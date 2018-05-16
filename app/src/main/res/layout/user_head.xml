@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@mipmap/bg_card_page_silver"
+    android:layout_height="200dp"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/main_sdv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            fresco:actualImageScaleType="focusCrop"
+            fresco:fadeDuration="5000"
+            fresco:failureImage="@mipmap/loadfail"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/headerimg"
+            fresco:placeholderImageScaleType="fitCenter"
+            fresco:progressBarAutoRotateInterval="5000"
+            fresco:progressBarImage="@mipmap/loading"
+            fresco:progressBarImageScaleType="centerInside"
+            fresco:retryImageScaleType="centerCrop"
+            fresco:roundAsCircle="true">
+        </com.facebook.drawee.view.SimpleDraweeView>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="5dp"
+                  android:id="@+id/tv_name"
+                  android:layout_centerHorizontal="true"
+                  android:layout_below="@id/main_sdv"
+                  android:text="邓桂林"
+                  android:textSize="14sp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="5dp"
+                  android:id="@+id/tv_depat"
+                  android:layout_centerHorizontal="true"
+                  android:layout_below="@id/tv_name"
+                  android:text="广东水政监察局"
+                  android:textSize="14sp"/>
+</RelativeLayout>

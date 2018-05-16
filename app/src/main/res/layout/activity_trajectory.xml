@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@mipmap/back"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:text="巡查轨迹"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar" />
+
+    <LinearLayout
+        android:padding="3dp"
+        android:background="@drawable/maptask_bg_shap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appbar"
+        android:layout_gravity="center"
+       android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_taskid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="任务ID："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_taskname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="案件名称"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_taskpublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="发布人："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_exebegintime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="开始时间："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_exeendtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="结束时间："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_taskarea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="巡查区域"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

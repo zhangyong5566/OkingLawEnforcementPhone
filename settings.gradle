@@ -1,0 +1,1 @@
+include ':app', ':CircularProgressButtonLibrary', ':baselib', ':easeui', ':whiteboardlib', ':ocr_ui', ':android-pdf-viewer'

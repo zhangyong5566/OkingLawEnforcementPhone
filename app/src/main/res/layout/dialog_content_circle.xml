@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:background="@drawable/shape_dialog"
+    android:orientation="vertical">
+
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="请选择队员"
+            android:textColor="@color/holo_red_light"
+            android:textSize="@dimen/task_input_textsize"/>
+        <View android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5px"
+            android:background="@color/login_bg"></View>
+
+        <ListView android:id="@+id/lv_members"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/bt_okselect"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/task_input_height"
+            android:layout_margin="15dp"
+            android:background="@drawable/btn_addevidence_selector"
+            android:gravity="center"
+            android:text="确     定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/task_input_textsize" />
+
+
+
+</LinearLayout>

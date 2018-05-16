@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_tag3"
+            android:layout_width="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="据初步调查，你（单位）"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_illegal_facts"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="2.5"
+            android:hint="（违法事实）"
+            android:paddingTop="8dp"
+            android:textColor="#f00"
+            android:textColorHint="@color/colorMain4"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="涉嫌违反了"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_01"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_legal_provisions"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="2.5"
+            android:hint="（法律条款）"
+            android:paddingTop="8dp"
+            android:textColor="#f00"
+            android:textColorHint="@color/colorMain4"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_02"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/et_legal_provisions"
+            android:text="的规定，现根据"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tag02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/ll_02"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="的规定，"
+        android:textColor="@color/colorAccent"
+        android:textSize="10sp" />
+
+    <EditText
+        android:id="@+id/et_legal_provisions2"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/tv_tag02"
+        android:hint="（法律条款）"
+        android:paddingTop="8dp"
+        android:textColor="#f00"
+        android:textColorHint="@color/colorMain4"
+        android:textSize="10sp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_legal_provisions2"
+        android:layout_margin="10dp"
+        android:text="责令你（单位）立即停止违法行为，听候处理。"
+        android:textColor="@color/colorAccent"
+        android:textSize="10sp" />
+</RelativeLayout>

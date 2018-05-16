@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/bt_upload"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/btn_switch_case_selector"
+        android:text="上传文件"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_select"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/bt_upload"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="选择文件"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_file_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/bt_upload"
+        android:layout_alignTop="@id/bt_upload"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/bt_upload" />
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/tv_file_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="投诉举报请求：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_complaint_reporting_requests"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="3"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_01"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="抄送单位：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_cc_unit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="3"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp" />
+</RelativeLayout>

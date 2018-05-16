@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog">
+    <TextView android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="问题模版"
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/tv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_title"
+        android:layout_marginRight="10dp"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@mipmap/ic_add"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="新增问题"
+        android:textColor="@color/custom_progress_blue_header"
+        android:textSize="12sp"/>
+    <TextView android:id="@+id/tv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_title"
+        android:layout_marginRight="10dp"
+        android:drawableLeft="@mipmap/back"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="返回"
+        android:textColor="@color/custom_progress_blue_header"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/tv_title"
+        android:background="@color/custom_progress_blue_header"></View>
+    <ListView android:id="@+id/lv_questions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="5dp">
+
+    </ListView>
+
+    <TextView android:id="@+id/tv_typename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="案件类型："
+        android:textColor="@color/colorBackground"
+        android:textSize="12sp"
+        android:visibility="gone"
+        />
+    <TextView android:id="@+id/tv_tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_typename"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="问题内容："
+        android:textColor="@color/colorMain4"
+        android:textSize="12sp"
+        android:visibility="gone"
+        />
+
+    <EditText android:id="@+id/et_ask_content"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/tv_typename"
+        android:layout_marginRight="20dp"
+        android:paddingTop="8dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@id/tv_tag1"
+        android:textColor="@color/colorMain4"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/bt_add"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/et_ask_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="新  增"
+        android:textColor="@color/colorMain6"
+        android:textSize="12sp"/>
+
+
+</RelativeLayout>

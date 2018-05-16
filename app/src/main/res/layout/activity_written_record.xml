@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@mipmap/back"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:text="询问笔录"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <Button
+        android:layout_below="@id/appbar"
+        android:id="@+id/bt_print"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="打  印"
+        android:textColor="@color/colorMain6"
+        android:textSize="12sp"/>
+
+    <Button
+        android:layout_alignTop="@id/bt_print"
+        android:layout_toLeftOf="@id/bt_print"
+        android:id="@+id/bt_save"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="提  交"
+        android:textColor="@color/colorMain6"
+        android:textSize="12sp"/>
+
+    <Button
+        android:layout_below="@id/appbar"
+        android:layout_alignTop="@id/bt_print"
+        android:layout_toLeftOf="@id/bt_save"
+        android:id="@+id/bt_problem"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="问题库"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/colorMain6"
+        android:textSize="12sp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_written_record"
+        android:layout_below="@id/bt_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

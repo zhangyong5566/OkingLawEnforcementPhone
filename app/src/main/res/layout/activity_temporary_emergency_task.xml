@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@mipmap/back"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:titleTextColor="@color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="新增紧急任务"
+                        android:textColor="#fff"
+                        android:textSize="16sp" />
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ll_01"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/appbar"
+                android:layout_margin="10dp"
+                android:hint="任务名称：">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_taskname"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/editor_bg"
+                    android:ellipsize="end"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="3"
+                    android:padding="3dp"
+                    android:textSize="12sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/ll_01"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ll_02"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/ll_01"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="发布人："
+                android:textColorHint="@color/colorAccent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/publisher_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:gravity="left|center_vertical"
+                    android:padding="3dp"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/ll_02"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_01"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@id/ll_02"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="任务类型："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Spinner
+                android:id="@+id/sp_tasktype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_01"
+                android:layout_alignTop="@id/tv_01"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/tv_01"
+                android:gravity="center"
+                android:overlapAnchor="false"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:spinnerMode="dropdown"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tv_01"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_02"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv_01"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="审批领导："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Spinner
+                android:id="@+id/sp_approver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_02"
+                android:layout_alignTop="@id/tv_02"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/tv_02"
+                android:gravity="center"
+                android:overlapAnchor="false"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:spinnerMode="dropdown"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tv_02"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_03"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv_02"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="线索来源："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Spinner
+                android:id="@+id/sp_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_03"
+                android:layout_alignTop="@id/tv_03"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/tv_03"
+                android:gravity="center"
+                android:overlapAnchor="false"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:spinnerMode="dropdown"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tv_03"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_04"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv_03"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="任务性质："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Spinner
+                android:id="@+id/sp_tasknature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_04"
+                android:layout_alignTop="@id/tv_04"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/tv_04"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:overlapAnchor="false"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:spinnerMode="dropdown"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tv_04"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tv_06"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ll_03"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv_04"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="成员：">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/list_item_missionMember"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:enabled="false"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:padding="3dp"
+                    android:textSize="12sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/bt_select_members"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@id/ll_03"
+                android:layout_alignEnd="@id/ll_03"
+                android:layout_alignTop="@id/ll_03"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_addevidence_selector"
+                android:text="点击获取"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/ll_03"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_07"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_03"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="开始时间："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Button
+                android:id="@+id/bt_select_begintime"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/ll_03"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/tv_07"
+                android:background="@drawable/btn_addevidence_selector"
+                android:gravity="center"
+                android:text="选择"
+                android:textColor="@color/white"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/bt_select_begintime"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <TextView
+                android:id="@+id/tv_08"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bt_select_begintime"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="结束时间："
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <Button
+                android:id="@+id/bt_select_endtime"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/bt_select_begintime"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/tv_08"
+                android:background="@drawable/btn_addevidence_selector"
+                android:gravity="center"
+                android:text="选择"
+                android:textColor="@color/white"
+                android:textSize="@dimen/task_input_textsize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/bt_select_endtime"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ll_06"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@id/bt_select_endtime"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="巡查区域：">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/list_item_missionDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/editor_bg"
+                    android:ellipsize="end"
+                    android:gravity="left|top"
+                    android:maxLines="3"
+                    android:padding="3dp"
+                    android:textSize="12sp" />
+            </android.support.design.widget.TextInputLayout>
+            <ImageButton
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:padding="3dp"
+                android:id="@+id/ib_map"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignEnd="@id/ll_06"
+                android:layout_alignTop="@id/ll_06"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/icon_map" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/ll_06"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ll_07"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@id/ll_06"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="任务描述：">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/editor_bg"
+                    android:gravity="left|top"
+                    android:padding="3dp"
+                    android:textSize="12sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/ll_07"
+                android:layout_marginTop="3dp"
+                android:background="@color/login_bg"></View>
+
+            <Button
+                android:id="@+id/bt_ok"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/task_input_height"
+                android:layout_below="@id/ll_07"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/btn_addevidence_selector"
+                android:gravity="center"
+                android:text="发     布"
+                android:textColor="@color/white"
+                android:textSize="@dimen/task_input_textsize" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

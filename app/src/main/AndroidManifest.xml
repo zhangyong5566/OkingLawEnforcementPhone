@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zhang.okinglawenforcementphone">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <uses-feature android:name="android.hardware.camera2.full" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name="com.zhang.baselib.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".mvp.ui.activitys.LoginActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.zhang.okinglawenforcementphone.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+
+        <service
+            android:name=".service.IRemoteLocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":Remote" />
+
+        <activity
+            android:name=".mvp.ui.activitys.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.PatrolsToReleaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.TemporaryEmergencyTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ArrangeTeamMembersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.MissionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.TaskMissionProjectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.MissionRecorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ImageViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ShootActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".mvp.ui.activitys.VideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".mvp.ui.activitys.VideoRecordActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".mvp.ui.activitys.VoiceCallActivity" />
+        <activity android:name=".mvp.ui.activitys.VideoCallActivity" />
+
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1119161129178934#oking-old" />
+        <!-- 声明sdk所需的service -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <!-- 声明sdk所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".mvp.ui.activitys.MemberSignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.WrittenRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.RecorderVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ImageGridActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".mvp.ui.activitys.CaseManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.CaseDealActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <!-- 百度地图所需的 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="2n78mDdMnLIiDDGyTIDT20mPsSEUYrNL" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+
+        <activity
+            android:name=".mvp.ui.activitys.SceneInquestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.StatisticalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.MapByPointActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.TrajectoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.LawEnforcementManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.baidu.ocr.ui.camera.CameraActivity"
+            android:configChanges="screenSize|orientation" />
+        <activity
+            android:name=".mvp.ui.activitys.RegulationsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.AllActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activitys.PuttedForwardConActivity"
+            android:screenOrientation="portrait"></activity>
+    </application>
+
+</manifest>

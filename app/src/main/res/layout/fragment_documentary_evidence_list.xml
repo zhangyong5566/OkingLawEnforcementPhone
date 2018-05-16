@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+    <Button
+        android:id="@+id/add_evidence_button"
+        android:layout_width="wrap_content"
+        android:layout_height="80px"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10px"
+        android:textSize="32px"
+        android:background="@drawable/btn_addevidence_selector"
+        android:text="添加书证"
+        android:textColor="@color/white" />
+
+
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_below="@id/add_evidence_button"
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:text="证据名称"
+            android:textColor="@color/task_other_tx"
+            android:textSize="32px" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:text="采集地点"
+            android:textColor="@color/task_other_tx"
+            android:textSize="32px" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:text="证据内容"
+            android:textColor="@color/task_other_tx"
+            android:textSize="32px" />
+
+        <TextView
+            android:layout_weight="1.5"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:text="操作"
+            android:textColor="@color/task_other_tx"
+            android:textSize="32px" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/ll"
+        android:id="@+id/ry_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"></android.support.v7.widget.RecyclerView>
+
+
+
+</RelativeLayout>

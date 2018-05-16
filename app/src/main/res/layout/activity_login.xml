@@ -1,0 +1,166 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/room_bg">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_scrollFlags="scroll|enterAlways">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="登录"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#f00"
+        android:textSize="12sp" />
+
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="anim/sky.json"
+        app:lottie_loop="true"
+        app:lottie_scale="1.5" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+
+        <LinearLayout
+            android:id="@+id/ll_01"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="用户名："
+                android:textColor="@color/task_other_tx"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/userName_editText"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/search_bg"
+                android:ems="22"
+                android:hint="请输入帐号"
+                android:imeOptions="actionSearch"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textColor="#88000000"
+                android:textColorHint="#88000000"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_02"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_alignEnd="@id/ll_01"
+            android:layout_alignStart="@id/ll_01"
+            android:layout_below="@id/ll_01"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="密    码："
+                android:textColor="@color/task_other_tx"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/password_editText"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/search_bg"
+                android:ems="22"
+                android:hint="请输入帐号"
+                android:imeOptions="actionSearch"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textColor="#88000000"
+                android:textColorHint="#88000000"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/save_pwd_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/ll_02"
+            android:layout_below="@id/ll_02"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="记住密码"
+            android:textColor="@color/task_other_tx"
+            android:textSize="14sp" />
+
+        <com.dd.CircularProgressButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignEnd="@id/ll_02"
+            android:layout_alignStart="@id/ll_02"
+            android:layout_below="@id/save_pwd_button"
+            android:layout_gravity="center"
+            android:ems="22"
+            android:padding="10px"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            app:cpb_cornerRadius="10px"
+            app:cpb_paddingProgress="4px"
+            app:cpb_selectorComplete="@color/colorMain8"
+            app:cpb_selectorError="@color/colorMain7"
+            app:cpb_selectorIdle="@color/login_bt_selectorIdle"
+            app:cpb_textIdle="登 录" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

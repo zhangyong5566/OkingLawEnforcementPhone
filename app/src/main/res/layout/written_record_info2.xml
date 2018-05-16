@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="询问地点：广东省"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_city"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/tv_addr"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_tag12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/sp_city"
+        android:text="市（区）"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_county"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/tv_tag12"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_tag13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sp_county"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="县（市、区）"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/et_addrdetail"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/sp_county"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@id/tv_tag13"
+        android:hint="详细地址"
+        android:maxLength="20"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_03"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_addrdetail"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:hint="询问人："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_ask_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="10"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:hint="执法编号（询问人）："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_ask_enforcement_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="15"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_05"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_03"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:hint="记录人："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_recorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:maxLength="10"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:hint="执法编号（记录人）："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_recorder_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="15"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

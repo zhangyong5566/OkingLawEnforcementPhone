@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:hint="执法人员（姓名及执法证号）："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_enforcement1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:hint="执法人员（姓名及执法证号）："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_enforcement2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_02"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_01"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:hint="联系地址："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:hint="签收人："
+            android:textColorHint="@color/colorMain4">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tet_sign_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="datetime"
+                android:textColor="@color/task_other_tx"
+                android:textSize="10sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="签收时间："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_sign_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="11"
+            android:textColor="@color/task_other_tx"
+            android:textSize="10sp" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/bt_prin"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/ll_03"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/btn_waiting_selector"
+        android:text="打印"
+        android:textColor="@color/white"
+        android:textSize="30px" />
+
+</RelativeLayout>

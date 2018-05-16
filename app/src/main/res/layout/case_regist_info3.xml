@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="案件类型："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_01"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/sp_type"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/sp_type"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="案件名称："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_taskname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="30"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_02"
+        android:layout_marginTop="9dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_03"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="案由："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_cause_of_action"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="30"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_03"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <TextView
+        android:id="@+id/tv_tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_03"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="17dp"
+        android:text="案发时间："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_select_begintime"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/ll_03"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/tv_tag1"
+        android:background="@drawable/btn_addevidence_selector"
+        android:gravity="center"
+        android:text="选择"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/bt_select_begintime"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_04"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/bt_select_begintime"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="案发地点："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_scene"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="30"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_04"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_05"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_04"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="当事人基本情况：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_basic_situation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_05"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_06"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_05"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="受权委托人：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_authorized_client"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:maxLength="20"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_06"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_07"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_06"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="违法事项：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_illegal_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_08"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_07"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="案情简要：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_case_brief"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_08"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_09"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_08"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="法律依据：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_legal_basis"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_09"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_10"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/ll_09"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="处罚内容：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_punishment_according"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_10"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_11"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_10"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="承办人1：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_promoter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+
+        android:maxLength="15"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_11"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_12"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_11"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="执法证号：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_enforcement_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="30"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_12"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_13"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_12"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="承办人2：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_promoter2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="15"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_13"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_14"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_13"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="执法证号：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_enforcement_number2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:maxLength="30"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_14"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_15"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/ll_14"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="执法部门：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_law_enforcement"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="4"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+</RelativeLayout>

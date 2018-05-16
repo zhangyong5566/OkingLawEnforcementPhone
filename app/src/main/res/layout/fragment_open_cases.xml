@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zhang.okinglawenforcementphone.mvp.ui.fragments.OpenCasesFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_open_cases"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/tv_tag"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:text="（无）"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#007FFE</color>
+    <color name="colorPrimaryDark">#0072E3</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+
+    <!--新配色-->
+    <color name="colorMain1">#455158</color>
+    <color name="colorMain2">#495054</color>
+    <color name="colorMain3">#3C4247</color>
+    <color name="colorMain4">#A1A8AE</color>
+    <color name="colorMain5">#63CAFF</color>
+    <color name="colorMain6">#FFFFFF</color>
+    <color name="colorMain7">#FF6C00</color>
+    <color name="colorMain8">#98CF60</color>
+    <color name="colorMain9">#303538</color>
+    <color name="colorMain10">#666666</color>
+
+
+    <!--底部导航栏图片颜色-->
+    <color name="bottom_nav_normal">#C7CCD3</color>
+    <color name="bottom_nav_selected">#0B85F9</color>
+
+
+    <color name="top_nav_bg">#007FFE</color>
+
+    <!--白色-->
+    <color name="white">#FFFFFF</color>
+
+    <color name="top_tab_textcolor_normal">#57C1FE</color>
+
+    <color name="activity_bg">#F3F7F6</color>
+    <color name="divider_color">#F3F7F6</color>
+
+    <color name="refresh_color">#007FFE</color>
+
+    <color name="loading_color">#007FFE</color>
+
+    <color name="flow_item_color">#FF6C00</color>
+
+    <color name="author_color">#fc9b00</color>
+
+    <color name="around_shap_no">#bad4d4</color>
+    <color name="task_other_tx">#88000000</color>
+    <color name="login_bt_selectorIdle">#37a1ed</color>
+    <color name="black">#FF000000</color>
+    <color name="login_bg">#656565</color>
+
+    <color name="btn_addevidence_enable">#8ebf5b</color>
+    <color name="btn_addevidence_press">#bfea93</color>
+    <color name="holo_red_light">#ffff4444</color>
+    <color name="law_enforcement_bt_enable">#ffea64</color>
+    <color name="text_menu_color">#ffffff</color>
+
+    <color name="waiting_btn_enable">#ff7ad1fd</color>
+    <color name="lightsalmon">#FFA07A</color><!--亮肉色 -->
+    <color name="waiting_btn_press">#ff23b0f9</color>
+
+    <color name="btn_switch_case_enable">#FF6C00</color>
+    <color name="btn_switch_case_press">#fc9b00</color>
+
+    <color name="msg_btn_enable">#14191C</color>
+    <color name="msg_btn_press">#41484e</color>
+    <color name="colorBackground">#FF4081</color>
+
+    <color name="custom_progress_blue_header">#ff33b5e5</color>
+</resources>

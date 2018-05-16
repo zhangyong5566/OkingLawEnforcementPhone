@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12sp"
+        android:text="案件类型："
+        android:textColor="@color/colorBackground"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_01"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tv02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sp_type"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:hint="询问内容："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="30"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:text="笔录时间："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_select_begintime"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/tv02"
+        android:layout_margin="3dp"
+        android:layout_toRightOf="@id/tv_tag1"
+        android:background="@drawable/btn_addevidence_selector"
+        android:gravity="center"
+        android:text="选择"
+
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+
+    <TextView
+        android:id="@+id/tv_tag6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv02"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/bt_select_begintime"
+        android:text="至"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_select_endtime"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/tv02"
+        android:layout_margin="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/tv_tag6"
+        android:background="@drawable/btn_addevidence_selector"
+        android:text="选择"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+</RelativeLayout>

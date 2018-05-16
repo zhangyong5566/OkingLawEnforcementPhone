@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_bg"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+        android:src="@mipmap/icon_task" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_caseid"
+            android:textSize="12sp"
+            android:text="案件id"
+            android:textColor="@color/task_other_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="3dp"
+            android:id="@+id/tv_casename"
+            android:textSize="12sp"
+            android:text="案件名称"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/task_other_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="3dp"
+            android:id="@+id/tv_casetime"
+            android:textSize="12sp"
+            android:text="受理时间"
+            android:textColor="@color/task_other_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:id="@+id/tv_casestate"
+            android:textSize="12sp"
+            android:text="状态"
+            android:textColor="@color/task_other_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

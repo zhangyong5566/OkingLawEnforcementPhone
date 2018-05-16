@@ -1,0 +1,505 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="10px"
+        android:background="@drawable/item_bg"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/member_item_bg2"
+                android:gravity="center"
+                android:padding="10px"
+                android:text="书证"
+                android:textColor="@color/task_other_tx"
+                android:textSize="32px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="图片："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="250px"
+                    android:orientation="vertical"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+                    <ImageView
+                        android:id="@+id/iv_addpic"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="right"
+                        android:src="@mipmap/photo" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/pic_gridView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:background="@drawable/member_item_bg2" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="证据名称："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_name_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:singleLine="true"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="证据来源："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <Spinner
+                        android:id="@+id/evidence_source_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="80px"
+                        android:overlapAnchor="false"
+                        android:layout_gravity="center"
+                        android:layout_margin="4px"
+                        android:layout_weight="2"
+                        android:gravity="left|center_vertical"
+                        android:saveEnabled="false"
+                        android:spinnerMode="dropdown"
+                        android:textSize="32px"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="证据内容："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_content_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:gravity="left|top"
+                        android:minLines="5"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="页数："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_pagerCount_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:inputType="numberSigned"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:singleLine="true"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="见证人："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_man_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="80px"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:singleLine="true"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="备注："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_remark_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:gravity="left|top"
+                        android:minLines="5"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150px"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/member_item_bg2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
+                        android:text="*"
+                        android:textColor="@color/colorMain7"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="采集地点："
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/member_item_bg2"
+                    android:padding="10px">
+
+                    <EditText
+                        android:id="@+id/evidence_getLocation_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:background="@drawable/memo_edittext_bg"
+                        android:padding="10px"
+                        android:saveEnabled="false"
+                        android:singleLine="true"
+                        android:textColor="@color/task_other_tx"
+                        android:textSize="32px" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+                        android:text="单位:"
+                        android:textSize="32px" />
+
+                    <EditText
+                        android:id="@+id/evidence_dept_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10px"
+                        android:saveEnabled="false"
+                        android:textSize="32px" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="300px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_margin="10px"
+            android:background="@drawable/btn_waiting_selector"
+            android:text="保 存"
+            android:textColor="@color/colorMain6"
+            android:textSize="32px" />
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="300px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_margin="10px"
+            android:background="@drawable/btn_msg_selector"
+            android:text="关 闭"
+            android:textColor="@color/colorMain6"
+            android:textSize="32px" />
+    </LinearLayout>
+</LinearLayout>
+

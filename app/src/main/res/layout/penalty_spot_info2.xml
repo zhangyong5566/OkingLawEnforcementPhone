@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_tag3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="当事人"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_illegal_facts"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="2.5"
+            android:hint="（违法事实）"
+            android:paddingTop="8dp"
+            android:textColor="#f00"
+            android:textColorHint="@color/colorMain4"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="违反了"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_legal_provisions"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="2.5"
+            android:hint="（法律条款）"
+            android:paddingTop="8dp"
+            android:textColor="#f00"
+            android:textColorHint="@color/colorMain4"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_01"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_02"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/et_legal_provisions"
+            android:text="的规定，现根据《行政处罚法》第三十三条和"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_legal_provisions2"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:hint="（其他法律条款）"
+            android:paddingTop="8dp"
+            android:textColor="#f00"
+            android:textColorHint="@color/colorMain4"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tag02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="的规定，决定给予如下处罚："
+        android:textColor="@color/colorAccent"
+        android:textSize="10sp" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_04"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_tag02"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cb_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:text="1.警告；"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <CheckBox
+            android:id="@+id/cb_fine"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="2.罚款"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_amount"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:digits="壹贰叁肆伍陆柒捌玖拾佰仟万亿圆角分零整"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="（金额大写）。"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_05"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_04"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:text="收款形式："
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <CheckBox
+            android:id="@+id/cb_spot"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:text="（1）当场收缴；"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <CheckBox
+            android:id="@+id/cb_within_time"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:text="（2）限于"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_year"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="4"
+            android:paddingTop="5dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_month"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingTop="5dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="2"
+            android:text="月"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_day"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingTop="5dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_06"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_05"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日前将罚款交至(银行名称及账户、帐号)"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_banknum"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_tag6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_06"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="4dp"
+        android:text="逾期不缴的，每日按罚款数额的3%加处罚款。如不服本决定，可在收到本决定书之日起60日内向（同级人民政府或上一级水行政主管部门）申请行政复议；也可以在收到本决定之日起六个月内直接向人民法院起诉。复议和起诉期间本决定不停止执行；逾期不申请复议也不起诉，又不履行本决定的，本机关将依法申请人民法院强制执行。"
+        android:textColor="@color/colorAccent"
+        android:textSize="10sp" />
+
+</RelativeLayout>

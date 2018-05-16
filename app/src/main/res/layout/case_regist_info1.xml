@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="案件来源："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_01"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/sp_from"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <TextView
+        android:id="@+id/tv_tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_01"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:text="笔录时间："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_select_begintime"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/tv_01"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@id/tv_tag1"
+        android:background="@drawable/btn_addevidence_selector"
+        android:gravity="center"
+        android:text="选择"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/bt_select_begintime"
+        android:layout_marginTop="6dp"
+        android:background="@color/login_bg"></View>
+
+    <TextView
+        android:id="@+id/tv_02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_select_begintime"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="登记人："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_registrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_select_begintime"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_02"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/sp_registrar"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <TextView
+        android:id="@+id/tv_03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_02"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="举报方式："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_report_way"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_02"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_03"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/sp_report_way"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <LinearLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_03"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12sp"
+        android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="举报人："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <Spinner
+            android:id="@+id/sp_whistleblowers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/tv_03"
+            android:layout_weight="1"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/sp_whistleblowers"
+            android:text="性别："
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <Spinner
+            android:id="@+id/sp_sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tv_03"
+            android:layout_weight="1"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_01"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_01"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="身份证号码："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_idcard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="18"
+            android:background="@drawable/editor_bg"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_02"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_03"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="联系电话："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="11"
+            android:background="@drawable/editor_bg"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_03"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_04"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_03"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="工作单位："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_work_units"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="30"
+            android:background="@drawable/editor_bg"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_04"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_05"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_04"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="联系地址："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_contact_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="30"
+            android:background="@drawable/editor_bg"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_05"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_06"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/ll_05"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="举报地点："
+        android:textColorHint="@color/colorMain4">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_report_location"
+            android:layout_width="match_parent"
+            android:background="@drawable/editor_bg"
+            android:layout_height="match_parent"
+            android:maxLength="30"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_06"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <TextView
+        android:id="@+id/tv_04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_06"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="执法机关："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/sp_enforcement_agencies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_06"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_04"
+        android:overlapAnchor="false"
+        android:spinnerMode="dropdown"
+        android:textSize="12sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/sp_enforcement_agencies"
+        android:layout_marginTop="3dp"
+        android:background="@color/login_bg"></View>
+    <TextView
+        android:id="@+id/tv_05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_04"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="18dp"
+        android:text="举报时间："
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/bt_report_time"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/tv_04"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/tv_05"
+        android:background="@drawable/btn_addevidence_selector"
+        android:gravity="center"
+        android:text="选择"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_07"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/tv_05"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:hint="举报事项：">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_reporting_matters"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_bg"
+            android:ellipsize="end"
+            android:gravity="left|top"
+            android:maxLines="3"
+            android:padding="3dp"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+</RelativeLayout>

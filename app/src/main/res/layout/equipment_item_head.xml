@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
+    <CheckBox android:id="@+id/cb"
+        android:layout_width="45dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/member_item_bg2"
+        android:button="@null"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"/>
+
+    <TextView
+        android:id="@+id/type_textView"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/member_item_bg2"
+        android:gravity="center"
+        android:text="类型"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/value_textView"
+        android:layout_width="95dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/member_item_bg2"
+        android:gravity="center"
+        android:text="编号"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/remarks_textView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/member_item_bg2"
+        android:gravity="center"
+        android:text="备注"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tv_mc"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/member_item_bg2"
+        android:gravity="center"
+        android:text="名称"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tv_attribute"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/member_item_bg2"
+        android:gravity="center"
+        android:text="属性"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+</LinearLayout>
