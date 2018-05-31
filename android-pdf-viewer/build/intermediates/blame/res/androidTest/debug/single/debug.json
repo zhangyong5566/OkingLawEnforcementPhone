@@ -1,50 +1,18 @@
 [
     {
-        "merged": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_left.xml.flat",
-        "source": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_left.xml"
+        "merged": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_bottom.xml.flat",
+        "source": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_bottom.xml"
     },
     {
-        "merged": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_right.xml.flat",
-        "source": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_right.xml"
+        "merged": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_top.xml.flat",
+        "source": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_top.xml"
     },
     {
-        "merged": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_bottom.xml.flat",
-        "source": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_bottom.xml"
+        "merged": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_left.xml.flat",
+        "source": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_left.xml"
     },
     {
-        "merged": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_bottom.xml.flat",
-        "source": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_bottom.xml"
-    },
-    {
-        "merged": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_top.xml.flat",
-        "source": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_top.xml"
-    },
-    {
-        "merged": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_top.xml.flat",
-        "source": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_top.xml"
-    },
-    {
-        "merged": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_right.xml.flat",
-        "source": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_right.xml"
-    },
-    {
-        "merged": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_top.xml.flat",
-        "source": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_top.xml"
-    },
-    {
-        "merged": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_right.xml.flat",
-        "source": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_right.xml"
-    },
-    {
-        "merged": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_bottom.xml.flat",
-        "source": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_bottom.xml"
-    },
-    {
-        "merged": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_left.xml.flat",
-        "source": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_left.xml"
-    },
-    {
-        "merged": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_left.xml.flat",
-        "source": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_left.xml"
+        "merged": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_default_scroll_handle_right.xml.flat",
+        "source": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\bundles\\debug\\res\\drawable\\default_scroll_handle_right.xml"
     }
 ]

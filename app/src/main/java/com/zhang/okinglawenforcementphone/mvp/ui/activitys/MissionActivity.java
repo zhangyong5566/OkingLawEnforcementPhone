@@ -5,17 +5,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
+import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
 import com.zhang.okinglawenforcementphone.mvp.contract.UpdateMissionStateContract;
@@ -98,7 +98,7 @@ public class MissionActivity extends BaseActivity {
 
         long id = intent.getLongExtra("id", -1L);
         if (id != -1L) {
-            mGreenMissionTask = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
+            mGreenMissionTask = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
         }
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -279,7 +279,7 @@ public class MissionActivity extends BaseActivity {
                                 if (code == 0) {
                                     mGreenMissionTask.setExecute_start_time(System.currentTimeMillis());
                                     mGreenMissionTask.setStatus("4");
-                                    GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                                     list_item_missionRecord.setText("任务日志");
                                     tv_state.setText("巡查中");
                                     tv_state.setTextColor(BaseApplication.getApplictaion().getResources().getColor(R.color.colorMain5));
@@ -303,7 +303,7 @@ public class MissionActivity extends BaseActivity {
                         public void updateMissionStateFail(Throwable ex) {
                             mGreenMissionTask.setExecute_start_time(System.currentTimeMillis());
                             mGreenMissionTask.setStatus("4");
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                             list_item_missionRecord.setText("任务日志");
                             tv_state.setText("巡查中");
                             tv_state.setTextColor(BaseApplication.getApplictaion().getResources().getColor(R.color.colorMain5));
@@ -314,11 +314,13 @@ public class MissionActivity extends BaseActivity {
                 }
                 mUpdateMissionStatePresenter.updateMissionState(mGreenMissionTask.getTaskid(), OkingContract.SDF.format(System.currentTimeMillis())
                         , "", 4);
+
+                EventBus.getDefault().post(new NewsTaskOV(0,mGreenMissionTask));
             } else {
 
                 mGreenMissionTask.setExecute_start_time(System.currentTimeMillis());
                 mGreenMissionTask.setStatus("4");
-                GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
 
             }
 

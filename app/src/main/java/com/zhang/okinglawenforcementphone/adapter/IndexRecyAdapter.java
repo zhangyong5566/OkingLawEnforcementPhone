@@ -31,14 +31,15 @@ import java.util.List;
 public class IndexRecyAdapter extends BaseQuickAdapter<MenuOV, BaseViewHolder> {
 
     private OnTagClickListener mOnTagClickListener;
-    public IndexRecyAdapter(int layoutResId, @Nullable List<MenuOV> data,OnTagClickListener onTagClickListener) {
-        super(layoutResId,data);
+
+    public IndexRecyAdapter(int layoutResId, @Nullable List<MenuOV> data, OnTagClickListener onTagClickListener) {
+        super(layoutResId, data);
         this.mOnTagClickListener = onTagClickListener;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, final MenuOV item) {
-        helper.setText(R.id.tv_title,item.getTage());
+        helper.setText(R.id.tv_title, item.getTage());
         TagFlowLayout flowlayout = helper.getView(R.id.flowlayout);
         final List<MenuItemOV> menuItemOVS = item.getMenuItemOVS();
         flowlayout.setAdapter(new TagAdapter<MenuItemOV>(menuItemOVS) {
@@ -46,6 +47,11 @@ public class IndexRecyAdapter extends BaseQuickAdapter<MenuOV, BaseViewHolder> {
             public View getView(FlowLayout parent, int position, MenuItemOV dataBean) {
                 View inflate = View.inflate(BaseApplication.getApplictaion(), R.layout.hot_tagflow_item, null);
                 TextView tv_tag = inflate.findViewById(R.id.tv_tag);
+                if (dataBean.getTitle().equals("待办")) {
+                    TextView tv_msgcout = inflate.findViewById(R.id.tv_msgcout);
+                    mOnTagClickListener.setMessageCount(tv_msgcout);
+                }
+
                 ImageView icon = inflate.findViewById(R.id.iv_icon);
                 tv_tag.setText(dataBean.getTitle());
                 icon.setImageResource(dataBean.getIcon());
@@ -63,7 +69,9 @@ public class IndexRecyAdapter extends BaseQuickAdapter<MenuOV, BaseViewHolder> {
     }
 
 
-    public interface OnTagClickListener{
+    public interface OnTagClickListener {
         void onTagClickListener(MenuItemOV bean);
+
+        void setMessageCount(TextView textView);
     }
 }

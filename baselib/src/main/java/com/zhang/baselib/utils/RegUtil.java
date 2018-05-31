@@ -45,4 +45,25 @@ public class RegUtil {
     public static boolean isNullString(@Nullable String str) {
         return str == null || str.length() == 0 || "".equals(str) || "null".equals(str);
     }
+
+    /**
+     * 验证手机号（简单）
+     *
+     * @param string 待验证文本
+     * @return {@code true}: 匹配<br>{@code false}: 不匹配
+     */
+    public static boolean isMobileSimple(String string) {
+        return isMatch("^[1]\\d{10}$", string);
+    }
+
+    /**
+     * 验证邮箱
+     *
+     * @param string 待验证文本
+     * @return {@code true}: 匹配<br>{@code false}: 不匹配
+     */
+    public static boolean isEmail(String string) {
+        return isMatch("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", string);
+    }
+
 }

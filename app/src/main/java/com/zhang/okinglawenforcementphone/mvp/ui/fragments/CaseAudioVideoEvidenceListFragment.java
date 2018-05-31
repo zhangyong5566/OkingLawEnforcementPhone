@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hyphenate.util.NetUtils;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
@@ -25,11 +24,12 @@ import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.NetUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.CaseAudioVideoEvidenceListRecyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceSTZJOV;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
@@ -67,7 +67,6 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
 
     private RecyclerView ryMain;
     private ArrayList<GreenEvidence> evidences = new ArrayList<>();
-    private Button add_evidence_button;
 
     private boolean uploadSound, uploadVideo;
     private int  uploadSoundCount, uploadVideoCount;
@@ -76,9 +75,9 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
     private CaseAudioVideoEvidenceListRecyAdapter mCaseAudioVideoEvidenceListRecyAdapter;
     private RxDialogSureCancel mRxDialogSureCancel;
     private RxDialogLoading mRxDialogLoading;
-    private ArrayList<GreenMedia> mPicGreenMediaList = new ArrayList<>();
-    private ArrayList<GreenMedia> mVoiceGreenMediaList = new ArrayList<>();
-    private ArrayList<GreenMedia> mVideoGreenMediaList = new ArrayList<>();
+    private ArrayList<GreenEvidenceMedia> mPicGreenMediaList = new ArrayList<>();
+    private ArrayList<GreenEvidenceMedia> mVoiceGreenMediaList = new ArrayList<>();
+    private ArrayList<GreenEvidenceMedia> mVideoGreenMediaList = new ArrayList<>();
     private View mInflate;
 
     public CaseAudioVideoEvidenceListFragment() {
@@ -132,8 +131,8 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
                     case R.id.upload_button:            //上传
                         if (NetUtil.isConnected(BaseApplication.getApplictaion())) {
                             GreenEvidence greenEvidence = evidences.get(position);
-                            List<GreenMedia> greenMedias = greenEvidence.getGreenMedia();
-                            for (GreenMedia greenMedia : greenMedias) {
+                            List<GreenEvidenceMedia> greenMedias = greenEvidence.getGreenMedia();
+                            for (GreenEvidenceMedia greenMedia : greenMedias) {
                                 if (greenMedia.getType()==1){
                                     mPicGreenMediaList.clear();
                                     mPicGreenMediaList.add(greenMedia);
@@ -162,7 +161,7 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-                                GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().delete(evidences.get(position));
+                                GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().delete(evidences.get(position));
                                 evidences.remove(position);
                                 mCaseAudioVideoEvidenceListRecyAdapter.setNewData(evidences);
                                 mRxDialogSureCancel.cancel();
@@ -184,12 +183,12 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
 
                             CaseAudioVideoEvidenceFragment caseAudioVideoEvidenceFragment = CaseAudioVideoEvidenceFragment.newInstance(0);
                             caseAudioVideoEvidenceFragment.setGreenCase(mycase, evidences.get(position));
-                            ft.add(R.id.sub_fragment_root, caseAudioVideoEvidenceFragment).commit();
+                            ft.add(R.id.rl_sub_content, caseAudioVideoEvidenceFragment).commit();
                         } else {
                             FragmentTransaction ft = getFragmentManager().beginTransaction();
                             CaseAudioVideoEvidenceFragment caseAudioVideoEvidenceFragment = CaseAudioVideoEvidenceFragment.newInstance(1);
                             caseAudioVideoEvidenceFragment.setGreenCase(mycase, evidences.get(position));
-                            ft.add(R.id.sub_fragment_root, caseAudioVideoEvidenceFragment).commit();
+                            ft.add(R.id.rl_sub_content, caseAudioVideoEvidenceFragment).commit();
                         }
 
                         break;
@@ -199,18 +198,6 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
             }
         });
 
-        add_evidence_button = (Button) rootView.findViewById(R.id.add_evidence_button);
-        add_evidence_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                CaseAudioVideoEvidenceFragment caseAudioVideoEvidenceFragment = CaseAudioVideoEvidenceFragment.newInstance(2);
-                caseAudioVideoEvidenceFragment.setGreenCase(mycase,null);
-                ft.add(R.id.sub_fragment_root, caseAudioVideoEvidenceFragment,"caseAudioVideoEvidenceFragment").commit();
-
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -465,9 +452,9 @@ public class CaseAudioVideoEvidenceListFragment extends Fragment {
         if (uploadSound && uploadVideo ) {
             mRxDialogLoading.cancel();
             evidence.setIsUpload(true);
-            GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().update(evidence);
+            GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().update(evidence);
             mCaseAudioVideoEvidenceListRecyAdapter.notifyDataSetChanged();
-            GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().update(mycase);
+            GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().update(mycase);
             final RxDialogSure rxDialogSure = new RxDialogSure(getActivity());
             rxDialogSure.setTitle("提示");
             rxDialogSure.setContent("上传成功！");

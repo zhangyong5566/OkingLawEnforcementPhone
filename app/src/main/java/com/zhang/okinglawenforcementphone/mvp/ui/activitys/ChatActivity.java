@@ -211,7 +211,7 @@ public class ChatActivity extends BaseActivity implements EMMessageListener {
         if (mFile==null){
             mFile = new File(cameraFile.getParentFile().getPath() + "/luban");
             if (!mFile.exists()){
-                mFile.mkdir();
+                mFile.mkdirs();
             }
         }
 

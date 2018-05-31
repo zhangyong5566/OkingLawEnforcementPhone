@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:text="统计查询"
+                android:text="日志统计"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </android.support.v7.widget.Toolbar>
@@ -62,4 +62,9 @@
         app:compactCalendarOtherMonthDaysTextColor="@color/colorMain4"
         app:compactCalendarTextColor="@color/colorMain10"
         app:compactCalendarTextSize="14sp"/>
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_below="@id/materialcalendarview2"
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

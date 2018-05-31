@@ -140,24 +140,24 @@ public class MapByPointActivity extends BaseActivity implements AMap.OnMyLocatio
 
                     mRxDialogSureCancel.setContent("确认巡查范围已标记无误？");
                     mRxDialogSureCancel.getTvCancel().setText("重来");
-                    mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mRxDialogSureCancel.cancel();
-                        }
-                    });
                     mRxDialogSureCancel.getTvSure().setText("完成");
-                    mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mRxDialogSureCancel.cancel();
 
-                            EventBus.getDefault().post(latLngListOV);
-                            finish();
-                        }
-                    });
                 }
+                mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mRxDialogSureCancel.cancel();
+                    }
+                });
+                mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mRxDialogSureCancel.cancel();
 
+                        EventBus.getDefault().post(latLngListOV);
+                        finish();
+                    }
+                });
                 mRxDialogSureCancel.show();
             }
         });

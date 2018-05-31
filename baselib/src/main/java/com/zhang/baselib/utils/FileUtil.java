@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Administrator on 2018/3/19.
@@ -365,8 +367,8 @@ public class FileUtil {
     }
 
     public static File getCacheDir(Context context) {
-        String APP_DIR_NAME = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/";
-        File dir = new File(APP_DIR_NAME + context.getPackageName() + "/cache/");
+        String AppDirName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/";
+        File dir = new File(AppDirName + context.getPackageName() + "/cache/");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -377,4 +379,97 @@ public class FileUtil {
         File file = new File(context.getFilesDir(), "pic.jpg");
         return file;
     }
+
+
+    /**
+     * 获取 搜索的路径 下的 所有 后缀 的文件
+     *
+     * @param fileAbsolutePath 搜索的路径
+     * @param suffix           文件后缀
+     * @return
+     */
+    public static Vector<String> getAllFileName(String fileAbsolutePath, String suffix) {
+        Vector<String> vecFile = new Vector<String>();
+        File file = new File(fileAbsolutePath);
+        File[] subFile = file.listFiles();
+        for (int iFileLength = 0; iFileLength < subFile.length; iFileLength++) {
+            // 判断是否为文件夹
+            if (!subFile[iFileLength].isDirectory()) {
+                String filename = subFile[iFileLength].getName();
+                // 判断是否为suffix结尾
+                if (filename.trim().toLowerCase().endsWith(suffix)) {
+                    vecFile.add(filename);
+                }
+            }
+        }
+        return vecFile;
+    }
+
+
+    /**
+     * 获取目录下所有文件
+     *
+     * @param dirPath     目录路径
+     * @param isRecursive 是否递归进子目录
+     * @return 文件链表
+     */
+    public static List<File> listFilesInDir(String dirPath, boolean isRecursive) {
+        return listFilesInDir(getFileByPath(dirPath), isRecursive);
+    }
+
+    /**
+            * 获取目录下所有文件
+     *
+             * @param dir         目录
+     * @param isRecursive 是否递归进子目录
+     * @return 文件链表
+     */
+    public static List<File> listFilesInDir(File dir, boolean isRecursive) {
+        if (isRecursive) return listFilesInDir(dir);
+        if (dir == null || !isDir(dir)) return null;
+        List<File> list = new ArrayList<>();
+        Collections.addAll(list, dir.listFiles());
+        return list;
+    }
+
+    /**
+     * 判断是否是目录
+     *
+     * @param file 文件
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isDir(File file) {
+        return isFileExists(file) && file.isDirectory();
+    }
+
+    /**
+     * 判断文件是否存在
+     *
+     * @param file 文件
+     * @return {@code true}: 存在<br>{@code false}: 不存在
+     */
+    public static boolean isFileExists(File file) {
+        return file != null && file.exists();
+    }
+
+
+    /**
+     * 获取目录下所有文件包括子目录
+     *
+     * @param dir 目录
+     * @return 文件链表
+     */
+    public static List<File> listFilesInDir(File dir) {
+        if (dir == null || !isDir(dir)) return null;
+        List<File> list = new ArrayList<>();
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            list.add(file);
+            if (file.isDirectory()) {
+                list.addAll(listFilesInDir(file));
+            }
+        }
+        return list;
+    }
+
 }

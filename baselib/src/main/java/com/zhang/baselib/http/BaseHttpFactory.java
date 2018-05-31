@@ -4,6 +4,7 @@ import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.http.interceptor.AddCookiesInterceptor;
 import com.zhang.baselib.http.interceptor.CacheControlInterceptor;
 import com.zhang.baselib.http.interceptor.HttpLoggingInterceptor;
+import com.zhang.baselib.http.interceptor.ReLoginInterceptor;
 import com.zhang.baselib.http.interceptor.SaveCookiesInterceptor;
 
 import java.io.File;
@@ -73,6 +74,7 @@ public class BaseHttpFactory {
         httpClientBuilder.cache(mCache);
         httpClientBuilder.addInterceptor(new HttpLoggingInterceptor());
         httpClientBuilder.addInterceptor(new CacheControlInterceptor());
+        httpClientBuilder.addInterceptor(new ReLoginInterceptor());
         httpClientBuilder.addInterceptor(new AddCookiesInterceptor(BaseApplication.getApplictaion()));
         httpClientBuilder.addInterceptor(new SaveCookiesInterceptor(BaseApplication.getApplictaion()));
         //设置超时时间

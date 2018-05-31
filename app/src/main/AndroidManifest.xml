@@ -3,6 +3,7 @@
     package="com.zhang.okinglawenforcementphone">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -92,21 +93,25 @@
             android:name=".mvp.ui.activitys.ShootActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".mvp.ui.activitys.VideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".mvp.ui.activitys.VideoRecordActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".mvp.ui.activitys.VoiceCallActivity" />
-        <activity android:name=".mvp.ui.activitys.VideoCallActivity" />
+        <activity
+            android:name=".mvp.ui.activitys.VoiceCallActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.VideoCallActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -197,8 +202,63 @@
         <activity
             android:name=".mvp.ui.activitys.AllActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activitys.PuttedForwardConActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".mvp.ui.activitys.PuttedForwardConActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ToDoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.SerchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllLawEnforcementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllPenaltyTheSpotActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllLawsAndRegulationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllLawEnforcementSpecificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.MapQueryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activitys.MapTaskActivity" />
+        <activity
+            android:name=".mvp.ui.activitys.RegionalHistoryEnforcementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllCaseRegistrationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllOpenCasesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllCaseProcessingListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllCaseComplaintActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FromAllCaseInAdvanceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activitys.BinnerContentActivity" />
+        <activity android:name=".mvp.ui.activitys.EvidenceManagerActivity"></activity>
     </application>
 
 </manifest>

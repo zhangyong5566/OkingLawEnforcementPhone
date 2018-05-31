@@ -3,9 +3,15 @@ package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,6 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
@@ -24,37 +31,52 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.exceptions.HyphenateException;
+import com.roughike.bottombar.BadgeContainer;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.zhang.baselib.BaseApplication;
+import com.zhang.baselib.DefaultContants;
+import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
+import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
+import com.zhang.baselib.utils.ActivityUtil;
+import com.zhang.baselib.utils.AppUtil;
 import com.zhang.baselib.utils.DeviceUtil;
+import com.zhang.baselib.utils.FileUtil;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.OkingEMManager;
 import com.zhang.okinglawenforcementphone.OkingFileManager;
-import com.zhang.okinglawenforcementphone.OkingLocationMannager;
+import com.zhang.okinglawenforcementphone.OkingLocationManager;
 import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
+import com.zhang.okinglawenforcementphone.SendEmailManager;
+import com.zhang.okinglawenforcementphone.adapter.StatisRcyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
+import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
+import com.zhang.okinglawenforcementphone.beans.GreenUser;
+import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.RefreshTaskMissionEvent;
 import com.zhang.okinglawenforcementphone.beans.StopSwipeRefreshEvent;
 import com.zhang.okinglawenforcementphone.db.LawDao;
+import com.zhang.okinglawenforcementphone.htttp.Api;
+import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadHttpMissionContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadLocationToServerContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.LoadHttpMissionPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
-import com.zhang.okinglawenforcementphone.mvp.ui.fragments.AddressBookFragment;
-import com.zhang.okinglawenforcementphone.mvp.ui.fragments.ChatFragment;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.IndexFragment;
-import com.zhang.okinglawenforcementphone.mvp.ui.fragments.MessageFragment;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.UserFragment;
+import com.zhang.okinglawenforcementphone.utils.DialogUtil;
+import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,9 +86,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -74,11 +98,15 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.tv_doing)
+    TextView mTvDoing;
     private Unbinder unbinder;
     @BindView(R.id.bottom_navigation_bar_container)
     BottomBar bottom_navigation_bar_container;
@@ -100,6 +128,9 @@ public class MainActivity extends BaseActivity {
     private boolean mIsLoginIMErro = false;
     private BottomBarTab mNearby;
     private boolean isMessageFragmentShow = false;
+    private ArrayList<GreenMissionTask> mNewsGreenMissionTasks = new ArrayList<>();
+    private RxDialogSureCancel mRxDialogSureCancel;
+    private String mCrashDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +144,30 @@ public class MainActivity extends BaseActivity {
 
     private void initData() {
         EventBus.getDefault().register(this);
+
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            mCrashDir = getExternalCacheDir().getPath() + File.separator + "crash" + File.separator;
+        } else {
+            mCrashDir = getCacheDir().getPath() + File.separator + "crash" + File.separator;
+        }
+        final String content = "用户名：" + OkingContract.CURRENTUSER.getUserName() + "\n";
+        //获取奔溃日志发送邮件
+        Schedulers.io().createWorker().schedule(new Runnable() {
+            @Override
+            public void run() {
+                List<File> files = FileUtil.listFilesInDir(mCrashDir, false);
+                if (files != null) {
+                    for (File file : files) {
+                        boolean succ = SendEmailManager.send(file, "zhy842667166@qq.com", "水政执法崩溃日志", content);
+                        if (succ) {
+                            file.delete();
+                        }
+                    }
+                }
+
+            }
+        });
+
 
         Schedulers.io().createWorker().schedule(new Runnable() {
             @Override
@@ -134,11 +189,12 @@ public class MainActivity extends BaseActivity {
         login();
 
         //初始化定位
-        OkingLocationMannager.getInstence().init();
-        OkingLocationMannager.getInstence().startLocation(new UploadLocationToServerContract.View() {
+        OkingLocationManager.getInstence().init();
+        OkingLocationManager.getInstence().startLocation(new UploadLocationToServerContract.View() {
             @Override
             public void uploadSucc(String result) {
                 Log.i("Oking", "上传位置成功" + result);
+
             }
 
             @Override
@@ -147,8 +203,12 @@ public class MainActivity extends BaseActivity {
             }
         }, imei, gson);
 
+        //获取任务
         getHttpMissionList();
     }
+
+
+
 
     private void login() {
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -253,12 +313,42 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //新任务
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleEvent2(NewsTaskOV event) {
+//        mNewsGreenMissionTasks.clear();
+//        List<GreenMissionTask> greenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
+//                .queryBuilder()
+//                .where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Status.eq("4"))
+//                .list();
+//
+//        for (GreenMissionTask greenMissionTask : greenMissionTasks) {
+//            if (greenMissionTask.getStatus().equals("4")) {
+//                mNewsGreenMissionTasks.add(greenMissionTask);
+//
+//            }
+//        }
+
+        if (event.mType == 0) {
+            mTvDoing.setVisibility(View.VISIBLE);
+            mNewsGreenMissionTasks.add(event.mGreenMissionTask);
+        } else {
+            GreenMissionTask greenMissionTask = event.mGreenMissionTask;
+            for (GreenMissionTask newsGreenMissionTask : mNewsGreenMissionTasks) {
+                if (newsGreenMissionTask.getTaskid().equals(greenMissionTask.getTaskid())) {
+                    mNewsGreenMissionTasks.remove(newsGreenMissionTask);
+                }
+            }
+        }
+
+    }
+
 
     private void setListener() {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this,SerchActivity.class));
+                startActivity(new Intent(MainActivity.this, SerchActivity.class));
 
             }
         });
@@ -270,7 +360,6 @@ public class MainActivity extends BaseActivity {
                     case R.id.tab_index:            //首页
                         isMessageFragmentShow = false;
                         if (mIndexFragment == null) {
-
                             mIndexFragment = IndexFragment.newInstance(null, null);
                         }
                         addFrag(mIndexFragment);
@@ -355,7 +444,6 @@ public class MainActivity extends BaseActivity {
         mTvTitle.setText(OkingContract.CURRENTUSER.getDeptname());
         mNearby = bottom_navigation_bar_container.getTabWithId(R.id.tab_message);
 
-
         bottom_navigation_bar_container.selectTabAtPosition(0);
 
     }
@@ -409,6 +497,13 @@ public class MainActivity extends BaseActivity {
             mLoadHttpMissionPresenter = new LoadHttpMissionPresenter(new LoadHttpMissionContract.View() {
                 @Override
                 public void loadHttpMissionSucc(List<GreenMissionTask> greenMissionTasks) {
+                    mNewsGreenMissionTasks.clear();
+                    for (GreenMissionTask greenMissionTask : greenMissionTasks) {
+                        if (greenMissionTask.getStatus().equals("4")) {
+                            mNewsGreenMissionTasks.add(greenMissionTask);
+
+                        }
+                    }
                     AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                         @Override
                         public void run() {
@@ -416,7 +511,12 @@ public class MainActivity extends BaseActivity {
                             StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
                             stopSwipeRefreshEvent.setType(0);
                             EventBus.getDefault().post(stopSwipeRefreshEvent);
+                            if (mNewsGreenMissionTasks.size() > 0) {
+                                showBottomDialog();
+                            }
                         }
+
+
                     });
                 }
 
@@ -448,6 +548,13 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void loadMissionFromLocal(List<GreenMissionTask> greenMissionTasks) {
+                    mNewsGreenMissionTasks.clear();
+                    for (GreenMissionTask greenMissionTask : greenMissionTasks) {
+                        if (greenMissionTask.getStatus().equals("4")) {
+                            mNewsGreenMissionTasks.add(greenMissionTask);
+
+                        }
+                    }
                     AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                         @Override
                         public void run() {
@@ -455,24 +562,134 @@ public class MainActivity extends BaseActivity {
                             StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
                             stopSwipeRefreshEvent.setType(0);
                             EventBus.getDefault().post(stopSwipeRefreshEvent);
+
+                            if (mNewsGreenMissionTasks.size() > 0) {
+                                showBottomDialog();
+
+                            }
                         }
                     });
                 }
+
             });
         }
 
         mLoadHttpMissionPresenter.loadHttpMission(2, OkingContract.CURRENTUSER.getUserid());
     }
 
+    private DialogUtil mDialogUtil;
+
+    private void showBottomDialog() {
+        if (mRxDialogSureCancel == null) {
+            mRxDialogSureCancel = new RxDialogSureCancel(MainActivity.this, false, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    dialogInterface.cancel();
+                }
+            });
+            mRxDialogSureCancel.setContent("有任务正在执行，需要直接打开任务吗？");
+
+            mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mTvDoing.setVisibility(View.VISIBLE);
+                    mRxDialogSureCancel.cancel();
+
+                }
+            });
+            mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
+
+                private View mDoingTaskView;
+                private StatisRcyAdapter mStatisRcyAdapter;
+
+
+                @Override
+                public void onClick(View view) {
+                    mRxDialogSureCancel.cancel();
+                    mTvDoing.setVisibility(View.VISIBLE);
+                    if (mDialogUtil == null) {
+
+                        mDialogUtil = new DialogUtil();
+                        mDoingTaskView = View.inflate(BaseApplication.getApplictaion(), R.layout.statistical_dialog, null);
+                        RecyclerView doingTaskRecyt = mDoingTaskView.findViewById(R.id.rcy_statis);
+                        doingTaskRecyt.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+                        doingTaskRecyt.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+                        mStatisRcyAdapter = new StatisRcyAdapter(R.layout.statistical_dialog_item, mNewsGreenMissionTasks);
+                        mStatisRcyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+                        doingTaskRecyt.setAdapter(mStatisRcyAdapter);
+                        setItemListener(mStatisRcyAdapter);
+                    } else {
+                        mStatisRcyAdapter.setNewData(mNewsGreenMissionTasks);
+                    }
+                    mDialogUtil.showBottomDialog(MainActivity.this, mDoingTaskView, 350);
+                }
+            });
+        }
+
+
+        mRxDialogSureCancel.show();
+    }
+
+    private void setItemListener(StatisRcyAdapter statisRcyAdapter) {
+        statisRcyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+            private Intent mIntent;
+
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                List<GreenMissionTask> data = adapter.getData();
+                GreenMissionTask greenMissionTask = data.get(position);
+                switch (greenMissionTask.getStatus()) {
+                    case "0":
+
+                    case "1":
+
+                    case "2":
+                        mIntent = new Intent(MainActivity.this, ArrangeTeamMembersActivity.class);
+                        mIntent.putExtra("id", greenMissionTask.getId());
+                        mIntent.putExtra("position", position);
+                        startActivity(mIntent);
+                        break;
+                    case "3":
+
+                    case "4":
+                    case "100":
+                        mIntent = new Intent(MainActivity.this, MissionActivity.class);
+                        mIntent.putExtra("id", greenMissionTask.getId());
+                        mIntent.putExtra("position", position);
+                        startActivity(mIntent);
+                        break;
+                    case "5":
+                        mIntent = new Intent(MainActivity.this, MissionRecorActivity.class);
+                        mIntent.putExtra("id", greenMissionTask.getId());
+                        mIntent.putExtra("taskId", greenMissionTask.getTaskid());
+                        startActivity(mIntent);
+                        break;
+                    case "9":
+                        mIntent = new Intent(MainActivity.this, MissionActivity.class);
+                        mIntent.putExtra("id", greenMissionTask.getId());
+                        mIntent.putExtra("position", position);
+                        startActivity(mIntent);
+                        break;
+                    default:
+                        break;
+                }
+
+                mDialogUtil.cancelDialog();
+            }
+        });
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        OkingLocationMannager.getInstence().cancelLocation();
+        OkingLocationManager.getInstence().cancelLocation();
         EventBus.getDefault().unregister(this);
         OkingEMManager.getInstence().unRegist();
         Log.i("Oking", "销毁");
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Process.killProcess(Process.myPid());
     }
 
 
@@ -503,6 +720,18 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.tv_doing)
+    public void onViewClicked() {
+
+        if (mNewsGreenMissionTasks.size() < 1) {
+            mTvDoing.setVisibility(View.GONE);
+            RxToast.success("当前任务已经执行完毕了~~~~");
+        } else {
+
+            showBottomDialog();
+        }
+    }
+
     class MsgListener implements EMMessageListener {
 
         @Override
@@ -511,7 +740,7 @@ public class MainActivity extends BaseActivity {
             /**
              * 巨坑：这个回调方法是子线程，请切换主线程更新UI！！！！！！！！！！！！！1
              */
-            if (!isMessageFragmentShow){
+            if (!isMessageFragmentShow) {
                 mUnreadMsgCount = mUnreadMsgCount + list.size();
                 AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                     @Override
@@ -519,10 +748,9 @@ public class MainActivity extends BaseActivity {
                         mNearby.setBadgeCount(mUnreadMsgCount);
                     }
                 });
-            }else {
-                mUnreadMsgCount=0;
+            } else {
+                mUnreadMsgCount = 0;
             }
-
 
 
         }
@@ -558,15 +786,14 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-//
-            RxToast.error(getApplicationContext(), "返回键...", Toast.LENGTH_SHORT).show();
+            EMClient.getInstance().logout(true);
+            ActivityUtil.AppExit(BaseApplication.getApplictaion());
             return true;//return true;拦截事件传递,从而屏蔽back键。
         }
         if (KeyEvent.KEYCODE_HOME == keyCode) {
-            RxToast.error(getApplicationContext(), "HOME 键已被禁用...", Toast.LENGTH_SHORT).show();
             return true;//同理
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

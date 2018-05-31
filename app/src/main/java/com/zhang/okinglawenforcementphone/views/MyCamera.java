@@ -1,5 +1,7 @@
 package com.zhang.okinglawenforcementphone.views;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.view.SurfaceHolder;
@@ -7,8 +9,11 @@ import android.widget.Toast;
 
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxToast;
+import com.zhang.baselib.utils.PicUtil;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ShootActivity;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,6 +38,7 @@ public class MyCamera implements Camera.PictureCallback, Camera.ShutterCallback 
     public void openCamera() {
         if (null == mCamera) {
             mCamera = Camera.open();
+            mCamera.setDisplayOrientation(90);
         }
     }
 
@@ -100,18 +106,29 @@ public class MyCamera implements Camera.PictureCallback, Camera.ShutterCallback 
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        try {
-
-//            String filename = (String) android.text.format.DateFormat
-//                    .format("yyyyMMdd_HHmmss", System.currentTimeMillis());
+            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+            bmp = PicUtil.rotateBitmapByDegree(bmp, 90);
             String filename = UUID.randomUUID().toString();
-            FileOutputStream out;
             String filePathname = "/storage/emulated/0/oking/mission_pic/" + filename+".jpg";
-            out = new FileOutputStream(filePathname);
-            out.write(data);
-            out.flush();
-            out.close();
-            paths.add(filePathname);
+            save(bmp, filePathname, filename);
+
+
+    }
+
+
+    private void save(Bitmap bitmap, String filePath, String fileName) {
+        File file = new File(filePath);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs(); // 创建文件夹
+        }
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos); // 向缓冲区之中压缩图片
+            bos.flush();
+            bos.close();
+
+            paths.add(filePath);
 
             RxToast.success(BaseApplication.getApplictaion(), "拍照成功", Toast.LENGTH_SHORT).show();
             mHandler.postDelayed(new Runnable() {
@@ -124,10 +141,8 @@ public class MyCamera implements Camera.PictureCallback, Camera.ShutterCallback 
             //重新启动预览
             mCamera.startPreview();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+
         }
     }
 

@@ -29,36 +29,36 @@ public class OkingFileManager {
     public void init() {
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "oking/mission_pic");
         if (!mediaStorageDir.exists()) {
-            mediaStorageDir.mkdir();
+            mediaStorageDir.mkdirs();
         }
         File mediaStorageSignDir = new File(Environment.getExternalStorageDirectory(), "oking/mission_signature");
         if (!mediaStorageSignDir.exists()) {
-            mediaStorageSignDir.mkdir();
+            mediaStorageSignDir.mkdirs();
         }
 
         File mediaStorageVideoDir = new File(Environment.getExternalStorageDirectory(), "oking/mission_video");
 
         if (!mediaStorageVideoDir.exists()) {
-            mediaStorageVideoDir.mkdir();
+            mediaStorageVideoDir.mkdirs();
         }
 
         File printStorageVideoDir = new File(Environment.getExternalStorageDirectory(), "oking/print");
 
         if (!printStorageVideoDir.exists()) {
-            printStorageVideoDir.mkdir();
+            printStorageVideoDir.mkdirs();
         }
 
         File locationStorageVideoDir = new File(Environment.getExternalStorageDirectory(), "oking/location");
 
         if (!locationStorageVideoDir.exists()) {
-            locationStorageVideoDir.mkdir();
+            locationStorageVideoDir.mkdirs();
         }
 
 
         File logStorageVideoDir = new File(Environment.getExternalStorageDirectory(), "oking/System_log");
 
         if (!logStorageVideoDir.exists()) {
-            logStorageVideoDir.mkdir();
+            logStorageVideoDir.mkdirs();
         }
 
     }

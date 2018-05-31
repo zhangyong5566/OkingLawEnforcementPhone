@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zhang.okinglawenforcementphone.MediaManager;
 import com.zhang.okinglawenforcementphone.R;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 
 import java.io.IOException;
@@ -24,14 +25,14 @@ import java.util.ArrayList;
 
 public class SoundSimpleAdapter extends BaseAdapter {
 
-    private ArrayList<GreenMedia> greenMedias;
+    private ArrayList<GreenEvidenceMedia> greenMedias;
     private OnClickListener onClickListener;
     private boolean canAdd;
 
     private View viewanim;
     private AnimationDrawable mDrawable;
 
-    public SoundSimpleAdapter(ArrayList<GreenMedia> greenMedias, boolean canAdd) {
+    public SoundSimpleAdapter(ArrayList<GreenEvidenceMedia> greenMedias, boolean canAdd) {
         this.greenMedias = greenMedias;
         this.canAdd = canAdd;
     }
@@ -142,7 +143,7 @@ public class SoundSimpleAdapter extends BaseAdapter {
 
 
     public interface OnClickListener {
-        void onLongItemClick(SoundSimpleAdapter adapter, ArrayList<GreenMedia> data, int position);
+        void onLongItemClick(SoundSimpleAdapter adapter, ArrayList<GreenEvidenceMedia> data, int position);
 
         void onAddSoundClick();
     }

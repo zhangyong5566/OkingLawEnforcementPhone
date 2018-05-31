@@ -47,6 +47,7 @@ public class GreenMissionTask {
     private String typename;
     private String typeoftask;
     private String userid;
+    private Boolean todo;       //是否已经加入代办
     private int drawLaLoType;                       //绘制类型（圆4或者多边形5）
     private String mcoordinateJson;             //经纬度范围
     @ToMany(referencedJoinProperty = "greenMemberId")
@@ -57,7 +58,7 @@ public class GreenMissionTask {
     /** Used for active entity operations. */
     @Generated(hash = 499486839)
     private transient GreenMissionTaskDao myDao;
-    @Generated(hash = 1087053633)
+    @Generated(hash = 789338819)
     public GreenMissionTask(Long id, String approved_person,
             String approved_person_name, Long approved_time, Long begin_time,
             Long create_time, Long delivery_time, Long end_time,
@@ -66,8 +67,8 @@ public class GreenMissionTask {
             String publisher_name, String receiver, String receiver_name,
             String rwly, String rwqyms, String spr, String spyj, String status,
             String task_area, String task_content, String task_name, int task_type,
-            String typename, String typeoftask, String userid, int drawLaLoType,
-            String mcoordinateJson) {
+            String typename, String typeoftask, String userid, Boolean todo,
+            int drawLaLoType, String mcoordinateJson) {
         this.id = id;
         this.approved_person = approved_person;
         this.approved_person_name = approved_person_name;
@@ -100,6 +101,7 @@ public class GreenMissionTask {
         this.typename = typename;
         this.typeoftask = typeoftask;
         this.userid = userid;
+        this.todo = todo;
         this.drawLaLoType = drawLaLoType;
         this.mcoordinateJson = mcoordinateJson;
     }
@@ -298,6 +300,12 @@ public class GreenMissionTask {
     public void setUserid(String userid) {
         this.userid = userid;
     }
+    public Boolean getTodo() {
+        return this.todo;
+    }
+    public void setTodo(Boolean todo) {
+        this.todo = todo;
+    }
     public int getDrawLaLoType() {
         return this.drawLaLoType;
     }
@@ -405,6 +413,7 @@ public class GreenMissionTask {
                 ", typename='" + typename + '\'' +
                 ", typeoftask='" + typeoftask + '\'' +
                 ", userid='" + userid + '\'' +
+                ", todo=" + todo +
                 ", drawLaLoType=" + drawLaLoType +
                 ", mcoordinateJson='" + mcoordinateJson + '\'' +
                 ", members=" + members +

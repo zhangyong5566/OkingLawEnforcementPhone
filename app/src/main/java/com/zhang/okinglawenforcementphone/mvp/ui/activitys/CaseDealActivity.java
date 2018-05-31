@@ -10,15 +10,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenCaseDao;
-import com.zhang.okinglawenforcementphone.beans.SaveOrRemoveDataEvent;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.CaseDealFragment;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +34,7 @@ public class CaseDealActivity extends BaseActivity {
     private RxDialogSureCancel mRxDialogSureCancel;
     private GreenCase mUnique;
     private CaseDealFragment mCaseDealFragment;
+    private String mAjid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,58 +53,20 @@ public class CaseDealActivity extends BaseActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment documentaryEvidenceFragment = getSupportFragmentManager().findFragmentByTag("documentaryEvidenceFragment");
-                Fragment caseEvidenceFragment = getSupportFragmentManager().findFragmentByTag("caseEvidenceFragment");
-                Fragment caseAudioVideoEvidenceFragment = getSupportFragmentManager().findFragmentByTag("caseAudioVideoEvidenceFragment");
-                if (documentaryEvidenceFragment != null && documentaryEvidenceFragment.getUserVisibleHint()) {
-                    saveData(documentaryEvidenceFragment);
-
-                } else if (caseAudioVideoEvidenceFragment != null && caseAudioVideoEvidenceFragment.getUserVisibleHint()) {
-                    saveData(caseAudioVideoEvidenceFragment);
-                }else if (caseEvidenceFragment!=null&&caseEvidenceFragment.getUserVisibleHint()){
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.show(mCaseDealFragment);
-                    fragmentTransaction.remove(caseEvidenceFragment).commit();
-                }else {
-                    finish();
-                }
+                finish();
 
             }
         });
     }
 
-    private void saveData(final Fragment fragment) {
-        if (mRxDialogSureCancel == null) {
-            mRxDialogSureCancel = new RxDialogSureCancel(CaseDealActivity.this);
-            mRxDialogSureCancel.setContent("是否需要保存数据？");
-            mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mRxDialogSureCancel.cancel();
-                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                }
-            });
-
-            mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mRxDialogSureCancel.cancel();
-                    EventBus.getDefault().post(new SaveOrRemoveDataEvent(-1));
-                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                }
-            });
-        }
-
-        mRxDialogSureCancel.show();
-    }
 
     private void initData() {
 
         Intent intent = getIntent();
-        String ajid = intent.getStringExtra("AJID");
-        if (ajid != null) {
+        mAjid = intent.getStringExtra("AJID");
+        if (mAjid != null) {
 
-            mUnique = GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.AJID.eq(ajid)).unique();
+            mUnique = GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.AJID.eq(mAjid)).unique();
         }
 
 
@@ -132,7 +92,8 @@ public class CaseDealActivity extends BaseActivity {
         return mUnique;
     }
 
-    public void setToolbarText(String title) {
-        mTvTitle.setText(title);
+    public String getAJID() {
+        return mAjid;
     }
+
 }

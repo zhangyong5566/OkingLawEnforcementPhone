@@ -15,6 +15,47 @@
         <item>媒体披露</item>
         <item>群众举报</item>
     </string-array>
+
+    <string-array name="menus">
+        <item>一般任务</item>
+        <item>紧急任务</item>
+        <item>待办</item>
+        <item>安排</item>
+        <item>执行</item>
+        <item>上报</item>
+        <item>笔录</item>
+        <item>办案</item>
+        <item>勘验</item>
+        <item>统计</item>
+        <item>执法</item>
+        <item>日志</item>
+        <item>轨迹</item>
+        <item>全部</item>
+        <item>巡查任务接收安排</item>
+        <item>任务执行</item>
+        <item>任务上报</item>
+        <item>调查笔录</item>
+        <item>责令停止违法行为通知</item>
+        <item>水行政当场处罚决定书</item>
+        <item>法律法规库</item>
+        <item>执法规范</item>
+        <item>预立案</item>
+        <item>现场勘验</item>
+        <item>案例库</item>
+        <item>日志统计</item>
+        <item>日志(已完成)</item>
+        <item>地图查询</item>
+        <item>地图任务展示</item>
+        <item>区域执法记录查询</item>
+        <item>轨迹管理</item>
+        <item>案件登记</item>
+        <item>案件受理</item>
+        <item>案件处理</item>
+        <item>案件转办</item>
+        <item>修改密码</item>
+        <item>意见反馈</item>
+        <item>关于</item>
+    </string-array>
     <string-array name="spinner_tasknature">
         <item>日常执法</item>
         <item>专项执法</item>

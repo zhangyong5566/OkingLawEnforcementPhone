@@ -4,20 +4,8 @@
     android:layout_height="match_parent">
 
 
-    <Button
-        android:id="@+id/add_evidence_button"
-        android:layout_width="wrap_content"
-        android:layout_height="80px"
-        android:layout_alignParentRight="true"
-        android:layout_margin="10px"
-        android:background="@drawable/btn_addevidence_selector"
-        android:text="添加视听资料"
-        android:textSize="32px"
-        android:textColor="@color/white" />
-
     <LinearLayout
         android:id="@+id/ll_01"
-        android:layout_below="@id/add_evidence_button"
         android:layout_width="match_parent"
         android:layout_height="60px"
         android:orientation="horizontal">

@@ -307,4 +307,15 @@ public interface GDWaterService {
     @FormUrlEncoded
     @POST("gdWater/yla/addYlaForAndroid")
     Observable<ResponseBody>  uploadCaseInAdvance(@FieldMap Map<String, Object> params);
+
+    /**
+     * 更改信息
+     * /publicController/updUsers
+     */
+    @FormUrlEncoded
+    @POST("gdWater/publicController/updUsers")
+    Observable<ResponseBody> uploadUserInfo(@FieldMap Map<String, Object> params);
+
 }
+
+

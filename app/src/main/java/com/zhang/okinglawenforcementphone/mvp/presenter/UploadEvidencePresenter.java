@@ -1,6 +1,7 @@
 package com.zhang.okinglawenforcementphone.mvp.presenter;
 
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadEvidenceContract;
 import com.zhang.okinglawenforcementphone.mvp.model.UploadEvidenceModel;
@@ -22,7 +23,7 @@ public class UploadEvidencePresenter implements UploadEvidenceContract.Presenter
     }
 
     @Override
-    public void uploadEvidence(Map<String, Object> fields, GreenEvidence evidence, List<GreenMedia> picGreenMedias) {
+    public void uploadEvidence(Map<String, Object> fields, GreenEvidence evidence, List<GreenEvidenceMedia> picGreenMedias) {
         mModel.uploadEvidence(fields,evidence,picGreenMedias);
     }
 

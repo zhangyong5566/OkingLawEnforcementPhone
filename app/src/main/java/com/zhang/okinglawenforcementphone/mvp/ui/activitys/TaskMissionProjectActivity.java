@@ -12,8 +12,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.baselib.utils.TextUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.ArrangeMissionRcyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
@@ -94,7 +93,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
 
                     case "TrajectoryListActivity":
                         mGreenMissionTask = mAarrangeMissionRcyAdapter.getData().get(position);
-                        GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao()
+                        GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao()
                                 .queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mGreenMissionTask.getTaskid())).unique();
                         if (unique == null || unique.getLocJson() == null|| unique.getLocJson().equals("[]")|| TextUtils.isEmpty(unique.getLocJson())) {
                             RxToast.error("抱歉后台哥们不给力，木有轨迹返回给我~~~~");
@@ -138,7 +137,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
                 Schedulers.io().createWorker().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        mGreenMissionTasks = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao()
+                        mGreenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                                 .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Status.eq(2))
                                 .list();
                         if (mGreenMissionTasks.size() > 0) {
@@ -166,7 +165,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
                 break;
             case "TaskExecutionActivity":
                 mTvTitle.setText("待执行任务列表");
-                mGreenMissionTasks = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao()
+                mGreenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                         .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()))
                         .whereOr(GreenMissionTaskDao.Properties.Status.eq(3), GreenMissionTaskDao.Properties.Status.eq(4))
                         .list();
@@ -194,7 +193,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
 
             case "ReportTaskActivity":
                 mTvTitle.setText("待上报任务列表");
-                mGreenMissionTasks = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao()
+                mGreenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                         .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Status.eq(100))
                         .list();
                 if (mGreenMissionTasks.size() > 0) {
@@ -221,7 +220,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
 
             case "TrajectoryListActivity":
                 mTvTitle.setText("任务轨迹列表");
-                QueryBuilder<GreenMissionTask> greenMissionTaskQueryBuilder = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao()
+                QueryBuilder<GreenMissionTask> greenMissionTaskQueryBuilder = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                         .queryBuilder();
                 greenMissionTaskQueryBuilder.where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()));
                 greenMissionTaskQueryBuilder.whereOr(GreenMissionTaskDao.Properties.Status.eq(100), GreenMissionTaskDao.Properties.Status.eq(5));
@@ -249,7 +248,7 @@ public class TaskMissionProjectActivity extends BaseActivity {
                 break;
             case "CompleteListActivity":
                 mTvTitle.setText("任务完成列表");
-                mGreenMissionTasks = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao()
+                mGreenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                         .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Status.eq(5)).list();
                 if (mGreenMissionTasks.size() > 0) {
                     AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {

@@ -9,41 +9,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:layout_alignParentRight="true"
+    <TextView
+        android:id="@+id/takePictureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        >
-        <Button
-            android:id="@+id/bt_back"
-            android:layout_width="40dp"
-            android:background="@drawable/btn_waiting_selector"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:layout_height="90dp"
-            android:text="返回"/>
-        <Button
-            android:layout_marginTop="15dp"
-            android:id="@+id/takePictureButton"
-            android:background="@drawable/btn_waiting_selector"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:layout_width="40dp"
-            android:layout_height="90dp"
-            android:text="拍照"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btn_taking_selector"
+        android:gravity="center"
+        android:text="拍照"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/bt_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/takePictureButton"
+        android:background="@drawable/btn_taking_selector"
+        android:gravity="center"
+        android:text="返回"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
 
 
-        <Button
-            android:layout_marginTop="15dp"
-            android:id="@+id/bt_succ"
-            android:background="@drawable/btn_waiting_selector"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:layout_width="40dp"
-            android:layout_height="90dp"
-            android:text="完成"/>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/bt_succ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/takePictureButton"
+        android:background="@drawable/btn_taking_selector"
+        android:gravity="center"
+        android:text="完成"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
 
 </RelativeLayout>

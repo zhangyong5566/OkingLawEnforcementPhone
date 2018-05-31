@@ -1,15 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\AsWorkplace\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\values_values.arsc.flat",
-            "map": []
-        },
-        {
-            "outputFile": "E:\\Users\\Administrator\\AndroidStudioProjects\\shuizheng\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\values_values.arsc.flat",
-            "map": []
-        },
-        {
-            "outputFile": "D:\\AsWorkplace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\values_values.arsc.flat",
+            "outputFile": "G:\\AndroidWorkSpace\\OkingLawEnforcementPhone\\android-pdf-viewer\\build\\intermediates\\res\\merged\\androidTest\\debug\\values_values.arsc.flat",
             "map": []
         }
     ]

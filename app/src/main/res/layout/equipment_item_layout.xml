@@ -1,67 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
-    <CheckBox android:id="@+id/cb"
-        android:background="@drawable/member_item_bg2"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:layout_gravity="center_vertical"
-        android:layout_width="45dp"
-        android:layout_height="35dp"/>
 
-    <TextView
-        android:background="@drawable/member_item_bg2"
-        android:id="@+id/type_textView"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/task_other_tx"
-        android:textSize="12sp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:background="@drawable/member_item_bg2"
-        android:id="@+id/value_textView"
-        android:layout_width="95dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/task_other_tx"
-        android:textSize="12sp"/>
+        <CheckBox
+            android:id="@+id/cb"
+            android:layout_width="45dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" />
 
-    <TextView
-        android:background="@drawable/member_item_bg2"
-        android:id="@+id/remarks_textView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/task_other_tx"
-        android:textSize="12sp"/>
+        <TextView
+            android:id="@+id/type_textView"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
 
-    <TextView
-        android:background="@drawable/member_item_bg2"
-        android:id="@+id/tv_mc"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/task_other_tx"
-        android:textSize="12sp"/>
+        <TextView
+            android:id="@+id/value_textView"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
 
-    <TextView
-        android:background="@drawable/member_item_bg2"
-        android:id="@+id/tv_attribute"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/task_other_tx"
-        android:textSize="12sp"/>
+        <TextView
+            android:id="@+id/remarks_textView"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_mc"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_attribute"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/member_item_bg2"
+            android:gravity="center"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+    </LinearLayout>
+</HorizontalScrollView>

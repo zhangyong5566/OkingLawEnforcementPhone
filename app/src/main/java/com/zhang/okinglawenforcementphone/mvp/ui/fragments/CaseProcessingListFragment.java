@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.CaseListAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
@@ -146,7 +145,7 @@ public class CaseProcessingListFragment extends Fragment {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String ajid = jsonObject.getString("AJID");
-                                GreenCase unique = GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.AJID.eq(ajid)).unique();
+                                GreenCase unique = GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.AJID.eq(ajid)).unique();
 
                                 if (unique == null) {
                                     GreenCase greenCase = new GreenCase();
@@ -182,7 +181,7 @@ public class CaseProcessingListFragment extends Fragment {
                                     greenCase.setZFZH1(jsonObject.getString("ZFZH1"));
                                     greenCase.setZFZH2(jsonObject.getString("ZFZH2"));
                                     greenCase.setZT(jsonObject.getString("ZT"));
-                                    GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().insert(greenCase);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().insert(greenCase);
                                     mCaseList.add(greenCase);
                                 } else {
                                     unique.setAJID(ajid);
@@ -216,7 +215,7 @@ public class CaseProcessingListFragment extends Fragment {
                                     unique.setZFZH1(jsonObject.getString("ZFZH1"));
                                     unique.setZFZH2(jsonObject.getString("ZFZH2"));
                                     unique.setZT(jsonObject.getString("ZT"));
-                                    GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().update(unique);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().update(unique);
                                     mCaseList.add(unique);
                                 }
 
@@ -233,7 +232,7 @@ public class CaseProcessingListFragment extends Fragment {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         mLayoutSwipeRefresh.setRefreshing(false);
-                        List<GreenCase> greenCases = GreenDAOMannager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.CBRID1.eq(OkingContract.CURRENTUSER.getUserid())).list();
+                        List<GreenCase> greenCases = GreenDAOManager.getInstence().getDaoSession().getGreenCaseDao().queryBuilder().where(GreenCaseDao.Properties.CBRID1.eq(OkingContract.CURRENTUSER.getUserid())).list();
                         mCaseListAdapter.setNewData(greenCases);
 
                     }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +26,7 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
@@ -35,6 +38,9 @@ import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.TextUtil;
 import com.zhang.okinglawenforcementphone.R;
+import com.zhang.okinglawenforcementphone.adapter.AllMenuSubRecyAdapter;
+import com.zhang.okinglawenforcementphone.adapter.MapTaskRecyAdapter;
+import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.ApproverBean;
 import com.zhang.okinglawenforcementphone.beans.InspectTaskBean;
@@ -42,12 +48,14 @@ import com.zhang.okinglawenforcementphone.beans.LatLngListOV;
 import com.zhang.okinglawenforcementphone.beans.MemberOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.RecipientBean;
+import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
 import com.zhang.okinglawenforcementphone.htttp.Api;
 import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.ApproverPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.CBRPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
+import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +65,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -81,22 +90,22 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     @BindView(R.id.et_description)
     EditText mEt_description;           //任务描述
     @BindView(R.id.sp_recipient)
-    Spinner mSp_recipient;     //接收人
+    TextView mSp_recipient;     //接收人
     @BindView(R.id.sp_emergency)
-    Spinner mSp_emergency;      //紧急程度
+    TextView mSp_emergency;      //紧急程度
 
     @BindView(R.id.sp_approver)
-    Spinner mSp_approver;   //审批人
+    TextView mSp_approver;   //审批人
     @BindView(R.id.sp_source)
-    Spinner mSp_source;     //线索来源
+    TextView mSp_source;     //线索来源
     @BindView(R.id.sp_tasknature)
-    Spinner mSp_tasknature;   //任务性质
+    TextView mSp_tasknature;   //任务性质
     @BindView(R.id.bt_select_begintime)
     Button mBt_select_begintime;
     @BindView(R.id.bt_select_endtime)
     Button mBt_select_endtime;
     @BindView(R.id.sp_tasktype)
-    Spinner mSp_tasktype;       //任务类型
+    TextView mSp_tasktype;       //任务类型
     @BindView(R.id.publisher_tv)
     TextView mPublisher_tv;         //申请人
     @BindView(R.id.ib_map)
@@ -106,15 +115,10 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private TimePickerDialog mBeginDialogAll;
     private TimePickerDialog mEndDialogAll;
     private List<ApproverBean.SZJCBean> mSzjc;
-    private String[] mSourceArray;
-    private String[] mTasknatureArray;
-    private String[] mApprovers;
-    private String[] mEmergencyArray;
-    private String[] mTasktypeArray;
+
     private RxDialogLoading mSubRxDialogLoading;
     private RxDialogLoading mRxDialogLoading;
     private List<ApproverBean.CBRBean> mCbr;
-    private ArrayList<String> mRecipients;      //接收人数据源
     private String mSelecRecipient;         //选中的接收人名称
     private String mEmergency;
     private String mApproverId;    //选中的审批人ID
@@ -127,9 +131,19 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private InspectTaskBean inspectTaskBean;
     private long mBeginMillseconds = 0;
     private String mTasktype;
-    private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private Intent mIntent;
+    private DialogUtil mDialogUtil;
+    private View mButtonDailog;
+    private TextView mTv_title;
+    private ArrayList<SourceArrayOV> mSourceArrayOVS;
+    private SourceArrayRecyAdapter mSourceArrayRecyAdapter;
+    private ArrayList<SourceArrayOV> mTasknatureArrayOVS;
+    private ArrayList<SourceArrayOV> mEmergencyArrayOVS;
+    private List<SourceArrayOV> mTasktypeArrayOVS;
+    private List<SourceArrayOV> mApproversOVS;
+    private List<SourceArrayOV> mRecipientsOVS;
 
+    private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,27 +182,138 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             mPublisher_tv.setText(OkingContract.CURRENTUSER.getUserName());
 
         }
-        initSpinner();
+        initBottomDialog();
         initWebView();
 
     }
 
-    private void initSpinner() {
-        mSourceArray = getResources().getStringArray(R.array.spinner_source);
-        SpinnerArrayAdapter sourceArrayAdapter = new SpinnerArrayAdapter(mSourceArray);
-        mSp_source.setAdapter(sourceArrayAdapter);
+    private void initBottomDialog() {
 
-        mTasknatureArray = getResources().getStringArray(R.array.spinner_tasknature);
-        SpinnerArrayAdapter tasknatureArrayAdapter = new SpinnerArrayAdapter(mTasknatureArray);
-        mSp_tasknature.setAdapter(tasknatureArrayAdapter);
 
-        mEmergencyArray = getResources().getStringArray(R.array.spinner_emergency);
-        SpinnerArrayAdapter emergencyArrayAdapter = new SpinnerArrayAdapter(mEmergencyArray);
-        mSp_emergency.setAdapter(emergencyArrayAdapter);
+        if (mDialogUtil == null) {
+            mDialogUtil = new DialogUtil();
+            mButtonDailog = View.inflate(BaseApplication.getApplictaion(), R.layout.maptask_dialog, null);
+            mTv_title = mButtonDailog.findViewById(R.id.tv_title);
+            RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
+            recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+            recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+            mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
+            mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+            recyList.setAdapter(mSourceArrayRecyAdapter);
+            mSourceArrayRecyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    List<SourceArrayOV> sourceArrayOVS = adapter.getData();
+                    SourceArrayOV sourceArrayOV = sourceArrayOVS.get(position);
+                    switch (sourceArrayOV.getType()) {
+                        case 0:
 
-        mTasktypeArray = getResources().getStringArray(R.array.spinner_tasktype);
-        SpinnerArrayAdapter tasktypeArrayAdapter = new SpinnerArrayAdapter(mTasktypeArray);
-        mSp_tasktype.setAdapter(tasktypeArrayAdapter);
+                            if ("上级交办".equals(sourceArrayOV.getSource())) {
+                                mSource = "0";
+                            } else if ("部门移送".equals(sourceArrayOV.getSource())) {
+                                mSource = "1";
+                            } else if ("系统报警".equals(sourceArrayOV.getSource())) {
+                                mSource = "2";
+                            } else if ("日常巡查".equals(sourceArrayOV.getSource())) {
+                                mSource = "3";
+                            } else if ("媒体披露".equals(sourceArrayOV.getSource())) {
+                                mSource = "4";
+                            } else if ("群众举报".equals(sourceArrayOV.getSource())) {
+                                mSource = "5";
+                            }
+
+                            mSp_source.setText(sourceArrayOV.getSource());
+
+                            break;
+                        case 1:
+
+                            if ("日常执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "0";
+                            } else if ("联合执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "1";
+                            } else if ("专项执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "2";
+                            }
+                            mSp_tasknature.setText(sourceArrayOV.getSource());
+                            break;
+                        case 2:
+
+                            if ("特急".equals(sourceArrayOV.getSource())) {
+                                mEmergency = "0";
+                            } else if ("紧急".equals(sourceArrayOV.getSource())) {
+                                mEmergency = "1";
+                            } else if ("一般".equals(sourceArrayOV.getSource())) {
+                                mEmergency = "2";
+                            }
+                            mSp_emergency.setText(sourceArrayOV.getSource());
+                            break;
+                        case 3:
+
+                            if ("河道管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "0";
+                            } else if ("河道采砂".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "1";
+                            } else if ("水资源管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "2";
+                            } else if ("水土保持管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "3";
+                            } else if ("水利工程管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "4";
+                            }
+                            mSp_tasktype.setText(sourceArrayOV.getSource());
+                            break;
+                        case 4:
+                            mApproverId = mSzjc.get(position).getUSERID();
+                            mApprover = sourceArrayOV.getSource();
+                            mSp_approver.setText(sourceArrayOV.getSource());
+                            break;
+                        case 5:
+                            mSelecRecipient = sourceArrayOV.getSource();
+                            mReBean = mRecipientBeans.get(position);
+                            mSp_recipient.setText(sourceArrayOV.getSource());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    mDialogUtil.cancelDialog();
+                }
+            });
+        }
+
+
+        String[] sourceArray = getResources().getStringArray(R.array.spinner_source);
+        mSourceArrayOVS = new ArrayList<>();
+        for (String s : sourceArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(0);
+            sourceArrayOV.setSource(s);
+            mSourceArrayOVS.add(sourceArrayOV);
+        }
+        String[] tasknatureArray = getResources().getStringArray(R.array.spinner_tasknature);
+        mTasknatureArrayOVS = new ArrayList<>();
+        for (String s : tasknatureArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(1);
+            sourceArrayOV.setSource(s);
+            mTasknatureArrayOVS.add(sourceArrayOV);
+        }
+        String[] emergencyArray = getResources().getStringArray(R.array.spinner_emergency);
+        mEmergencyArrayOVS = new ArrayList<>();
+        for (String s : emergencyArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(2);
+            sourceArrayOV.setSource(s);
+            mEmergencyArrayOVS.add(sourceArrayOV);
+        }
+        String[] tasktypeArray = getResources().getStringArray(R.array.spinner_tasktype);
+        mTasktypeArrayOVS = new ArrayList<>();
+        for (String s : tasktypeArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(3);
+            sourceArrayOV.setSource(s);
+            mTasktypeArrayOVS.add(sourceArrayOV);
+        }
         if (mRxDialogLoading == null) {
             initWaitingDialog();
         }
@@ -206,12 +331,14 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                         ApproverBean approverBean = gson.fromJson(result, ApproverBean.class);
                         mSzjc = approverBean.getSZJC();
                         Collections.sort(mSzjc, new ApproverPinyinComparator());
-                        mApprovers = new String[mSzjc.size()];
+                        mApproversOVS = new ArrayList<>();
                         for (int i = 0; i < mSzjc.size(); i++) {
-                            mApprovers[i] = mSzjc.get(i).getUSERNAME();
+                            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                            sourceArrayOV.setType(4);
+                            sourceArrayOV.setSource(mSzjc.get(i).getUSERNAME());
+                            mApproversOVS.add(sourceArrayOV);
                         }
-                        SpinnerArrayAdapter approverAdapter = new SpinnerArrayAdapter(mApprovers);
-                        mSp_approver.setAdapter(approverAdapter);
+
 
                     }
                 }, new Consumer<Throwable>() {
@@ -256,14 +383,14 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                         }
 
                         Collections.sort(mRecipientBeans, new CBRPinyinComparator());
-                        mRecipients = new ArrayList<>();
+                        mRecipientsOVS = new ArrayList<>();
                         for (RecipientBean bean : mRecipientBeans) {
-                            mRecipients.add(bean.getUSERNAME());
+                            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                            sourceArrayOV.setType(5);
+                            sourceArrayOV.setSource(bean.getUSERNAME());
+                            mRecipientsOVS.add(sourceArrayOV);
                         }
-                        String[] objects = mRecipients.toArray(new String[0]);
 
-                        SpinnerArrayAdapter recipientsAdapter = new SpinnerArrayAdapter(objects);
-                        mSp_recipient.setAdapter(recipientsAdapter);
 
                     }
                 }, new Consumer<Throwable>() {
@@ -288,119 +415,8 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     }
 
     private void initLister() {
-        mSp_approver.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mApproverId = mSzjc.get(i).getUSERID();
-                mApprover = mSzjc.get(i).getUSERNAME();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-
-        mSp_source.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView tv = (TextView) view;
-                tv.setTextSize(12.0f);
-                if ("上级交办".equals(mSourceArray[i])) {
-                    mSource = "0";
-                } else if ("部门移送".equals(mSourceArray[i])) {
-                    mSource = "1";
-                } else if ("系统报警".equals(mSourceArray[i])) {
-                    mSource = "2";
-                } else if ("日常巡查".equals(mSourceArray[i])) {
-                    mSource = "3";
-                } else if ("媒体披露".equals(mSourceArray[i])) {
-                    mSource = "4";
-                } else if ("群众举报".equals(mSourceArray[i])) {
-                    mSource = "5";
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSp_tasknature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView tv = (TextView) view;
-                tv.setTextSize(12.0f);
-                if ("日常执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "0";
-                } else if ("联合执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "1";
-                } else if ("专项执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "2";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSp_emergency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView tv = (TextView) view;
-                tv.setTextSize(12.0f);
-                if ("特急".equals(mEmergencyArray[i])) {
-                    mEmergency = "0";
-                } else if ("紧急".equals(mEmergencyArray[i])) {
-                    mEmergency = "1";
-                } else if ("一般".equals(mEmergencyArray[i])) {
-                    mEmergency = "2";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSp_recipient.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                mSelecRecipient = mRecipients.get(position);
-                mReBean = mRecipientBeans.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        mSp_tasktype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ("河道管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "0";
-                } else if ("河道采砂".equals(mTasktypeArray[i])) {
-                    mTasktype = "1";
-                } else if ("水资源管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "2";
-                } else if ("水土保持管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "3";
-                } else if ("水利工程管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "4";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
     }
 
@@ -419,9 +435,39 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
 
     }
 
-    @OnClick({R.id.bt_select_begintime, R.id.bt_select_endtime, R.id.bt_ok, R.id.ib_map})
+    @OnClick({R.id.sp_tasktype, R.id.sp_approver, R.id.sp_source, R.id.sp_tasknature, R.id.sp_recipient, R.id.sp_emergency, R.id.bt_select_begintime, R.id.bt_select_endtime, R.id.bt_ok, R.id.ib_map})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.sp_tasktype:
+                mTv_title.setText("任务类型");
+                mSourceArrayRecyAdapter.setNewData(mTasktypeArrayOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_approver:
+                mTv_title.setText("审批领导");
+                mSourceArrayRecyAdapter.setNewData(mApproversOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_source:
+                mTv_title.setText("线索来源");
+                mSourceArrayRecyAdapter.setNewData(mSourceArrayOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_tasknature:
+                mTv_title.setText("任务性质");
+                mSourceArrayRecyAdapter.setNewData(mTasknatureArrayOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_recipient:
+                mTv_title.setText("接收人");
+                mSourceArrayRecyAdapter.setNewData(mRecipientsOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_emergency:
+                mTv_title.setText("紧急程度");
+                mSourceArrayRecyAdapter.setNewData(mEmergencyArrayOVS);
+                mDialogUtil.showBottomDialog(PatrolsToReleaseActivity.this, mButtonDailog, 300f);
+                break;
             case R.id.bt_select_begintime:     //选择开始时间
                 if (mBeginDialogAll == null) {
                     initBeginWheelYearMonthDayDialog();
@@ -555,6 +601,33 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             });
             mSubRxDialogLoading.setLoadingText("提交数据中,请稍等...");
         }
+
+
+        if (mSp_tasktype.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务类型");
+            return;
+        }
+        if (mSp_approver.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择审批领导");
+            return;
+        }
+        if (mSp_source.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择线索来源");
+            return;
+        }
+        if (mSp_tasknature.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务性质");
+            return;
+        }
+        if (mSp_recipient.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择接收人");
+            return;
+        }
+        if (mSp_emergency.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择紧急程度");
+            return;
+        }
+
         String taskName = mEt_taskname.getText().toString().trim();
         String missionDetail = mList_item_missionDetail.getText().toString().trim();
         String description = mEt_description.getText().toString().trim();
@@ -651,12 +724,37 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             mSubRxDialogLoading.setLoadingText("提交数据中,请稍等...");
         }
 
+        if (mSp_tasktype.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务类型");
+            return;
+        }
+        if (mSp_approver.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择审批领导");
+            return;
+        }
+        if (mSp_source.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择线索来源");
+            return;
+        }
+        if (mSp_tasknature.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务性质");
+            return;
+        }
+        if (mSp_recipient.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择接收人");
+            return;
+        }
+        if (mSp_emergency.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择紧急程度");
+            return;
+        }
 
         String taskName = mEt_taskname.getText().toString().trim();
         String missionDetail = mList_item_missionDetail.getText().toString().trim();
         String description = mEt_description.getText().toString().trim();
         String beginTime = mBt_select_begintime.getText().toString();
         String endTime = mBt_select_endtime.getText().toString();
+
 
 
         if (!TextUtils.isEmpty(taskName) && !TextUtils.isEmpty(missionDetail)
@@ -687,6 +785,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             stringObjectMap.put("rwcd", "0");
             stringObjectMap.put("typeoftask", mTasktype);
             stringObjectMap.put("receiver", mReBean.getUSERID());
+            Log.i("Oking",stringObjectMap.toString()+">>>>");
             if (mMcoordinateJson != null) {
 
                 stringObjectMap.put("coordinateJson", RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), mMcoordinateJson));
@@ -700,7 +799,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                             mSubRxDialogLoading.cancel();
                             String result = responseBody.string();
                             //需要返回个id
-                            Log.i("Oking","巡查任务发布成功："+result);
+                            Log.i("Oking", "巡查任务发布成功：" + result);
                             try {
                                 JSONObject jsonObject = new JSONObject(result);
                                 int code = jsonObject.getInt("code");
@@ -741,7 +840,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(LatLngListOV latLngListOV) {
-       Log.i("Oking",latLngListOV.getLatLngs().size()+">>"+new Gson().toJson(latLngListOV.getLatLngs()));
+        Log.i("Oking", latLngListOV.getLatLngs().size() + ">>" + new Gson().toJson(latLngListOV.getLatLngs()));
     }
 
     @Override

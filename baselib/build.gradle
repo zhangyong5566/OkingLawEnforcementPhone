@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
 
 
 
@@ -10,8 +10,8 @@ android {
                 arguments = [moduleName: project.getName()]
             }
         }
-        minSdkVersion 18
-        targetSdkVersion 26
+        minSdkVersion 17
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -30,7 +30,7 @@ android {
 
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -39,15 +39,16 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.facebook.fresco:fresco:0.12.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.alibaba:arouter-api:1.2.1'
     compile 'org.greenrobot:greendao:3.2.2'
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     //加密
     compile 'net.zetetic:android-database-sqlcipher:3.5.6'
     implementation files('libs/commons-lang3-3.0-beta.jar')
     compile 'com.apkfuns.logutils:library:1.0.6'
     compile 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 }

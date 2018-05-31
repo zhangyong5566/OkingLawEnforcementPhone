@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/editor_enabel_bg"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/tv_taskname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="任务名称"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_taskid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@id/tv_taskname"
+        android:layout_below="@id/tv_taskname"
+        android:layout_marginTop="10dp"
+        android:text="任务ID号:15076048897780719164"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_fbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/tv_taskname"
+        android:layout_below="@id/tv_taskid"
+        android:layout_marginTop="10dp"
+        android:text="发布人"
+        android:textColor="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_alignParentRight="true"
+        android:id="@+id/tv_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_fbr"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="任务状态"
+        android:textColor="#f00"
+        android:textSize="12sp" />
+
+</RelativeLayout>

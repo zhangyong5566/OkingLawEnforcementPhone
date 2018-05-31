@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
@@ -46,12 +48,14 @@ import com.zhang.okinglawenforcementphone.beans.AnswBean;
 import com.zhang.okinglawenforcementphone.beans.Level0Item;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.ProblemBean;
+import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
 import com.zhang.okinglawenforcementphone.beans.WrittenItemBean;
 import com.zhang.okinglawenforcementphone.beans.WrittenRecordLevel0;
 import com.zhang.okinglawenforcementphone.db.LawDao;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadRecordContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.UploadRecordPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
+import com.zhang.okinglawenforcementphone.utils.DialogUtil;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 import com.zhang.okinglawenforcementphone.views.MyRecycelerView;
 
@@ -82,11 +86,11 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
             , R.array.lv_county_11, R.array.lv_county_12, R.array.lv_county_13
             , R.array.lv_county_14, R.array.lv_county_15, 0, 0, R.array.lv_county_18
             , R.array.lv_county_19, R.array.lv_county_20, R.array.lv_county_21};
-    private Spinner mSpCity;
-    private Spinner mSpCounty;
-    private Spinner mSpCity2;
-    private Spinner mSpCounty2;
-    private Spinner mSpType;
+    private TextView mSpCity;
+    private TextView mSpCounty;
+    private TextView mSpCity2;
+    private TextView mSpCounty2;
+    private TextView mSpType;
     private RxDialogLoading mRxDialogLoading;
     private String mCasetype = "1";
     private ArrayList<ProblemBean> mProblemContent;
@@ -118,8 +122,15 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
     private ArrayList<AnswBean> mAnswBeans;
     private UploadRecordPresenter mUploadRecordPresenter;
     private Gson mGson;
-    private String mBxwrtype="0";                                   //被询问人类型
+    private String mBxwrtype = "0";                                   //被询问人类型
     private String mIllegalPerson;
+    private DialogUtil mDialogUtil;
+    private View mButtonDailog;
+    private TextView mTv_title;
+    private ArrayList<SourceArrayOV> mCaseTypeArrayOVS;
+    private ArrayList<SourceArrayOV> mCountyArrayOVS;
+    private ArrayList<SourceArrayOV> mCityArrayOVS;
+    private SourceArrayRecyAdapter mSourceArrayRecyAdapter;
 
     public ExpandableWrittenRecordAdapter(List<MultiItemEntity> data, BaseActivity activity) {
         super(data);
@@ -201,37 +212,121 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                         }
                     });
                 }
+                if (mDialogUtil == null) {
+                    mDialogUtil = new DialogUtil();
+                    mButtonDailog = View.inflate(BaseApplication.getApplictaion(), R.layout.maptask_dialog, null);
+                    mTv_title = mButtonDailog.findViewById(R.id.tv_title);
+                    RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
+                    recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+                    recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+                    mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
+                    mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+                    recyList.setAdapter(mSourceArrayRecyAdapter);
+                    mSourceArrayRecyAdapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            List<SourceArrayOV> datas = adapter.getData();
+                            SourceArrayOV sourceArrayOV = datas.get(position);
+                            switch (sourceArrayOV.getType()) {
+                                case 0:
+                                    mSelectedItem = sourceArrayOV.getSource();
+                                    if (mSelectedItem.equals("无河道采砂许可证案")) {
+                                        mCasetype = "1";
+                                    } else if (mSelectedItem.equals("水土保持方案违法案")) {
+                                        mCasetype = "2";
+                                    }
+                                    if (mLvAsk != null) {
+                                        mProblemContent = LawDao.getProblemContent(mSelectedItem);
+                                        if (mAskAdapter == null) {
+                                            mAskAdapter = new AskAdapter(R.layout.survey_ask_item, mProblemContent);
+                                            mLvAsk.setAdapter(mAskAdapter);
+                                        } else {
+                                            mAskAdapter.setNewData(mProblemContent);
+
+                                        }
+                                    }
+                                    mSpType.setText(sourceArrayOV.getSource());
+                                    break;
+                                case 1:
+                                    int countyId = countyIds[position];
+                                    if (countyId == 0) {
+                                        String[] countyArray = {"无"};
+                                        mCountyArrayOVS = new ArrayList<>();
+                                        for (String s : countyArray) {
+                                            SourceArrayOV sourceArrayOV1 = new SourceArrayOV();
+                                            sourceArrayOV1.setType(2);
+                                            sourceArrayOV1.setSource(s);
+                                            mCountyArrayOVS.add(sourceArrayOV1);
+                                        }
+                                    } else {
+                                        String[] countyArray = BaseApplication.getApplictaion().getResources().getStringArray(countyIds[position]);
+                                        mCountyArrayOVS = new ArrayList<>();
+                                        for (String s : countyArray) {
+                                            SourceArrayOV sourceArrayOV1 = new SourceArrayOV();
+                                            sourceArrayOV1.setType(2);
+                                            sourceArrayOV1.setSource(s);
+                                            mCountyArrayOVS.add(sourceArrayOV1);
+                                        }
+                                    }
+                                    mSpCity.setText(sourceArrayOV.getSource());
+                                    break;
+                                case 2:
+
+
+                                    mSpCounty.setText(sourceArrayOV.getSource());
+                                    break;
+                                case 3:
+                                    int countyId2 = countyIds[position];
+                                    if (countyId2 == 0) {
+                                        String[] countyArray = {"无"};
+                                        mCountyArrayOVS = new ArrayList<>();
+                                        for (String s : countyArray) {
+                                            SourceArrayOV sourceArrayOV1 = new SourceArrayOV();
+                                            sourceArrayOV1.setType(4);
+                                            sourceArrayOV1.setSource(s);
+                                            mCountyArrayOVS.add(sourceArrayOV1);
+                                        }
+                                    } else {
+                                        String[] countyArray = BaseApplication.getApplictaion().getResources().getStringArray(countyIds[position]);
+                                        mCountyArrayOVS = new ArrayList<>();
+                                        for (String s : countyArray) {
+                                            SourceArrayOV sourceArrayOV1 = new SourceArrayOV();
+                                            sourceArrayOV1.setType(4);
+                                            sourceArrayOV1.setSource(s);
+                                            mCountyArrayOVS.add(sourceArrayOV1);
+                                        }
+                                    }
+                                    mSpCity2.setText(sourceArrayOV.getSource());
+                                    break;
+                                case 4:
+                                    mSpCounty2.setText(sourceArrayOV.getSource());
+                                    break;
+                                default:
+                                    break;
+                            }
+                            mDialogUtil.cancelDialog();
+                        }
+                    });
+                }
 
                 if (mSpType == null) {
 
                     mSpType = helper.getView(R.id.sp_type);
                     mCaseTypeArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.spinner_case_type);
-                    SpinnerArrayAdapter caseTypeAdapter = new SpinnerArrayAdapter(mCaseTypeArray);
-                    mSpType.setAdapter(caseTypeAdapter);
-                    mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    mCaseTypeArrayOVS = new ArrayList<>();
+                    for (String s : mCaseTypeArray) {
+                        SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                        sourceArrayOV.setType(0);
+                        sourceArrayOV.setSource(s);
+                        mCaseTypeArrayOVS.add(sourceArrayOV);
+                    }
+
+                    mSpType.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            mSelectedItem = (String) mSpType.getSelectedItem();
-                            if (mSelectedItem.equals("无河道采砂许可证案")) {
-                                mCasetype = "1";
-                            } else if (mSelectedItem.equals("水土保持方案违法案")) {
-                                mCasetype = "2";
-                            }
-                            if (mLvAsk != null) {
-                                mProblemContent = LawDao.getProblemContent(mSelectedItem);
-                                if (mAskAdapter == null) {
-                                    mAskAdapter = new AskAdapter(R.layout.survey_ask_item, mProblemContent);
-                                    mLvAsk.setAdapter(mAskAdapter);
-                                } else {
-                                    mAskAdapter.setNewData(mProblemContent);
-
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-
+                        public void onClick(View v) {
+                            mTv_title.setText("案件类型");
+                            mSourceArrayRecyAdapter.setNewData(mCaseTypeArrayOVS);
+                            mDialogUtil.showBottomDialog(activity, mButtonDailog, 300);
                         }
                     });
 
@@ -241,7 +336,33 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 if (mSpCity == null && mSpCounty == null) {
                     mSpCity = helper.getView(R.id.sp_city);
                     mSpCounty = helper.getView(R.id.sp_county);
-                    citySpinnerData(mSpCity, mSpCounty);
+
+                    final String[] cityArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.lv_city);
+                    mCityArrayOVS = new ArrayList<>();
+                    for (String s : cityArray) {
+                        SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                        sourceArrayOV.setType(1);
+                        sourceArrayOV.setSource(s);
+                        mCityArrayOVS.add(sourceArrayOV);
+                    }
+                    mSpCity.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mTv_title.setText("选择城市");
+                            mSpCounty.setText("*请选择");
+                            mSourceArrayRecyAdapter.setNewData(mCityArrayOVS);
+                            mDialogUtil.showBottomDialog(activity, mButtonDailog, 300f);
+                        }
+                    });
+
+                    mSpCounty.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mTv_title.setText("选择县区");
+                            mSourceArrayRecyAdapter.setNewData(mCountyArrayOVS);
+                            mDialogUtil.showBottomDialog(activity, mButtonDailog, 300f);
+                        }
+                    });
                 }
                 if (mEtAddrdetail1 == null) {
                     mEtAddrdetail1 = helper.getView(R.id.et_addrdetail);
@@ -269,7 +390,34 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 if (mSpCity2 == null && mSpCounty2 == null) {
                     mSpCity2 = helper.getView(R.id.sp_city2);
                     mSpCounty2 = helper.getView(R.id.sp_county2);
-                    citySpinnerData(mSpCity2, mSpCounty2);
+                    final String[] cityArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.lv_city);
+
+                    mCityArrayOVS = new ArrayList<>();
+                    for (String s : cityArray) {
+                        SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                        sourceArrayOV.setType(3);
+                        sourceArrayOV.setSource(s);
+                        mCityArrayOVS.add(sourceArrayOV);
+                    }
+                    mSpCity2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mTv_title.setText("选择城市");
+                            mSpCounty2.setText("*请选择");
+                            mSourceArrayRecyAdapter.setNewData(mCityArrayOVS);
+                            mDialogUtil.showBottomDialog(activity, mButtonDailog, 300f);
+                        }
+                    });
+
+                    mSpCounty2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mTv_title.setText("选择县区");
+                            mSourceArrayRecyAdapter.setNewData(mCountyArrayOVS);
+                            mDialogUtil.showBottomDialog(activity, mButtonDailog, 300f);
+                        }
+                    });
+
                 }
 
                 if (mRbIllegalPerson == null) {
@@ -393,33 +541,6 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
     }
 
 
-    private void citySpinnerData(Spinner citySpinner, final Spinner countySpinner) {
-        final String[] cityArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.lv_city);
-        SpinnerArrayAdapter cityAdapter = new SpinnerArrayAdapter(cityArray);
-        citySpinner.setAdapter(cityAdapter);
-        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                int countyId = countyIds[position];
-                if (countyId == 0) {
-                    String[] countyArray = {"无"};
-                    SpinnerArrayAdapter countyAdapter = new SpinnerArrayAdapter(countyArray);
-                    countySpinner.setAdapter(countyAdapter);
-                } else {
-
-                    String[] countyArray = BaseApplication.getApplictaion().getResources().getStringArray(countyIds[position]);
-                    SpinnerArrayAdapter countyAdapter = new SpinnerArrayAdapter(countyArray);
-                    countySpinner.setAdapter(countyAdapter);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-    }
-
     public String getCasetypeName() {
 
         return mSelectedItem;
@@ -462,8 +583,8 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
             return;
         }
         String askContent = mTetContent.getText().toString().trim();
-        String city = mSpCity.getSelectedItem().toString().trim();
-        String county = mSpCounty.getSelectedItem().toString().trim();
+        String city = mSpCity.getText().toString().trim();
+        String county = mSpCounty.getText().toString().trim();
         String addrdetail = mEtAddrdetail1.getText().toString().trim();
         String askPerson = mTetAskPerson.getText().toString().trim();
         String askEnforcementNumber = mTetAskEnforcementNumber.getText().toString().trim();
@@ -473,8 +594,8 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
         String askingIdcard = mTetAskingIdcard.getText().toString().trim();
         String askingPosition = mTetAskingPosition.getText().toString().trim();
         String askingWorkUnits = mTetAskingWorkUnits.getText().toString().trim();
-        String city2 = mSpCity2.getSelectedItem().toString().trim();
-        String county2 = mSpCounty2.getSelectedItem().toString().trim();
+        String city2 = mSpCity2.getText().toString().trim();
+        String county2 = mSpCounty2.getText().toString().trim();
         String addrdetail2 = mEtAddrdetail2.getText().toString().trim();
         String enforcementName = mEtEnforcementName.getText().toString().trim();
 
@@ -501,6 +622,14 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
             return;
         }
 
+        if (mSpCity.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择询问地点(城市)");
+            return;
+        }
+        if (mSpCounty.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择询问地点(县区)");
+            return;
+        }
 
         if (TextUtils.isEmpty(addrdetail)) {
             RxToast.warning("询问地点不能为空");
@@ -544,6 +673,15 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
 
         if (TextUtils.isEmpty(askingWorkUnits)) {
             RxToast.warning("被询问人工作单位不能为空");
+            return;
+        }
+
+        if (mSpCity2.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择被询问人住址(城市)");
+            return;
+        }
+        if (mSpCounty2.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择被询问人住址(县区)");
             return;
         }
 
@@ -720,11 +858,11 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
             final String askContent = mTetContent.getText().toString().trim();
             final String selectBegintime = mBtSelectBegintime.getText().toString().trim();
             final String selecEndtime = mBtSelectEndtime.getText().toString().trim();
-            String city = (String) mSpCity.getSelectedItem();
-            String city2 = (String) mSpCity2.getSelectedItem();
-            final String type = (String) mSpType.getSelectedItem();
-            String county = (String) mSpCounty.getSelectedItem();
-            String county2 = (String) mSpCounty2.getSelectedItem();
+            String city = mSpCity.getText().toString().trim();
+            String city2 = mSpCity2.getText().toString().trim();
+            final String type = mSpType.getText().toString().trim();
+            String county = mSpCounty.getText().toString().trim();
+            String county2 = mSpCounty2.getText().toString().trim();
             String addrdetail = mEtAddrdetail1.getText().toString().trim();
             final String askPerson = mTetAskPerson.getText().toString().trim();
             final String askEnforcementNumber = mTetAskEnforcementNumber.getText().toString().trim();
@@ -762,7 +900,14 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 RxToast.warning("询问内容不能为空");
                 return;
             }
-
+            if (mSpCity.getText().toString().trim().equals("*请选择")) {
+                RxToast.warning("请选择询问地点(城市)");
+                return;
+            }
+            if (mSpCounty.getText().toString().trim().equals("*请选择")) {
+                RxToast.warning("请选择询问地点(县区)");
+                return;
+            }
 
             if (TextUtils.isEmpty(addrdetail)) {
                 RxToast.warning("询问地点不能为空");
@@ -809,7 +954,14 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 return;
             }
 
-
+            if (mSpCity2.getText().toString().trim().equals("*请选择")) {
+                RxToast.warning("请选择被询问人住址(城市)");
+                return;
+            }
+            if (mSpCounty2.getText().toString().trim().equals("*请选择")) {
+                RxToast.warning("请选择被询问人住址(县区)");
+                return;
+            }
             if (TextUtils.isEmpty(addrdetail2)) {
                 RxToast.warning("被询问人住址不能为空");
                 return;
@@ -852,7 +1004,7 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 }
             });
 
-            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ComponentName comp = new ComponentName("com.dynamixsoftware.printershare", "com.dynamixsoftware.printershare.ActivityWeb");
                 Intent intent = new Intent();
                 Uri contentUri = FileProvider.getUriForFile(BaseApplication.getApplictaion(), "com.zhang.okinglawenforcementphone.fileProvider", new File(Environment.getExternalStorageDirectory().getPath() + "/oking/print/temp3.html"));
@@ -864,7 +1016,7 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 intent.setType("text/html");
                 intent.setData(contentUri);
                 activity.startActivity(intent);
-            }else {
+            } else {
                 ComponentName comp = new ComponentName("com.dynamixsoftware.printershare", "com.dynamixsoftware.printershare.ActivityWeb");
                 Intent intent = new Intent();
 
@@ -893,7 +1045,7 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                 public void run() {
                     final File assetFileToCacheDir = FileUtil.getAssetFileToCacheDir("PrinterShare.apk");
 
-                    if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                             @Override
                             public void run() {
@@ -907,7 +1059,7 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
                                 activity.startActivity(intent);
                             }
                         });
-                         }else {
+                    } else {
                         AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                             @Override
                             public void run() {

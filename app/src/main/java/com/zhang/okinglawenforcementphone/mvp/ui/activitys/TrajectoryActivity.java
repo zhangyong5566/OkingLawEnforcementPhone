@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -25,12 +24,11 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.google.gson.reflect.TypeToken;
 import com.zhang.baselib.utils.DataUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenLocation;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
@@ -96,7 +94,7 @@ public class TrajectoryActivity extends BaseActivity implements AMap.OnMyLocatio
 
 
         if (taskid != null) {
-            GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder()
+            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder()
                     .where(GreenMissionLogDao.Properties.Task_id.eq(taskid)).unique();
             mGreenMedias = unique.getGreenMedia();
             String taskName = intent.getStringExtra("taskName");

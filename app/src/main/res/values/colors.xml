@@ -66,4 +66,6 @@
     <color name="colorBackground">#FF4081</color>
 
     <color name="custom_progress_blue_header">#ff33b5e5</color>
+
+    <color name="gary">#898989</color>
 </resources>

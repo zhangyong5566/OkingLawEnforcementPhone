@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.zhang.baselib.BaseApplication;
+import com.zhang.baselib.GlideApp;
 import com.zhang.okinglawenforcementphone.R;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.VideoActivity;
 
@@ -23,13 +26,13 @@ import java.util.ArrayList;
 
 public class CaseSimpleAdapter extends BaseAdapter {
 
-    private ArrayList<GreenMedia> greenMedias;
+    private ArrayList<GreenEvidenceMedia> greenMedias;
     private OnClickListener onClickListener;
     private Fragment f;
     private boolean canAdd;
     private String typeName;
 
-    public CaseSimpleAdapter(ArrayList<GreenMedia> greenMedias, Fragment f, boolean canAdd, String typeName) {
+    public CaseSimpleAdapter(ArrayList<GreenEvidenceMedia> greenMedias, Fragment f, boolean canAdd, String typeName) {
         this.greenMedias = greenMedias;
         this.f = f;
         this.canAdd = canAdd;
@@ -62,7 +65,7 @@ public class CaseSimpleAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView =  View.inflate(BaseApplication.getApplictaion(), R.layout.pic_item,null);
-            viewHolder.iv_pic = (SimpleDraweeView) convertView.findViewById(R.id.sdv);
+            viewHolder.iv_pic = convertView.findViewById(R.id.sdv);
             viewHolder.tv = (TextView) convertView.findViewById(R.id.tv);
             convertView.setTag(viewHolder);
         } else {
@@ -71,8 +74,10 @@ public class CaseSimpleAdapter extends BaseAdapter {
 
         if (position == 0) {
             viewHolder.tv.setVisibility(View.GONE);
+            GlideApp.with(f)
+                    .load(R.drawable.video)
+                    .into(viewHolder.iv_pic);
 
-            viewHolder.iv_pic .setImageURI(Uri.parse("res://"+ BaseApplication.getApplictaion().getPackageName()+"/" + R.drawable.video));
             if (canAdd) {
                 viewHolder.iv_pic .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -89,7 +94,10 @@ public class CaseSimpleAdapter extends BaseAdapter {
             viewHolder.tv.setVisibility(View.VISIBLE);
             final Uri uri = Uri.parse(greenMedias.get(position - 1).getPath());
 
-            viewHolder.iv_pic .setImageURI(uri.toString());
+            GlideApp.with(f)
+                    .load(uri)
+                    .into(viewHolder.iv_pic);
+
             viewHolder.iv_pic .setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -121,11 +129,11 @@ public class CaseSimpleAdapter extends BaseAdapter {
     public interface OnClickListener {
         void onAddVideo();
 
-        void onLongItemClick(CaseSimpleAdapter adapter, ArrayList<GreenMedia> data, int position);
+        void onLongItemClick(CaseSimpleAdapter adapter, ArrayList<GreenEvidenceMedia> data, int position);
     }
 
     class ViewHolder{
-        SimpleDraweeView iv_pic;
+        ImageView iv_pic;
         TextView tv;
     }
 }

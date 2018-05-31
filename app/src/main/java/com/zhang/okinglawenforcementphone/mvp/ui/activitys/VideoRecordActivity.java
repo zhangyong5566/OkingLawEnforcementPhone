@@ -82,7 +82,7 @@ public class VideoRecordActivity extends EaseBaseActivity implements
     private void initViews() {
         btn_switch = (Button) findViewById(R.id.switch_btn);
         btn_switch.setOnClickListener(this);
-        btn_switch.setVisibility(View.VISIBLE);
+//        btn_switch.setVisibility(View.VISIBLE);
         mVideoView = (VideoView) findViewById(R.id.mVideoView);
         btnStart = (ImageView) findViewById(R.id.recorder_start);
         btnStop = (ImageView) findViewById(R.id.recorder_stop);
@@ -117,6 +117,7 @@ public class VideoRecordActivity extends EaseBaseActivity implements
         try {
             if (frontCamera == 0) {
                 mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+
             } else {
                 mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
             }
@@ -125,7 +126,7 @@ public class VideoRecordActivity extends EaseBaseActivity implements
             mSurfaceHolder = mVideoView.getHolder();
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-//            mCamera.setDisplayOrientation(90);
+            mCamera.setDisplayOrientation(90);
 
         } catch (RuntimeException ex) {
             EMLog.e("video", "init Camera fail " + ex.getMessage());

@@ -1,7 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_bg"
@@ -120,19 +118,13 @@
                 android:layout_height="match_parent"
                 android:background="#FFFFFF" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/sdv"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:scaleType="fitXY"
-                fresco:actualImageScaleType="focusCrop"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImageScaleType="fitCenter"
-                fresco:progressBarAutoRotateInterval="5000"
-                fresco:progressBarImage="@mipmap/loading"
-                fresco:progressBarImageScaleType="centerInside"></com.facebook.drawee.view.SimpleDraweeView>
+                android:scaleType="fitXY" />
         </RelativeLayout>
 
         <View

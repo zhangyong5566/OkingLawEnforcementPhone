@@ -111,6 +111,11 @@ public class AllActivity extends BaseActivity {
                                 intent.putExtra("activity", "ReportTaskActivity");
                                 startActivity(intent);
                                 break;
+                            case 4:
+                                intent = new Intent(AllActivity.this, TaskMissionProjectActivity.class);
+                                intent.putExtra("activity", "CompleteListActivity");
+                                startActivity(intent);
+                                break;
                             default:
                                 break;
                         }
@@ -122,13 +127,11 @@ public class AllActivity extends BaseActivity {
                                 startActivity(intent);
                                 break;
                             case 1:
-                                intent = new Intent(AllActivity.this, LawEnforcementManagerActivity.class);
-                                intent.putExtra("position", 0);
+                                intent = new Intent(AllActivity.this, FromAllLawEnforcementActivity.class);
                                 startActivity(intent);
                                 break;
                             case 2:
-                                intent = new Intent(AllActivity.this, LawEnforcementManagerActivity.class);
-                                intent.putExtra("position", 1);
+                                intent = new Intent(AllActivity.this, FromAllPenaltyTheSpotActivity.class);
                                 startActivity(intent);
                                 break;
                             case 3:
@@ -142,13 +145,11 @@ public class AllActivity extends BaseActivity {
                     case 2:                                     //执法指导
                         switch (chilPosition) {
                             case 0:
-                                intent = new Intent(AllActivity.this, LawEnforcementManagerActivity.class);
-                                intent.putExtra("position", 2);
+                                intent = new Intent(AllActivity.this, FromAllLawsAndRegulationsActivity.class);
                                 startActivity(intent);
                                 break;
                             case 1:
-                                intent = new Intent(AllActivity.this, LawEnforcementManagerActivity.class);
-                                intent.putExtra("position", 3);
+                                intent = new Intent(AllActivity.this, FromAllLawEnforcementSpecificationActivity.class);
                                 startActivity(intent);
                                 break;
                             case 2:
@@ -162,15 +163,21 @@ public class AllActivity extends BaseActivity {
                     case 3:                                     //统计查询
                         switch (chilPosition) {
                             case 0:
-                                intent = new Intent(AllActivity.this, TaskMissionProjectActivity.class);
-                                intent.putExtra("activity", "CompleteListActivity");
+                                intent = new Intent(AllActivity.this, StatisticalActivity.class);
                                 startActivity(intent);
+
                                 break;
                             case 1:
+                                intent = new Intent(AllActivity.this, MapQueryActivity.class);
+                                startActivity(intent);
                                 break;
                             case 2:
+                                intent = new Intent(AllActivity.this, MapTaskActivity.class);
+                                startActivity(intent);
                                 break;
                             case 3:
+                                intent = new Intent(AllActivity.this, RegionalHistoryEnforcementActivity.class);
+                                startActivity(intent);
                                 break;
                             case 4:
                                 intent = new Intent(AllActivity.this, TaskMissionProjectActivity.class);
@@ -184,28 +191,23 @@ public class AllActivity extends BaseActivity {
                     case 4:                                     //案件管理
                         switch (chilPosition) {
                             case 0:
-                                intent = new Intent(AllActivity.this, CaseManagerActivity.class);
-                                intent.putExtra("position", 0);
+                                intent = new Intent(AllActivity.this, FromAllCaseRegistrationActivity.class);
                                 startActivity(intent);
                                 break;
                             case 1:
-                                intent = new Intent(AllActivity.this, CaseManagerActivity.class);
-                                intent.putExtra("position", 1);
+                                intent = new Intent(AllActivity.this, FromAllOpenCasesActivity.class);
                                 startActivity(intent);
                                 break;
                             case 2:
-                                intent = new Intent(AllActivity.this, CaseManagerActivity.class);
-                                intent.putExtra("position", 2);
+                                intent = new Intent(AllActivity.this, FromAllCaseProcessingListActivity.class);
                                 startActivity(intent);
                                 break;
                             case 3:
-                                intent = new Intent(AllActivity.this, CaseManagerActivity.class);
-                                intent.putExtra("position", 3);
+                                intent = new Intent(AllActivity.this, FromAllCaseComplaintActivity.class);
                                 startActivity(intent);
                                 break;
                             case 4:
-                                intent = new Intent(AllActivity.this, CaseManagerActivity.class);
-                                intent.putExtra("position", 4);
+                                intent = new Intent(AllActivity.this, FromAllCaseInAdvanceActivity.class);
                                 startActivity(intent);
                                 break;
                             default:
@@ -239,6 +241,7 @@ public class AllActivity extends BaseActivity {
         mMenusSub.add("巡查任接收安排");
         mMenusSub.add("任务执行");
         mMenusSub.add("任务上报");
+        mMenusSub.add("日志(已完成)");
         mAllMenuItemBean.setSubList(mMenusSub);
         allMenuItemBeans.add(mAllMenuItemBean);
 
@@ -264,7 +267,7 @@ public class AllActivity extends BaseActivity {
         mAllMenuItemBean = new AllMenuItemBean();
         mAllMenuItemBean.setTitle("统计查询");
         mMenusSub = new ArrayList<>();
-        mMenusSub.add("巡查日志");
+        mMenusSub.add("日志统计");
         mMenusSub.add("地图查询");
         mMenusSub.add("地图任务展示");
         mMenusSub.add("区域执法记录查询");

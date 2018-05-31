@@ -1,11 +1,11 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
@@ -34,23 +35,24 @@ import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.FileUtil;
-import com.zhang.baselib.utils.TextUtil;
 import com.zhang.baselib.utils.Util;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.MissionRecorCallBack;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenEquipment;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.beans.GreenMediaDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLogDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.Level0Item;
+import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.Point;
 import com.zhang.okinglawenforcementphone.beans.RecorItemBean;
 import com.zhang.okinglawenforcementphone.beans.RecordLogOV;
+import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
+import com.zhang.okinglawenforcementphone.beans.StopSwipeRefreshEvent;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
 import com.zhang.okinglawenforcementphone.htttp.Api;
 import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
@@ -65,7 +67,8 @@ import com.zhang.okinglawenforcementphone.mvp.presenter.UploadJobLogPresenter;
 import com.zhang.okinglawenforcementphone.mvp.presenter.UploadSignaturePicPresenter;
 import com.zhang.okinglawenforcementphone.mvp.presenter.UploadVideoPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.MissionRecorActivity;
-import com.zhang.okinglawenforcementphone.views.MyRecycelerView;
+import com.zhang.okinglawenforcementphone.utils.DialogUtil;
+import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -122,15 +125,12 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     private GreenMissionLog mGreenMissionLog;
     private PicSimpleAdapter picadapter;
     private VideoSimpleAdapter videoadapter;
-    private SparseArray mAdapterPositionArry = new SparseArray();
     private List<GreenMedia> mPhotoMedias = new ArrayList<>();
     private List<GreenMedia> mVideoMedias = new ArrayList<>();
     private MissionRecorActivity activity;
     private RxDialogSureCancel mRxDialogSureCancel;
     private RecyclerView mPicGridView;
     private RecyclerView mVideoGridView;
-    private SpinnerArrayAdapter mMattersArrayAdapter;
-    private SpinnerArrayAdapter mPlanArrayAdapter;
     private EditText mSummaryEditText;
     private EditText mLeaderSummaryEditText;
     private Switch mLeaderSummarySw;
@@ -148,14 +148,21 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     private UploadVideoPresenter mUploadVideoPresenter;
     private TextView mMemberTextView;
     private String[] mPlanArray;
-    private Spinner mPlanSpinner;
-    private Spinner mItemSpinner;
+    private TextView mPlanSpinner;
+    private TextView mItemSpinner;
     private String[] mMattersArray;
     private int mDatePoor;
     private long mBeforTime;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
     private String mLocJson;
-
+    private EditText mPartOtherEditText;
+    private TagFlowLayout mPartFlowTagLayout;
+    private DialogUtil mDialogUtil;
+    private View mButtonDailog;
+    private TextView mTv_title;
+    private ArrayList<SourceArrayOV> mPlanArrayOVS;
+    private ArrayList<SourceArrayOV> mMattersArrayOVS;
+    private SourceArrayRecyAdapter mSourceArrayRecyAdapter;
     public ExpandableItemAdapter(List<MultiItemEntity> data, MissionRecorActivity recorActivity) {
         super(data);
         this.activity = recorActivity;
@@ -216,66 +223,110 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 if (mPlanArray == null) {
 
                     mPlanArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.spinner_plan);
+                    mPlanArrayOVS = new ArrayList<>();
+                    for (String s : mPlanArray) {
+                        SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                        sourceArrayOV.setType(0);
+                        sourceArrayOV.setSource(s);
+                        mPlanArrayOVS.add(sourceArrayOV);
+                    }
                 }
 
-                if (mPlanSpinner == null) {
-
-                    mPlanSpinner = helper.getView(R.id.plan_spinner);
-                }
-                if (mPlanArrayAdapter == null) {
-
-                    mPlanArrayAdapter = new SpinnerArrayAdapter(mPlanArray);
-                    helper.setAdapter(R.id.plan_spinner, mPlanArrayAdapter);
-
-                    mPlanSpinner.setSelection(mGreenMissionLog.getPlan());
-                    mPlanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                if (mDialogUtil ==null){
+                    mDialogUtil = new DialogUtil();
+                    mButtonDailog = View.inflate(BaseApplication.getApplictaion(), R.layout.maptask_dialog, null);
+                    mTv_title = mButtonDailog.findViewById(R.id.tv_title);
+                    RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
+                    recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+                    recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+                    mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
+                    mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+                    recyList.setAdapter(mSourceArrayRecyAdapter);
+                    mSourceArrayRecyAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            mSelePlanPos = i;
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            List<SourceArrayOV> datas = adapter.getData();
+                            SourceArrayOV sourceArrayOV = datas.get(position);
+                            switch (sourceArrayOV.getType()){
+                                case 0:
+                                    mSelePlanPos = position;
+                                    mPlanSpinner.setText(sourceArrayOV.getSource());
+                                    break;
+                                case 1:
+                                    mSeleMattersPos = position;
+                                    mItemSpinner.setText(sourceArrayOV.getSource());
+                                    break;
+                                default:
+                                    break;
+                            }
+                            mDialogUtil.cancelDialog();
                         }
                     });
+                }
+
+
+                if (mPlanSpinner == null) {
+                    mPlanSpinner = helper.getView(R.id.plan_spinner);
+                    mPlanSpinner.setText(mPlanArray[mGreenMissionLog.getPlan()]);
+                    mPlanSpinner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mTv_title.setText("计划");
+                            mSourceArrayRecyAdapter.setNewData(mPlanArrayOVS);
+                            mDialogUtil.showBottomDialog(activity,mButtonDailog,300f);
+                        }
+                    });
+
+
+
+                }
+
+
+
+                if (mMattersArray == null) {
+
+                    mMattersArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.spinner_matters);
+
+                    mMattersArrayOVS = new ArrayList<>();
+                    for (String s : mMattersArray) {
+                        SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                        sourceArrayOV.setType(1);
+                        sourceArrayOV.setSource(s);
+                        mMattersArrayOVS.add(sourceArrayOV);
+                    }
                 }
 
                 if (mItemSpinner == null) {
 
                     mItemSpinner = helper.getView(R.id.item_spinner);
-                }
-
-                if (mMattersArray == null) {
-
-                    mMattersArray = BaseApplication.getApplictaion().getResources().getStringArray(R.array.spinner_matters);
-                }
-                if (mMattersArrayAdapter == null) {
-                    mMattersArrayAdapter = new SpinnerArrayAdapter(mMattersArray);
-                    mItemSpinner.setAdapter(mMattersArrayAdapter);
-                    mItemSpinner.setSelection(mGreenMissionLog.getItem());
-                    mItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    mItemSpinner.setText(mMattersArray[mGreenMissionLog.getItem()]);
+                    mItemSpinner.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            mSeleMattersPos = i;
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-
+                        public void onClick(View v) {
+                            mTv_title.setText("事项");
+                            mSourceArrayRecyAdapter.setNewData(mMattersArrayOVS);
+                            mDialogUtil.showBottomDialog(activity,mButtonDailog,300f);
                         }
                     });
-                }
 
+                }
 
                 helper.setText(R.id.area_TextView, mGreenMissionTask.getRwqyms());
 
-                final EditText partOtherEditText = helper.getView(R.id.part_other_editText);
-                TagFlowLayout partFlowTagLayout = helper.getView(R.id.part_flow_layout);
+
+                if (mPartOtherEditText ==null){
+                    mPartOtherEditText = helper.getView(R.id.part_other_editText);
+
+                }
+
+                if (mPartFlowTagLayout==null){
+
+                    mPartFlowTagLayout = helper.getView(R.id.part_flow_layout);
+                }
 
 
-                partList = Arrays.asList("公安", "海事", "环保", "航道", "交通", "国土", "城管", "纪检");
                 if (partTagAdapter == null) {
+                    partList = Arrays.asList("公安", "海事", "环保", "航道", "交通", "国土", "城管", "纪检");
                     partTagAdapter = new TagAdapter<String>(partList) {
                         @Override
                         public View getView(FlowLayout parent, int position, String parts) {
@@ -295,8 +346,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         partTagAdapter.setSelectedList(integers);
                     }
 
-                    partFlowTagLayout.setAdapter(partTagAdapter);
-                    partFlowTagLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+                    mPartFlowTagLayout.setAdapter(partTagAdapter);
+                    mPartFlowTagLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
                         @Override
                         public void onSelected(Set<Integer> selectPosSet) {
                             mIsSelected = true;
@@ -308,22 +359,21 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                                 parts += partList.get(next) + ",";
                                 mFlowTagPos += next + ",";
                             }
-                            if (!"".equals(partOtherEditText.getText().toString())) {
-                                parts += partOtherEditText.getText().toString() + ",";
+                            if (!"".equals(mPartOtherEditText.getText().toString())) {
+                                parts += mPartOtherEditText.getText().toString() + ",";
                             }
-                            Log.i("Oking", parts);
                         }
                     });
 
                     if (mGreenMissionTask.getStatus().equals("100")) {
-                        partFlowTagLayout.setEnabled(false);
+                        mPartFlowTagLayout.setEnabled(false);
                     } else if (mGreenMissionTask.getStatus().equals("5")) {
-                        partFlowTagLayout.setEnabled(false);
+                        mPartFlowTagLayout.setEnabled(false);
                         helper.setVisible(R.id.edit_Equipment_Btn, false);
                         mPlanSpinner.setClickable(false);
                         mItemSpinner.setClickable(false);
                     } else if (mGreenMissionTask.getStatus().equals("9")) {
-                        partFlowTagLayout.setEnabled(false);
+                        mPartFlowTagLayout.setEnabled(false);
                         mPlanSpinner.setEnabled(false);
                         mItemSpinner.setEnabled(false);
                         helper.setVisible(R.id.edit_Equipment_Btn, false);
@@ -334,7 +384,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
                 break;
             case TYPE_LEVEL_2:
-                mSummarySw = helper.getView(R.id.sw_summary);
+                if (mSummarySw==null){
+                    mSummarySw = helper.getView(R.id.sw_summary);
+
+                }
                 if (mSummaryEditText == null) {
 
                     mSummaryEditText = helper.getView(R.id.summary_editText);
@@ -491,9 +544,9 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                                     }
                                     mPhotoMedias.remove(position);
                                     if (media.getGreenGreenLocationId() != null) {
-                                        GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().deleteByKey(media.getGreenGreenLocationId());
+                                        GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().deleteByKey(media.getGreenGreenLocationId());
                                     }
-                                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().delete(media);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().delete(media);
                                     collapse(helper.getLayoutPosition() - 1);
 
 
@@ -576,9 +629,9 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                                     mVideoMedias.remove(position);
                                     if (media.getGreenGreenLocationId() != null) {
 
-                                        GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().deleteByKey(media.getGreenGreenLocationId());
+                                        GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().deleteByKey(media.getGreenGreenLocationId());
                                     }
-                                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().delete(media);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().delete(media);
                                     collapse(helper.getLayoutPosition() - 1);
                                     mRxDialogSureCancel.cancel();
 
@@ -624,8 +677,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 //把巡查轨迹插入本地数据库
                 String locationTrajectory = getLocationTrajectory();
                 mGreenMissionLog.setLocJson(locationTrajectory);
-                GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().update(mGreenMissionLog);
-                GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().update(mGreenMissionLog);
+                GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                 if (mSignBtn != null) {
 
                     mSignBtn.setVisibility(View.VISIBLE);
@@ -669,7 +722,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
     @Override
     public void saveTheRecord() {
-        GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mGreenMissionTask.getTaskid())).unique();
+        GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mGreenMissionTask.getTaskid())).unique();
         if (unique != null) {
             unique.setPlan(mSelePlanPos);
             unique.setItem(mSeleMattersPos);
@@ -695,7 +748,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
 
             unique.setOther_part(parts);
-            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().update(unique);
+            GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().update(unique);
         } else {
             GreenMissionLog greenMissionLog = new GreenMissionLog();
             greenMissionLog.setPlan(mSelePlanPos);
@@ -719,7 +772,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             }
 
             greenMissionLog.setOther_part(parts);
-            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().insert(greenMissionLog);
+            GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(greenMissionLog);
 
         }
 
@@ -862,7 +915,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         if (code == 0) {
                             String serverId = jsonObject.getString("id");
                             mGreenMissionLog.setServer_id(serverId);
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().update(mGreenMissionLog);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().update(mGreenMissionLog);
                         }
 
                     } catch (JSONException e) {
@@ -1007,7 +1060,6 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
                 @Override
                 public void uploadIsCount(int pos) {
-                    Log.i("Oking1", "-------存在下标-------------------" + pos);
                     logSignPosion = pos;
                     if (logSignPosion == mGreenMissionTask.getMembers().size()) {
                         uploadSignPic = true;
@@ -1144,9 +1196,13 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                             mRxDialogLoading.cancel();
                         }
                         String string = responseBody.string();
-                        Log.i("Oking", "》》》》》》》更新任务状态：" + string);
+                        StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
+                        stopSwipeRefreshEvent.setType(0);
+                        EventBus.getDefault().post(stopSwipeRefreshEvent);
+                        Log.i("Oking", "》》》》》》》更新任务状态成功：" + string);
+                        EventBus.getDefault().post(new NewsTaskOV(1,mGreenMissionTask));
                         mGreenMissionTask.setStatus("5");
-                        GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                        GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                         UpdateGreenMissionTaskOV greenMissionOV = new UpdateGreenMissionTaskOV();
                         greenMissionOV.setMissionTask(mGreenMissionTask);
                         EventBus.getDefault().post(greenMissionOV);

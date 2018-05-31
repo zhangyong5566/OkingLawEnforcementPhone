@@ -15,7 +15,7 @@
         android:textColor="@color/task_other_tx"
         android:textSize="12sp" />
 
-    <Spinner
+    <TextView
         android:id="@+id/sp_city"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -25,11 +25,12 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/tv_addr"
-        android:gravity="center"
-        android:overlapAnchor="false"
+        android:gravity="center_vertical|right"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:spinnerMode="dropdown"
+        android:text="*请选择"
+        android:textColor="@color/colorAccent"
         android:textSize="12sp" />
 
     <TextView
@@ -43,7 +44,7 @@
         android:textColor="@color/task_other_tx"
         android:textSize="12sp" />
 
-    <Spinner
+    <TextView
         android:id="@+id/sp_county"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -53,11 +54,12 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/tv_tag12"
-        android:gravity="center"
-        android:overlapAnchor="false"
+        android:gravity="center_vertical|right"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:spinnerMode="dropdown"
+        android:text="*请选择"
+        android:textColor="@color/colorAccent"
         android:textSize="12sp" />
 
     <TextView
@@ -172,7 +174,6 @@
                 android:textSize="10sp" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
-
 
 
 </RelativeLayout>

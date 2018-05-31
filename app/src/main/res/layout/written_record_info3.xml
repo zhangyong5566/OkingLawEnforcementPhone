@@ -156,18 +156,18 @@
         android:textColor="@color/task_other_tx"
         android:textSize="12sp" />
 
-    <Spinner
+    <TextView
         android:id="@+id/sp_city2"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_06"
         android:layout_margin="3dp"
         android:layout_toRightOf="@id/tv_tag15"
-        android:gravity="center"
-        android:overlapAnchor="false"
+        android:gravity="center|right"
+        android:textColor="@color/colorAccent"
+        android:text="*请选择"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:spinnerMode="dropdown"
         android:textSize="12sp" />
 
     <TextView
@@ -181,18 +181,18 @@
         android:textColor="@color/task_other_tx"
         android:textSize="12sp" />
 
-    <Spinner
+    <TextView
         android:id="@+id/sp_county2"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_06"
         android:layout_margin="5dp"
         android:layout_toRightOf="@id/tv_tag16"
-        android:gravity="center"
-        android:overlapAnchor="false"
+        android:gravity="center|right"
+        android:text="*请选择"
+        android:textColor="@color/colorAccent"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:spinnerMode="dropdown"
         android:textSize="12sp" />
 
     <TextView

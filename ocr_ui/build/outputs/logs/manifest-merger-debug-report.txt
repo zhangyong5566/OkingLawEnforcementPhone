@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
 	package
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:2:11-37
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:2:11-37
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:1-6:12
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:11-69
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml:1:11-69
 uses-sdk
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\ocr_ui\src\main\AndroidManifest.xml

@@ -98,6 +98,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:ellipsize="end"
+                    android:enabled="false"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
                     android:padding="3dp"
@@ -123,6 +124,7 @@
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
+                    android:enabled="false"
                     android:padding="3dp"
                     android:textSize="12sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -146,6 +148,7 @@
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
+                    android:enabled="false"
                     android:padding="3dp"
                     android:textSize="12sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -167,6 +170,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:ellipsize="end"
+                    android:enabled="false"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
                     android:padding="3dp"
@@ -192,6 +196,7 @@
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
+                    android:enabled="false"
                     android:padding="3dp"
                     android:textSize="12sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -217,6 +222,7 @@
                         android:ellipsize="end"
                         android:gravity="left|center_vertical"
                         android:maxLines="3"
+                        android:enabled="false"
                         android:padding="3dp"
                         android:textSize="12sp"/>
                 </android.support.design.widget.TextInputLayout>
@@ -250,6 +256,7 @@
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
                     android:maxLines="3"
+                    android:enabled="false"
                     android:padding="3dp"
                     android:textSize="12sp"/>
             </android.support.design.widget.TextInputLayout>

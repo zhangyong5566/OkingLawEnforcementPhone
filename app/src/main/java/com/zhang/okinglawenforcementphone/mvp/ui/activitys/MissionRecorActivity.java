@@ -1,17 +1,21 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,13 +30,17 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.zhang.baselib.BaseApplication;
+import com.zhang.baselib.interfaces.OnRequestPermissionsListener;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.baselib.utils.NetUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.baselib.utils.PermissionUtil;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.EquipmentRecyAdapter;
 import com.zhang.okinglawenforcementphone.adapter.ExpandableItemAdapter;
@@ -67,13 +75,23 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
+
+import static com.yinghe.whiteboardlib.MultiImageSelectorFragment.REQUEST_CAMERA;
+import static com.zhang.okinglawenforcementphone.mvp.ui.activitys.ChatActivity.REQUEST_CODE_CAMERA;
 
 public class MissionRecorActivity extends BaseActivity {
     @BindView(R.id.toolbar)
@@ -132,6 +150,8 @@ public class MissionRecorActivity extends BaseActivity {
     private ArrayList<GreenEquipment> canSelectList = new ArrayList<>();
     private int adapterPostion;
     private Long mGreenGreenLocationId;
+    private Random mRandom = new Random();
+    private File mCameraFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +159,9 @@ public class MissionRecorActivity extends BaseActivity {
         setContentView(R.layout.activity_mission_recor);
         mBind = ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
         initView();
         initData();
     }
@@ -162,6 +185,8 @@ public class MissionRecorActivity extends BaseActivity {
 
                         mRxDialogSureCancel = new RxDialogSureCancel(MissionRecorActivity.this);
                     }
+                    mRxDialogSureCancel.getTvSure().setText("是");
+                    mRxDialogSureCancel.getTvCancel().setText("否");
                     mRxDialogSureCancel.setContent("未保存日志，是否保存？");
                     mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -206,7 +231,7 @@ public class MissionRecorActivity extends BaseActivity {
 
         if (mTaskId != null) {
 
-            GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
+            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
 
             if (unique == null) {
                 //网络获取Log(尝试用http获取服务器的Log，获取不了再单机生成新Log)
@@ -216,7 +241,7 @@ public class MissionRecorActivity extends BaseActivity {
                 mGreenMissionLog = unique;
                 if (mission == null) {
 
-                    mission = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mTaskId)).unique();
+                    mission = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mTaskId)).unique();
                 }
                 initUI();
 
@@ -259,7 +284,7 @@ public class MissionRecorActivity extends BaseActivity {
 
         mExpandableItemAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
                 switch (view.getId()) {
                     case R.id.sign_btn:
                         mExpandableItemAdapter.saveTheRecord();
@@ -268,10 +293,7 @@ public class MissionRecorActivity extends BaseActivity {
                         startActivity(mIntent);
                         break;
                     case R.id.edit_Equipment_Btn:
-
-
                         if (mDialogUtil == null) {
-
                             mDialogUtil = new DialogUtil();
                             mEquipentView = View.inflate(BaseApplication.getApplictaion(), R.layout.set_equipent_dialog, null);
                             mSpinnerEquipentType = mEquipentView.findViewById(R.id.type_spinner);
@@ -328,9 +350,50 @@ public class MissionRecorActivity extends BaseActivity {
                         startActivityForResult(mIntent, MissionRecorActivity.VIDEO_FROM_CAMERA);
                         break;
                     case R.id.iv_addpic:
-                        adapterPostion = position - 1;
-                        Intent intent = new Intent(MissionRecorActivity.this, ShootActivity.class);
-                        startActivityForResult(intent, MissionRecorActivity.PHOTO_FROM_CAMERA);
+                        if (!EaseCommonUtils.isSdcardExist()) {
+                            RxToast.error("SD卡不存在，不能拍照");
+                            return;
+                        }
+                        PermissionUtil.requestCamer(MissionRecorActivity.this, new OnRequestPermissionsListener() {
+                            @Override
+                            public void onRequestBefore() {
+                                //清单文件没有这个权限需要在清单文件加上
+                            }
+
+                            @Override
+                            public void onRequestLater() {
+                                if (mRxDialogSureCancel == null) {
+                                    mRxDialogSureCancel = new RxDialogSureCancel(MissionRecorActivity.this);
+                                }
+                                mRxDialogSureCancel.setContent("是否需要高清拍摄？(注：高清拍摄无法连拍)");
+                                mRxDialogSureCancel.getTvSure().setText("需要");
+                                mRxDialogSureCancel.getTvCancel().setText("不需要");
+                                mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mRxDialogSureCancel.cancel();
+                                        adapterPostion = position - 1;
+                                        String filename = UUID.randomUUID().toString();
+                                        String filePathname = "/storage/emulated/0/oking/mission_pic/" + filename + ".jpg";
+                                        mCameraFile = new File(filePathname);
+                                        startActivityForResult(
+                                                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCameraFile)),
+                                                REQUEST_CODE_CAMERA);
+                                    }
+                                });
+                                mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mRxDialogSureCancel.cancel();
+                                        adapterPostion = position - 1;
+                                        Intent intent = new Intent(MissionRecorActivity.this, ShootActivity.class);
+                                        startActivityForResult(intent, MissionRecorActivity.PHOTO_FROM_CAMERA);
+                                    }
+                                });
+
+                                mRxDialogSureCancel.show();
+                            }
+                        });
 
                         break;
                     default:
@@ -361,10 +424,10 @@ public class MissionRecorActivity extends BaseActivity {
                         @Override
                         public void run() {
                             try {
-                                List<GreenEquipment> greenEquipments = GreenDAOMannager.getInstence().getDaoSession().getGreenEquipmentDao().queryBuilder().where(GreenEquipmentDao.Properties.DeptId.eq(OkingContract.CURRENTUSER.getDept_id())).list();
+                                List<GreenEquipment> greenEquipments = GreenDAOManager.getInstence().getDaoSession().getGreenEquipmentDao().queryBuilder().where(GreenEquipmentDao.Properties.DeptId.eq(OkingContract.CURRENTUSER.getDept_id())).list();
                                 if (greenEquipments.size() > 0) {
                                     for (GreenEquipment greenEquipment : greenEquipments) {
-                                        GreenDAOMannager.getInstence().getDaoSession().getGreenEquipmentDao().deleteByKey(greenEquipment.getId());
+                                        GreenDAOManager.getInstence().getDaoSession().getGreenEquipmentDao().deleteByKey(greenEquipment.getId());
                                     }
 
                                 }
@@ -410,7 +473,7 @@ public class MissionRecorActivity extends BaseActivity {
                     Schedulers.io().createWorker().schedule(new Runnable() {
                         @Override
                         public void run() {
-                            final List<GreenEquipment> greenEquipments = GreenDAOMannager.getInstence().getDaoSession().getGreenEquipmentDao().queryBuilder().where(GreenEquipmentDao.Properties.DeptId.eq(OkingContract.CURRENTUSER.getDept_id())).list();
+                            final List<GreenEquipment> greenEquipments = GreenDAOManager.getInstence().getDaoSession().getGreenEquipmentDao().queryBuilder().where(GreenEquipmentDao.Properties.DeptId.eq(OkingContract.CURRENTUSER.getDept_id())).list();
 
                             AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                                 @Override
@@ -442,7 +505,7 @@ public class MissionRecorActivity extends BaseActivity {
 
     private void getHttpMissionLog(final Long id) {
 
-        mission = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
+        mission = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
 
         if (mission != null) {
             mRxDialogLoading = new RxDialogLoading(this, true, new DialogInterface.OnCancelListener() {
@@ -477,9 +540,9 @@ public class MissionRecorActivity extends BaseActivity {
                         mGreenMissionLog.setName(OkingContract.CURRENTUSER.getUserid());
                         mGreenMissionLog.setStatus(0);
 
-                        GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
+                        GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
                         if (unique == null) {
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
                         }
                         initUI();
                     }
@@ -494,9 +557,9 @@ public class MissionRecorActivity extends BaseActivity {
             mGreenMissionLog.setName(OkingContract.CURRENTUSER.getUserid());
             mGreenMissionLog.setStatus(0);
 
-            GreenMissionLog unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
+            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
             if (unique == null) {
-                GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
+                GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
             }
             initUI();
         }
@@ -531,11 +594,12 @@ public class MissionRecorActivity extends BaseActivity {
         super.onDestroy();
         BaseApplication.getApplictaion().unregisterReceiver(mNetWokReceiver);
         EventBus.getDefault().unregister(this);
-        mBind.unbind();
+
         if (mWakeLock != null) {
             mWakeLock.release();
             mWakeLock = null;
         }
+        mBind.unbind();
     }
 
 
@@ -562,9 +626,9 @@ public class MissionRecorActivity extends BaseActivity {
                     greenMedia.setPath(uri.getPath());
                     greenMedia.setTime(System.currentTimeMillis());
                     greenMedia.setGreenMissionLogId(mGreenMissionLog.getId());
-                    mGreenGreenLocationId = (long) (Math.random() * 1000);
+                    mGreenGreenLocationId = mRandom.nextLong();
                     greenMedia.setGreenGreenLocationId(mGreenGreenLocationId);
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
+                    GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
                     if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
 
                         GreenLocation greenLocation1 = new GreenLocation();
@@ -572,7 +636,7 @@ public class MissionRecorActivity extends BaseActivity {
                         greenLocation1.setLongitude(OkingContract.LOCATIONRESULT[2]);
                         greenLocation1.setId(mGreenGreenLocationId);
                         greenMedia.setLocation(greenLocation1);
-                        long insert = GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation1);
+                        long insert = GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation1);
                         Log.i("Oking", "图片位置插入成功：" + insert);
                     }
 
@@ -582,32 +646,48 @@ public class MissionRecorActivity extends BaseActivity {
                     break;
                 case PHOTO_FROM_CAMERA:
                     ArrayList<String> picpaths = data.getStringArrayListExtra("picpaths");
+
                     if (picpaths != null && picpaths.size() > 0) {
-                        for (String s : picpaths) {
-                            GreenMedia greenMedia1 = new GreenMedia();
-                            greenMedia1.setType(1);
-                            greenMedia1.setPath("file://" + s);
-                            greenMedia1.setTime(System.currentTimeMillis());
-                            mGreenGreenLocationId = (long) (Math.random() * 1000);
-                            greenMedia1.setGreenMissionLogId(mGreenMissionLog.getId());
-                            greenMedia1.setGreenGreenLocationId(mGreenGreenLocationId);
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
-                            if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
-                                GreenLocation greenLocation2 = new GreenLocation();
-                                greenLocation2.setLatitude(OkingContract.LOCATIONRESULT[1]);
-                                greenLocation2.setLongitude(OkingContract.LOCATIONRESULT[2]);
-                                greenLocation2.setId(mGreenGreenLocationId);
-                                greenMedia1.setLocation(greenLocation2);
-                                long insert1 = GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation2);
-                                Log.i("Oking", "图片位置插入成功：" + insert1 + greenLocation2.toString());
+                        Observable.fromIterable(picpaths)
+                                .concatMap(new Function<String, Observable<GreenMedia>>() {
+                                    @Override
+                                    public Observable<GreenMedia> apply(String s) throws Exception {
+                                        GreenMedia greenMedia1 = new GreenMedia();
+                                        greenMedia1.setType(1);
+                                        greenMedia1.setPath("file://" + s);
+                                        greenMedia1.setTime(System.currentTimeMillis());
+                                        mGreenGreenLocationId = mRandom.nextLong();
+                                        greenMedia1.setGreenMissionLogId(mGreenMissionLog.getId());
+                                        greenMedia1.setGreenGreenLocationId(mGreenGreenLocationId);
+                                        GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
+
+
+                                        return Observable.just(greenMedia1);
+                                    }
+                                }).subscribe(new Consumer<GreenMedia>() {
+                            @Override
+                            public void accept(GreenMedia media) throws Exception {
+                                if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
+                                    GreenLocation greenLocation2 = new GreenLocation();
+                                    greenLocation2.setLatitude(OkingContract.LOCATIONRESULT[1]);
+                                    greenLocation2.setLongitude(OkingContract.LOCATIONRESULT[2]);
+                                    greenLocation2.setId(mGreenGreenLocationId);
+                                    media.setLocation(greenLocation2);
+
+                                    long insert1 = GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation2);
+                                    Log.i("Oking", "图片位置插入成功：" + insert1 + greenLocation2.toString());
+                                }
+
+                                mExpandableItemAdapter.getPhotoMedias().add(media);
+                                mExpandableItemAdapter.refreshList(adapterPostion);
                             }
-
-                            mExpandableItemAdapter.getPhotoMedias().add(greenMedia1);
-                            mExpandableItemAdapter.refreshList(adapterPostion);
-                        }
-//                        picadapter.notifyDataSetChanged();
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.i("Oking", "插入异常》》》" + throwable.toString());
+                            }
+                        });
                     }
-
 
 
 //                    localSaveRecord();
@@ -615,16 +695,15 @@ public class MissionRecorActivity extends BaseActivity {
                 case VIDEO_FROM_CAMERA:
                     if (data != null) {
                         Uri videouri = data.getData();
-
+                        Log.i("Oking", "@@@@@@@" + videouri.toString());
                         GreenMedia greenMedia1 = new GreenMedia();
                         greenMedia1.setType(2);
                         greenMedia1.setTime(System.currentTimeMillis());
-                        greenMedia1.setTime(System.currentTimeMillis());
                         greenMedia1.setPath(videouri.toString());
-                        mGreenGreenLocationId = (long) (Math.random() * 1000);
+                        mGreenGreenLocationId = mRandom.nextLong();
                         greenMedia1.setGreenMissionLogId(mGreenMissionLog.getId());
                         greenMedia1.setGreenGreenLocationId(mGreenGreenLocationId);
-                         GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
+                        GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
                         if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
 
                             GreenLocation greenLocation = new GreenLocation();
@@ -632,7 +711,7 @@ public class MissionRecorActivity extends BaseActivity {
                             greenLocation.setLongitude(OkingContract.LOCATIONRESULT[2]);
                             greenLocation.setId(mGreenGreenLocationId);
                             greenMedia1.setLocation(greenLocation);
-                            long insert = GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation);
+                            long insert = GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation);
                             Log.i("Oking", "视频位置插入成功：" + insert + greenLocation.toString());
 
                         }
@@ -657,10 +736,10 @@ public class MissionRecorActivity extends BaseActivity {
                     greenMedia1.setType(2);
                     greenMedia1.setTime(System.currentTimeMillis());
                     greenMedia1.setPath(videoUri.toString());
-                    mGreenGreenLocationId = (long) (Math.random() * 1000);
+                    mGreenGreenLocationId = mRandom.nextLong();
                     greenMedia1.setGreenMissionLogId(mGreenMissionLog.getId());
                     greenMedia1.setGreenGreenLocationId(mGreenGreenLocationId);
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
+                    GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia1);
                     if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
 
                         GreenLocation greenLocation = new GreenLocation();
@@ -668,7 +747,7 @@ public class MissionRecorActivity extends BaseActivity {
                         greenLocation.setLongitude(OkingContract.LOCATIONRESULT[2]);
                         greenLocation.setId(mGreenGreenLocationId);
                         greenMedia1.setLocation(greenLocation);
-                        long insert = GreenDAOMannager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation);
+                        long insert = GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation);
                         Log.i("Oking", "视频位置插入成功：" + insert + greenLocation.toString());
                     }
                     mExpandableItemAdapter.getVideoMedias().add(greenMedia1);
@@ -676,6 +755,61 @@ public class MissionRecorActivity extends BaseActivity {
 
 
 //                    localSaveRecord();
+                    break;
+
+                case REQUEST_CODE_CAMERA:
+                    if (mCameraFile != null && mCameraFile.exists()) {
+                        //先压缩
+                        File file = new File(mCameraFile.getParent() + "/luban");
+                        file.mkdirs();
+                        Luban.with(this)
+                                .load(mCameraFile.getPath())                                   // 传人要压缩的图片列表
+                                .ignoreBy(100)                                  // 忽略不压缩图片的大小
+                                .setTargetDir(file.getPath())                        // 设置压缩后文件存储位置
+                                .setCompressListener(new OnCompressListener() { //设置回调
+                                    @Override
+                                    public void onStart() {
+                                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                                        Log.i("Oking", "压缩成功：" + file.getPath());
+                                        mCameraFile.delete();//删除原文件
+
+                                        GreenMedia greenMedia = new GreenMedia();
+                                        greenMedia.setType(1);
+                                        greenMedia.setPath("file://" + file.getPath());
+                                        greenMedia.setTime(System.currentTimeMillis());
+                                        greenMedia.setGreenMissionLogId(mGreenMissionLog.getId());
+                                        mGreenGreenLocationId = mRandom.nextLong();
+                                        greenMedia.setGreenGreenLocationId(mGreenGreenLocationId);
+                                        GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
+                                        if (!TextUtils.isEmpty(OkingContract.LOCATIONRESULT[1]) && !"null".equals(OkingContract.LOCATIONRESULT[1])) {
+
+                                            GreenLocation greenLocation1 = new GreenLocation();
+                                            greenLocation1.setLatitude(OkingContract.LOCATIONRESULT[1]);
+                                            greenLocation1.setLongitude(OkingContract.LOCATIONRESULT[2]);
+                                            greenLocation1.setId(mGreenGreenLocationId);
+                                            greenMedia.setLocation(greenLocation1);
+                                            long insert = GreenDAOManager.getInstence().getDaoSession().getGreenLocationDao().insert(greenLocation1);
+                                            Log.i("Oking", "图片位置插入成功：" + insert);
+                                        }
+
+
+                                        mExpandableItemAdapter.getPhotoMedias().add(greenMedia);
+                                        mExpandableItemAdapter.refreshList(adapterPostion);
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // TODO 当压缩过程出现问题时调用
+                                    }
+                                }).launch();    //启动压缩
+                    }
+
                     break;
 
                 default:

@@ -7,19 +7,20 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.zhang.baselib.BaseApplication;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.baselib.GlideApp;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenLocation;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.beans.MenuOV;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ImageViewActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolde
     private boolean canAdd;
     private String typeName;
 
-    public PicSimpleAdapter(int layoutResId, @Nullable List<GreenMedia> data, Activity recorActivity, boolean canAdd, String typeName) {
+    public PicSimpleAdapter(int layoutResId, List<GreenMedia> data, Activity recorActivity, boolean canAdd, String typeName) {
         super(layoutResId, data);
         this.activity = recorActivity;
         this.canAdd = canAdd;
@@ -49,37 +50,44 @@ public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, final GreenMedia item) {
-        SimpleDraweeView sdv = helper.getView(R.id.sdv);
+        ImageView sdv = helper.getView(R.id.sdv);
         final int layoutPosition = helper.getLayoutPosition();
-            helper.setVisible(R.id.tv, true);
-            final Uri uri = Uri.parse(item.getPath());
-
-            sdv.setImageURI(uri.toString());
-            sdv.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (onClickListener != null && canAdd) {
-                        onClickListener.onLongItemClick(PicSimpleAdapter.this, item, layoutPosition);
-                    }
-                    return false;
+        String path = item.getPath();
+        final Uri uri = Uri.parse(path);
+        GlideApp.with(activity)
+                .load(uri)
+                .placeholder(R.mipmap.ic_launcher_logo)
+                .error(R.drawable.loadfail)
+                .into(sdv);
+//        sdv.setImageURI(uri);
+        sdv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (onClickListener != null && canAdd) {
+                    onClickListener.onLongItemClick(PicSimpleAdapter.this, item, layoutPosition);
                 }
-            });
-            sdv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(activity, ImageViewActivity.class);
-                    GreenLocation location = item.getLocation();
-                    if (location!=null){
-                        intent.putExtra("picLocation",location.getLongitude()+","+location.getLatitude());
-                    }
-                    intent.setData(uri);
-                    activity.startActivity(intent);
+                return false;
+            }
+        });
+        sdv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ImageViewActivity.class);
+                GreenLocation location = item.getLocation();
+                if (location != null) {
+                    intent.putExtra("picLocation", location.getLongitude() + "," + location.getLatitude());
                 }
-            });
-            String path = uri.getPath();
+                //file:///storage/emulated/0/oking/mission_pic/e9f8735f-066b-42da-85ed-e8ec0676a18c.jpg
+                //file:///storage/emulated/0/oking/mission_pic/e9f8735f-066b-42da-85ed-e8ec0676a18c.jpg
+                Log.i("Oking", uri.toString() + ">>>>>>>>");
+                intent.setData(uri);
+                activity.startActivity(intent);
+            }
+        });
+        String picName = uri.getPath();
 
-            String s = path.substring(path.lastIndexOf("/") + 1, path.length());
-            helper.setText(R.id.tv,s.split("_")[0] + typeName);
+        String s = picName.substring(picName.lastIndexOf("/") + 1, picName.length());
+        helper.setText(R.id.tv, s.split("_")[0] + typeName);
 
     }
 

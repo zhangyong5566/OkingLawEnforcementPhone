@@ -1,58 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recy_list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/activity_bg">
+    android:layout_height="match_parent">
 
-    <HorizontalScrollView
-        android:id="@+id/hsv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <RadioGroup android:id="@+id/rg" 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@drawable/item_bg"
-        android:orientation="horizontal"
-        android:padding="5dp">
 
-        <RadioButton android:id="@+id/rb_inspection_norms"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:button="@drawable/radio_button_style"
-            android:checked="true"
-            android:padding="5dp"
-            android:text="水行政执法检查行为规范"
-            android:textColor="@color/task_other_tx"
-            android:textSize="12sp"/>
-
-        <RadioButton android:id="@+id/rb_language_specification"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:button="@drawable/radio_button_style"
-            android:padding="5dp"
-            android:text="水行政执法用语规范"
-            android:textColor="@color/task_other_tx"
-            android:textSize="12sp"/>
-        <RadioButton android:id="@+id/rb_administrative_enforcement"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:button="@drawable/radio_button_style"
-            android:padding="5dp"
-            android:text="水行政执法禁令"
-            android:textColor="@color/task_other_tx"
-            android:textSize="12sp"/>
-    </RadioGroup>
-    </HorizontalScrollView>
-    <FrameLayout android:id="@+id/fl_administrative_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/hsv"
-        >
-
-    </FrameLayout>
-
-</RelativeLayout>
+</android.support.v7.widget.RecyclerView>

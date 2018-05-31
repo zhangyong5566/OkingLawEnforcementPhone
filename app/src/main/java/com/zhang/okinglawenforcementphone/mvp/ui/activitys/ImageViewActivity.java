@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.zhang.okinglawenforcementphone.R;
 
 import butterknife.BindView;
@@ -25,7 +26,7 @@ public class ImageViewActivity extends Activity {
     @BindView(R.id.tv_location)
     TextView mTvLocation;
     @BindView(R.id.imageView)
-    SimpleDraweeView mImageView;
+    ImageView mImageView;
     private Unbinder mBind;
 
     @Override
@@ -34,12 +35,13 @@ public class ImageViewActivity extends Activity {
         setContentView(R.layout.activity_image_view);
         mBind = ButterKnife.bind(this);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
         Intent intent = getIntent();
 
         Uri imageUri = intent.getData();
         if (imageUri != null) {
-            imageView.setImageURI(imageUri);
+            Glide.with(ImageViewActivity.this)
+                    .load(imageUri)
+                    .into(mImageView);
         } else {
             this.finish();
         }

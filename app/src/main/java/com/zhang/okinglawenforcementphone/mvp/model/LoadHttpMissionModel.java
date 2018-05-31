@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.utils.DataUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
 import com.zhang.okinglawenforcementphone.beans.GreenMemberDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
@@ -37,7 +37,7 @@ import okhttp3.ResponseBody;
 public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
     private LoadHttpMissionContract.Presenter mPresenter;
     private int mPosition = 0;
-    private ArrayList<GreenMissionTask> mGreenMissionTasks;
+    private ArrayList<GreenMissionTask> mGreenMissionTasks = new ArrayList<>();
     private ArrayList<Mission> missions;
     private GreenMissionTask mUnique;
     public LoadHttpMissionModel(LoadHttpMissionContract.Presenter presenter) {
@@ -55,7 +55,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                 .concatMap(new Function<ResponseBody, Observable<Mission>>() {
                     @Override
                     public Observable<Mission> apply(ResponseBody responseBody) throws Exception {
-                        mGreenMissionTasks = new ArrayList<>();
+                        mGreenMissionTasks .clear();
                         mPosition = 0;
                         final String result = responseBody.string();
                         final JSONObject object = new JSONObject(result);
@@ -78,7 +78,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
             public Observable<ResponseBody> apply(Mission mission) throws Exception {
 
 
-                mUnique = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mission.getId())).unique();
+                mUnique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mission.getId())).unique();
                 if (mUnique != null) {
                     mUnique.setApproved_person(mission.getApproved_person());
                     mUnique.setApproved_person_name(mission.getApproved_person_name());
@@ -143,7 +143,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                     mUnique.setTypeoftask(mission.getTypeoftask());
                     mUnique.setTaskid(mission.getId());
                     mUnique.setUserid(OkingContract.CURRENTUSER.getUserid());
-                    long id = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(mUnique);
+                    long id = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(mUnique);
 
                     GreenMember leader = new GreenMember();
                     leader.setUsername(mission.getReceiver_name());
@@ -151,7 +151,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                     leader.setTaskid(mission.getId());
                     leader.setGreenMemberId(id);
                     leader.setPost("任务负责人");
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(leader);
+                    GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(leader);
 
                 }
 
@@ -180,7 +180,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                         JSONObject jsonObject = memberJSONArray.getJSONObject(i);
                         String userid = jsonObject.getString("userid");
 
-                        GreenMember unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mUnique.getId()),GreenMemberDao.Properties.Userid.eq(userid)).unique();
+                        GreenMember unique = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mUnique.getId()),GreenMemberDao.Properties.Userid.eq(userid)).unique();
 
                         if (unique == null) {
                             GreenMember greenMember = new GreenMember();
@@ -193,7 +193,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                             greenMember.setPost("队员");
                             String username = jsonObject.getString("username");
                             greenMember.setUsername(username);
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(greenMember);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(greenMember);
 
                         }
                     }
@@ -202,7 +202,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                 mPosition++;
                 mPresenter.loadHttpMissionProgress(missions.size(), mPosition);
 
-                GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mUnique);
+                GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mUnique);
                 mGreenMissionTasks.add(mUnique);
                 if (mPosition == missions.size()) {
                     mPresenter.loadHttpMissionSucc(mGreenMissionTasks);
@@ -223,8 +223,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
                 Schedulers.io().createWorker().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        List<GreenMissionTask> list = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid())).list();
-                        Log.i("Oking", ">>>" + list.size());
+                        List<GreenMissionTask> list = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid())).list();
                         mPresenter.loadMissionFromLocal(list);
                     }
                 });

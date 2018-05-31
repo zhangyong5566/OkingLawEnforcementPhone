@@ -1,23 +1,23 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
+ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:1-4:12
 	package
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:11-41
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml:1:11-41
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
 uses-sdk
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-		ADDED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
-		INJECTED from D:\AsWorkplace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		ADDED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml
+		INJECTED from G:\AndroidWorkSpace\OkingLawEnforcementPhone\easeui\src\main\AndroidManifest.xml

@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
-import com.zhang.okinglawenforcementphone.beans.GreenCaseDao;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.CaseDealActivity;
+import com.zhang.okinglawenforcementphone.mvp.ui.activitys.EvidenceManagerActivity;
 
 import java.text.SimpleDateFormat;
 
@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import retrofit2.http.PUT;
 
 public class CaseDealFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -56,6 +55,7 @@ public class CaseDealFragment extends Fragment {
     private String mParam2;
     private View mInflate;
     private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private CaseDealActivity mCaseDealActivity;
 
     public CaseDealFragment() {
         // Required empty public constructor
@@ -167,15 +167,22 @@ public class CaseDealFragment extends Fragment {
                 getActivity().finish();
                 break;
             case R.id.evidence_btn:
-                Fragment caseDealFragment = getFragmentManager().findFragmentByTag("caseDealFragment");
+                String ajid = mCaseDealActivity.getAJID();
+                Intent intent = new Intent(mCaseDealActivity, EvidenceManagerActivity.class);
+                intent.putExtra("AJID",ajid);
+                startActivity(intent);
+//                mCaseDealActivity.setToolbarText("证据管理");
 
-                if (caseDealFragment.isAdded()){
-                    getFragmentManager().beginTransaction().hide(caseDealFragment).commit();
-                }
 
-                CaseEvidenceFragment caseEvidenceFragment = CaseEvidenceFragment.newInstance(null);
-                getFragmentManager().beginTransaction().add(R.id.sub_fragment_root, caseEvidenceFragment,"caseEvidenceFragment").commit();
-//                mChangeBtn.setEnabled(false);
+//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.hide(CaseDealFragment.this);
+//                if (mCaseEvidenceFragment == null) {
+//                    mCaseEvidenceFragment = CaseEvidenceFragment.newInstance(null);
+//                    fragmentTransaction.add(R.id.sub_fragment_root, mCaseEvidenceFragment, "caseEvidenceFragment").commit();
+//                }else {
+//                    fragmentTransaction.show(mCaseEvidenceFragment).commit();
+//
+//                }
                 break;
             default:
                 break;
@@ -183,7 +190,11 @@ public class CaseDealFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCaseDealActivity = (CaseDealActivity) context;
+    }
 
     public void setGreenCase(GreenCase greenCase) {
         this.mUnique = greenCase;

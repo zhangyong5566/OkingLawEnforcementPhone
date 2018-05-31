@@ -115,7 +115,7 @@
             android:id="@+id/cb_warning"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:text="1.警告；"
             android:textColor="@color/colorAccent"
@@ -145,7 +145,7 @@
             android:layout_marginTop="5dp"
             android:text="（金额大写）。"
             android:textColor="@color/colorAccent"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 
@@ -160,7 +160,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:text="收款形式："
             android:textColor="@color/colorAccent"

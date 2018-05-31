@@ -55,30 +55,28 @@
         android:textColor="@color/bottom_nav_selected"
         android:textSize="12sp" />
 
-    <Spinner
+    <TextView
         android:id="@+id/plan_spinner"
         android:layout_width="90dp"
+        android:layout_alignTop="@id/tv_04"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_01"
         android:layout_marginRight="6dp"
         android:layout_toRightOf="@id/tv_04"
-        android:gravity="center"
-        android:overlapAnchor="false"
-        android:layout_marginTop="3dp"
-        android:spinnerMode="dropdown" />
+        android:textSize="12sp"
+        android:gravity="left|center_vertical" />
 
-    <Spinner
+    <TextView
 
         android:id="@+id/item_spinner"
         android:layout_width="170dp"
+        android:layout_alignTop="@id/tv_03"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/tv_01"
         android:layout_marginRight="6dp"
-        android:gravity="center"
-        android:overlapAnchor="false"
-        android:spinnerMode="dropdown"
-        android:layout_marginTop="3dp" />
+        android:gravity="left|center_vertical"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_03"

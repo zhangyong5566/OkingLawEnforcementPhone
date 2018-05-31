@@ -26,21 +26,22 @@ public class LoadHttpMissionPresenter implements LoadHttpMissionContract.Present
 
     @Override
     public void loadHttpMission(int classify, String receiver) {
-        mModel.loadHttpMission(classify,receiver);
+        mModel.loadHttpMission(classify, receiver);
     }
 
     @Override
     public void loadHttpMissionProgress(int total, int count) {
-        mView.loadHttpMissionProgress(total,count);
+        mView.loadHttpMissionProgress(total, count);
     }
 
     @Override
     public void loadMissionFromLocal(List<GreenMissionTask> greenMissionTasks) {
-            mView.loadMissionFromLocal(greenMissionTasks);
+        mView.loadMissionFromLocal(greenMissionTasks);
     }
 
     @Override
     public void loadHttpMissionFail(Throwable ex) {
-    mView.loadHttpMissionFail(ex);
+        mView.loadHttpMissionFail(ex);
     }
+
 }

@@ -1,21 +1,29 @@
+<?xml version="1.0"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:background="@color/activity_bg"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/layoutSwipeRefresh"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ry_user"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ry_user"
-            android:paddingTop="3dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
+    <TextView
+        android:id="@+id/bt_loginout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ry_user"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/action_btn"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="退 出"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 
 </RelativeLayout>

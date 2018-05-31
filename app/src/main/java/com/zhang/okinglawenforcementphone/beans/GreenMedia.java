@@ -20,7 +20,7 @@ public class GreenMedia {
     private String path;
     private String userid;
     private String taskid;
-    private Integer type;               //1表示图片  2表示视频  3表示语音   否则签名图片
+    private Integer type;               //1表示日志图片  2表示视频  3表示语音   4签名图片
     private Long greenGreenLocationId;
     @ToOne(joinProperty = "greenGreenLocationId")
     private GreenLocation location;

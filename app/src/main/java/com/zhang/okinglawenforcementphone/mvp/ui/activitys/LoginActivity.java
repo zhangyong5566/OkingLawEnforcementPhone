@@ -13,8 +13,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,12 +30,15 @@ import com.zhang.baselib.http.progress.body.ProgressInfo;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxToast;
+import com.zhang.baselib.utils.CrashUtil;
 import com.zhang.baselib.utils.DeviceUtil;
+import com.zhang.baselib.utils.FileUtil;
 import com.zhang.baselib.utils.LocationUtil;
 import com.zhang.baselib.utils.NetUtil;
 import com.zhang.baselib.utils.PermissionUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
+import com.zhang.okinglawenforcementphone.SendEmailManager;
 import com.zhang.okinglawenforcementphone.htttp.Api;
 import com.zhang.okinglawenforcementphone.mvp.contract.AppVersionContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoginContract;
@@ -48,6 +51,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,12 +86,13 @@ public class LoginActivity extends BaseActivity {
     private SharedPreferences mSp;
     private Handler mHandler = new Handler();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mBind = ButterKnife.bind(this, this);
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPm();
         }
 
@@ -115,8 +120,11 @@ public class LoginActivity extends BaseActivity {
 
     private void initData() {
         //初始化化数据存储
-        GreenDAOMannager.getInstence().initGreenDao(this);
+        GreenDAOManager.getInstence().initGreenDao(this);
+        CrashUtil.getInstance(BaseApplication.getApplictaion()).init();
         tvVersion.setText("当前版本号：v" + DeviceUtil.getAppVersionName(BaseApplication.getApplictaion()));
+
+//        int o =  1/0;
         //检测更新
         detectionUpdate();
 
@@ -219,23 +227,43 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void loginFail(Throwable e) {
-                AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        userNameEditText.setEnabled(true);
-                        passwordEditText.setEnabled(true);
-                        loginBtn.setErrorText("登录失败，请重新登录");
-                        loginBtn.setProgress(-1);
+                if (e.getMessage().equals("密码错误")) {
+                    AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
+                        @Override
+                        public void run() {
+                            userNameEditText.setEnabled(true);
+                            passwordEditText.setEnabled(true);
+                            loginBtn.setErrorText("密码错误，请重新登录");
+                            loginBtn.setProgress(-1);
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginBtn.setClickable(true);
+                                    loginBtn.setProgress(0);
+                                }
+                            }, 1600);
+                        }
+                    });
+                } else {
+                    AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
+                        @Override
+                        public void run() {
+                            userNameEditText.setEnabled(true);
+                            passwordEditText.setEnabled(true);
+                            loginBtn.setErrorText("登录失败，请重新登录");
+                            loginBtn.setProgress(-1);
 
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                loginBtn.setClickable(true);
-                                loginBtn.setProgress(0);
-                            }
-                        }, 1600);
-                    }
-                });
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginBtn.setClickable(true);
+                                    loginBtn.setProgress(0);
+                                }
+                            }, 1600);
+                        }
+                    });
+
+                }
 
             }
         }).login(mName, mPwd, mSp);

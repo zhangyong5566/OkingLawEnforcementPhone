@@ -10,6 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.zhang.okinglawenforcementphone.EnableCallBack;
 import com.zhang.okinglawenforcementphone.R;
@@ -20,12 +21,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class ShootActivity extends BaseActivity implements SurfaceHolder.Callback ,EnableCallBack {
+public class ShootActivity extends BaseActivity implements SurfaceHolder.Callback, EnableCallBack {
 
     boolean enable = false;
     private MyCamera mCamera = new MyCamera(this);
     private File picStorageDir = new File(Environment.getExternalStorageDirectory(), "oking/mission_pic");
-    private Button mTakePictureButton;
+    private TextView mTakePictureButton;
     private SharedPreferences mSp;
 
 
@@ -44,7 +45,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         surfaceHolder.addCallback(this);
 
-        mTakePictureButton = (Button) findViewById(R.id.takePictureButton);
+        mTakePictureButton = findViewById(R.id.takePictureButton);
         mTakePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,15 +58,14 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         findViewById(R.id.bt_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    ArrayList<String> paths = mCamera.completePhotos();
-                    Intent intent = new Intent();
-                    intent.putStringArrayListExtra("picpaths", paths);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                ArrayList<String> paths = mCamera.completePhotos();
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("picpaths", paths);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
-        Button timerShootingButton = (Button) findViewById(R.id.bt_succ);
-        timerShootingButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bt_succ).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -112,5 +112,6 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         this.enable = enable;
         mTakePictureButton.setEnabled(enable);
     }
+
 
 }

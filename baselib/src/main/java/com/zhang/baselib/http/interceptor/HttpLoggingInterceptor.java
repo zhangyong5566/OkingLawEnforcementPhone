@@ -11,7 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * retrofit拦截
+ * retrofit拦截器
  */
 public class HttpLoggingInterceptor implements Interceptor {
 

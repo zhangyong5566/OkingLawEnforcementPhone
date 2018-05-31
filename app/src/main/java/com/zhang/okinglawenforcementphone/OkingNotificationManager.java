@@ -122,9 +122,10 @@ public class OkingNotificationManager {
 //                            .build();
         } else {
 
-            mBuilder.setContentTitle("新消息:任务" + greenMissionTask.getTask_name()).
-                    setContentText(cont).
-                    setSmallIcon(R.mipmap.ic_launcher_logo);
+            mBuilder.setContentTitle("新消息:任务" + greenMissionTask.getTask_name())
+                    .setContentText(cont)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher_logo);
 
             Notification notification = mBuilder.build();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;

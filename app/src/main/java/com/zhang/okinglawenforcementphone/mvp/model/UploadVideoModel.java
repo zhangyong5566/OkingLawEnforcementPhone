@@ -89,6 +89,7 @@ public class UploadVideoModel implements UploadVideoContract.Model {
     private GreenLocation mMediaLocation;
     private String msLaststr;
     private Long mTime;
+    private Map<String, RequestBody> mVideoParams;
 
     public UploadVideoModel(UploadVideoContract.Presenter presenter) {
         mPresenter = presenter;
@@ -178,14 +179,14 @@ public class UploadVideoModel implements UploadVideoContract.Model {
                         }
 
                         String path = object.getString("path");
-                        photoParams.clear();
+                        mVideoParams = new HashMap<>();
 
-                        photoParams.put("logId", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), greenMissionLog.getServer_id()));
-                        photoParams.put("type", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), "2"));
-                        photoParams.put("smallImg", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), path));
+                        mVideoParams.put("logId", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), greenMissionLog.getServer_id()));
+                        mVideoParams.put("type", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), "2"));
+                        mVideoParams.put("smallImg", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), path));
                         String fileName = mVideofile.getName().split("\\.")[0];
 
-                        photoParams.put("files" + "\"; filename=\"" + fileName , RequestBody.create(MediaType.parse("video/mp4"), mVideofile));
+                        mVideoParams.put("files" + "\"; filename=\"" + fileName , RequestBody.create(MediaType.parse("video/mp4"), mVideofile));
 
 
                         String ext = null;
@@ -206,7 +207,7 @@ public class UploadVideoModel implements UploadVideoContract.Model {
 
                         if (!TextUtils.isEmpty(ext)){
 
-                            photoParams.put("ext", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), ext));
+                            mVideoParams.put("ext", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), ext));
                         }
 
                     } else {
@@ -218,7 +219,7 @@ public class UploadVideoModel implements UploadVideoContract.Model {
                 }
 
                 return BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
-                        .uploadFiles(photoParams);
+                        .uploadFiles(mVideoParams);
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .retry(5, new Predicate<Throwable>() {
@@ -237,7 +238,8 @@ public class UploadVideoModel implements UploadVideoContract.Model {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
                         String result =  responseBody.string();
-
+                        mVideoParams.clear();
+                        mVideoParams=null;
 
                         mPresenter.loadVideoSucc(result);
                         Log.i("Oking", "上传成功");

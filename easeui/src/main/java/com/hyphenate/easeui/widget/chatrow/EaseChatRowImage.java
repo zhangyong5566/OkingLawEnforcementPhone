@@ -1,11 +1,11 @@
 package com.hyphenate.easeui.widget.chatrow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.os.AsyncTaskCompat;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -119,14 +119,15 @@ public class EaseChatRowImage extends EaseChatRowFile{
      * load image into image view
      * 
      */
-    private void showImageView(final String thumbernailPath, final String localFullSizePath,final EMMessage message) {
+    @SuppressLint("StaticFieldLeak")
+    private void showImageView(final String thumbernailPath, final String localFullSizePath, final EMMessage message) {
         // first check if the thumbnail image already loaded into cache
         Bitmap bitmap = EaseImageCache.getInstance().get(thumbernailPath);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
             imageView.setImageBitmap(bitmap);
         } else {
-            AsyncTaskCompat.executeParallel( new AsyncTask<Object, Void, Bitmap>() {
+            new AsyncTask<Object, Void, Bitmap>() {
 
                 @Override
                 protected Bitmap doInBackground(Object... args) {
@@ -149,13 +150,14 @@ public class EaseChatRowImage extends EaseChatRowFile{
                     }
                 }
 
+                @Override
                 protected void onPostExecute(Bitmap image) {
                     if (image != null) {
                         imageView.setImageBitmap(image);
                         EaseImageCache.getInstance().put(thumbernailPath, image);
                     }
                 }
-            });
+            };
         }
     }
 

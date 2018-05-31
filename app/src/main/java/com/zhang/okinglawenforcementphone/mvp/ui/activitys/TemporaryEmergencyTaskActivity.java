@@ -3,9 +3,12 @@ package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,8 +19,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
@@ -28,23 +33,27 @@ import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.TextUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.EmergencyMemberAdapter;
+import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.ApproverBean;
 import com.zhang.okinglawenforcementphone.beans.EmergencyMemberGson;
+import com.zhang.okinglawenforcementphone.beans.EmergencyTaskOV;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.LatLngListOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
+import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
 import com.zhang.okinglawenforcementphone.htttp.Api;
 import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.ApproverPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
 import com.zhang.okinglawenforcementphone.utils.EmergencyPinyinComparator;
+import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,13 +86,13 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
     @BindView(R.id.publisher_tv)
     TextInputEditText mPublisherTv;
     @BindView(R.id.sp_tasktype)
-    Spinner mSpTasktype;
+    TextView mSpTasktype;
     @BindView(R.id.sp_approver)
-    Spinner mSpApprover;
+    TextView mSpApprover;
     @BindView(R.id.sp_source)
-    Spinner mSpSource;
+    TextView mSpSource;
     @BindView(R.id.sp_tasknature)
-    Spinner mSpTasknature;
+    TextView mSpTasknature;
     @BindView(R.id.list_item_missionMember)
     TextInputEditText mListItemMissionMember;
     @BindView(R.id.bt_select_begintime)
@@ -107,9 +116,6 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
     private long mBeginMillseconds = 0;
     private long mEndMillseconds = 0;
 
-    private String[] mSourceArray;
-    private String[] mTasknatureArray;
-    private String[] mApprovers;
     private String mApproverId;    //选中的审批人ID
     private String mApprover;    //选中的审批人
     private String mSource;     //选中的线索来源
@@ -133,7 +139,14 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
     private Intent mIntent;
     private Unbinder mBind;
     private LatLngListOV mLatLngListOV;
-
+    private DialogUtil mDialogUtil;
+    private View mButtonDailog;
+    private TextView mTv_title;
+    private ArrayList<SourceArrayOV> mSourceArrayOVS;
+    private SourceArrayRecyAdapter mSourceArrayRecyAdapter;
+    private ArrayList<SourceArrayOV> mTasknatureArrayOVS;
+    private List<SourceArrayOV> mTasktypeArrayOVS;
+    private List<SourceArrayOV> mApproversOVS;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,86 +164,6 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                 finish();
             }
         });
-
-        mSpApprover.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mApproverId = mSzjc.get(i).getUSERID();
-                mApprover = mSzjc.get(i).getUSERNAME();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSpSource.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ("上级交办".equals(mSourceArray[i])) {
-                    mSource = "0";
-                } else if ("部门移送".equals(mSourceArray[i])) {
-                    mSource = "1";
-                } else if ("系统报警".equals(mSourceArray[i])) {
-                    mSource = "2";
-                } else if ("日常巡查".equals(mSourceArray[i])) {
-                    mSource = "3";
-                } else if ("媒体披露".equals(mSourceArray[i])) {
-                    mSource = "4";
-                } else if ("群众举报".equals(mSourceArray[i])) {
-                    mSource = "5";
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSpTasknature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ("日常执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "0";
-                } else if ("联合执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "1";
-                } else if ("专项执法".equals(mTasknatureArray[i])) {
-                    mTasknature = "2";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-        mSpTasktype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ("河道管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "0";
-                } else if ("河道采砂".equals(mTasktypeArray[i])) {
-                    mTasktype = "1";
-                } else if ("水资源管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "2";
-                } else if ("水土保持管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "3";
-                } else if ("水利工程管理".equals(mTasktypeArray[i])) {
-                    mTasktype = "4";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
     }
 
     private void initView() {
@@ -278,18 +211,33 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                     }
                 });
 
-        mSourceArray = getResources().getStringArray(R.array.spinner_source);
-        SpinnerArrayAdapter sourceArrayAdapter = new SpinnerArrayAdapter(mSourceArray);
-        mSpSource.setAdapter(sourceArrayAdapter);
+        initButtomDialog();
+        String[] sourceArray = getResources().getStringArray(R.array.spinner_source);
+        mSourceArrayOVS = new ArrayList<>();
+        for (String s : sourceArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(0);
+            sourceArrayOV.setSource(s);
+            mSourceArrayOVS.add(sourceArrayOV);
+        }
 
-        mTasknatureArray = getResources().getStringArray(R.array.spinner_tasknature);
-        SpinnerArrayAdapter tasknatureArrayAdapter = new SpinnerArrayAdapter(mTasknatureArray);
-        mSpTasknature.setAdapter(tasknatureArrayAdapter);
+        String[] tasknatureArray = getResources().getStringArray(R.array.spinner_tasknature);
+        mTasknatureArrayOVS = new ArrayList<>();
+        for (String s : tasknatureArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(1);
+            sourceArrayOV.setSource(s);
+            mTasknatureArrayOVS.add(sourceArrayOV);
+        }
 
-        mTasktypeArray = getResources().getStringArray(R.array.spinner_tasktype);
-        SpinnerArrayAdapter tasktypeArrayAdapter = new SpinnerArrayAdapter(mTasktypeArray);
-        mSpTasktype.setAdapter(tasktypeArrayAdapter);
-
+        String[] tasktypeArray =  getResources().getStringArray(R.array.spinner_tasktype);
+        mTasktypeArrayOVS = new ArrayList<>();
+        for (String s : tasktypeArray) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(2);
+            sourceArrayOV.setSource(s);
+            mTasktypeArrayOVS.add(sourceArrayOV);
+        }
 
         if (mRxDialogLoading == null) {
             initWaitingDialog();
@@ -308,13 +256,14 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                         ApproverBean approverBean = gson.fromJson(result, ApproverBean.class);
                         mSzjc = approverBean.getSZJC();
                         Collections.sort(mSzjc, new ApproverPinyinComparator());
-                        mApprovers = new String[mSzjc.size()];
+                        mApproversOVS = new ArrayList<>();
                         for (int i = 0; i < mSzjc.size(); i++) {
-                            mApprovers[i] = mSzjc.get(i).getUSERNAME();
+                            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+                            sourceArrayOV.setType(3);
+                            sourceArrayOV.setSource(mSzjc.get(i).getUSERNAME());
+                            mApproversOVS.add(sourceArrayOV);
                         }
 
-                        SpinnerArrayAdapter approverAdapter = new SpinnerArrayAdapter(mApprovers);
-                        mSpApprover.setAdapter(approverAdapter);
 
                     }
                 }, new Consumer<Throwable>() {
@@ -325,6 +274,86 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                         mRxDialogLoading.cancel();
                     }
                 });
+
+    }
+
+    private void initButtomDialog() {
+
+        if (mDialogUtil == null) {
+            mDialogUtil = new DialogUtil();
+            mButtonDailog = View.inflate(BaseApplication.getApplictaion(), R.layout.maptask_dialog, null);
+            mTv_title = mButtonDailog.findViewById(R.id.tv_title);
+            RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
+            recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+            recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+            mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
+            mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+            recyList.setAdapter(mSourceArrayRecyAdapter);
+            mSourceArrayRecyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    List<SourceArrayOV> sourceArrayOVS = adapter.getData();
+                    SourceArrayOV sourceArrayOV = sourceArrayOVS.get(position);
+                    switch (sourceArrayOV.getType()) {
+                        case 0:
+
+                            if ("上级交办".equals(sourceArrayOV.getSource())) {
+                                mSource = "0";
+                            } else if ("部门移送".equals(sourceArrayOV.getSource())) {
+                                mSource = "1";
+                            } else if ("系统报警".equals(sourceArrayOV.getSource())) {
+                                mSource = "2";
+                            } else if ("日常巡查".equals(sourceArrayOV.getSource())) {
+                                mSource = "3";
+                            } else if ("媒体披露".equals(sourceArrayOV.getSource())) {
+                                mSource = "4";
+                            } else if ("群众举报".equals(sourceArrayOV.getSource())) {
+                                mSource = "5";
+                            }
+
+                            mSpSource.setText(sourceArrayOV.getSource());
+
+                            break;
+                        case 1:
+
+                            if ("日常执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "0";
+                            } else if ("联合执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "1";
+                            } else if ("专项执法".equals(sourceArrayOV.getSource())) {
+                                mTasknature = "2";
+                            }
+                            mSpTasknature.setText(sourceArrayOV.getSource());
+                            break;
+                        case 2:
+
+                            if ("河道管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "0";
+                            } else if ("河道采砂".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "1";
+                            } else if ("水资源管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "2";
+                            } else if ("水土保持管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "3";
+                            } else if ("水利工程管理".equals(sourceArrayOV.getSource())) {
+                                mTasktype = "4";
+                            }
+                            mSpTasktype.setText(sourceArrayOV.getSource());
+                            break;
+                        case 3:
+                            mApproverId = mSzjc.get(position).getUSERID();
+                            mApprover = sourceArrayOV.getSource();
+                            mSpApprover.setText(sourceArrayOV.getSource());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    mDialogUtil.cancelDialog();
+                }
+            });
+
+        }
 
     }
 
@@ -339,9 +368,29 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
 
     }
 
-    @OnClick({R.id.bt_select_begintime, R.id.bt_select_endtime, R.id.bt_ok, R.id.bt_select_members, R.id.ib_map})
+    @OnClick({R.id.sp_tasktype, R.id.sp_approver, R.id.sp_source, R.id.sp_tasknature,R.id.bt_select_begintime, R.id.bt_select_endtime, R.id.bt_ok, R.id.bt_select_members, R.id.ib_map})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.sp_tasktype:
+                mTv_title.setText("任务类型");
+                mSourceArrayRecyAdapter.setNewData(mTasktypeArrayOVS);
+                mDialogUtil.showBottomDialog(TemporaryEmergencyTaskActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_approver:
+                mTv_title.setText("审批领导");
+                mSourceArrayRecyAdapter.setNewData(mApproversOVS);
+                mDialogUtil.showBottomDialog(TemporaryEmergencyTaskActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_source:
+                mTv_title.setText("线索来源");
+                mSourceArrayRecyAdapter.setNewData(mSourceArrayOVS);
+                mDialogUtil.showBottomDialog(TemporaryEmergencyTaskActivity.this, mButtonDailog, 300f);
+                break;
+            case R.id.sp_tasknature:
+                mTv_title.setText("任务性质");
+                mSourceArrayRecyAdapter.setNewData(mTasknatureArrayOVS);
+                mDialogUtil.showBottomDialog(TemporaryEmergencyTaskActivity.this, mButtonDailog, 300f);
+                break;
             case R.id.bt_select_begintime:          //选择开始时间
                 if (mBeginDialogAll == null) {
                     initBeginWheelYearMonthDayDialog();
@@ -556,6 +605,22 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
         String description = mEtDescription.getText().toString().trim();
         final String beginTime = mBtSelectBegintime.getText().toString();
         final String endTime = mBtSelectEndtime.getText().toString();
+        if (mSpTasktype.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务类型");
+            return;
+        }
+        if (mSpApprover.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择审批领导");
+            return;
+        }
+        if (mSpSource.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择线索来源");
+            return;
+        }
+        if (mSpTasknature.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("请选择任务性质");
+            return;
+        }
 
         if (!TextUtils.isEmpty(taskName) && !TextUtils.isEmpty(members)
                 && !TextUtils.isEmpty(missionDetail) && !TextUtils.isEmpty(description)
@@ -614,7 +679,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                             greenMissionTask.setEnd_time(mEndMillseconds);
                                             greenMissionTask.setUserid(OkingContract.CURRENTUSER.getUserid());
                                             greenMissionTask.setTypeoftask(mTasktype);
-                                            greenMissionTask.setTypename(mSpTasknature.getSelectedItem().toString());
+                                            greenMissionTask.setTypename(mSpTasknature.getText().toString());
                                             greenMissionTask.setApproved_person_name(mApprover);
                                             greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
                                             greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
@@ -623,7 +688,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
 
                                                 greenMissionTask.setMcoordinateJson(gson.toJson(mLatLngListOV.getLatLngs()));
                                             }
-                                            long insert = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(greenMissionTask);
+                                            long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(greenMissionTask);
 
                                             GreenMember greenMember = new GreenMember();
                                             greenMember.setGreenMemberId(insert);
@@ -631,17 +696,21 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                             greenMember.setUserid(OkingContract.CURRENTUSER.getUserid());
                                             greenMember.setPost("负责人");
                                             greenMember.setAccount(OkingContract.CURRENTUSER.getAcount());
-                                            GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(greenMember);
+                                            GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(greenMember);
 
                                             for (GreenMember checkName : mCheckName) {
                                                 checkName.setPost("组员");
                                                 checkName.setGreenMemberId(insert);
-                                                long insert1 = GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(checkName);
+                                                long insert1 = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(checkName);
                                             }
                                             Intent intent = new Intent(BaseApplication.getApplictaion(), MissionActivity.class);
                                             intent.putExtra("id", insert);
                                             PendingIntent pendingIntent = PendingIntent.getActivity(BaseApplication.getApplictaion(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                             OkingNotificationManager.getInstence().showTaskNotification(greenMissionTask, pendingIntent);
+                                            EmergencyTaskOV emergencyTaskOV = new EmergencyTaskOV();
+                                            emergencyTaskOV.setType(0);
+                                            emergencyTaskOV.setGreenMissionTask(greenMissionTask);
+                                            EventBus.getDefault().post(emergencyTaskOV);
 
                                         }
                                     });

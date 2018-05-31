@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/hot_tagflow_item_selector"
+    android:gravity="center"
     android:orientation="vertical"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-              android:background="@drawable/hot_tagflow_item_selector"
-    android:layout_height="wrap_content">
-    <ImageView
+    android:paddingRight="10dp">
 
+    <ImageView
         android:id="@+id/iv_icon"
-        android:layout_gravity="center"
         android:layout_width="35dp"
-        android:layout_height="35dp" />
+        android:layout_height="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:src="@mipmap/task_record" />
 
     <TextView
         android:id="@+id/tv_tag"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
+        android:layout_below="@id/iv_icon"
+        android:layout_centerHorizontal="true"
+        android:text="待办"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
-</LinearLayout>
+
+    <TextView
+        android:text="0"
+        android:layout_width="18dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:id="@+id/tv_msgcout"
+        android:layout_height="18dp"
+        android:layout_alignEnd="@id/iv_icon"
+        android:background="@drawable/btn_msg_bg"
+        android:textColor="@color/white"
+        android:textSize="8sp" />
+
+
+</RelativeLayout>

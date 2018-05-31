@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hyphenate.EMError;
 import com.hyphenate.easeui.model.EaseVoiceRecorder;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -33,20 +37,26 @@ import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.MediaManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.CaseSimpleAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SoundSimpleAdapter;
+import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceDao;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceSTZJOV;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.SaveOrRemoveDataEvent;
+import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
+import com.zhang.okinglawenforcementphone.mvp.ui.activitys.EvidenceManagerActivity;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.VideoRecordActivity;
+import com.zhang.okinglawenforcementphone.utils.DialogUtil;
+import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,15 +86,15 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
     private GreenCase mycase;
     private TextView evidence_name_tv, evidence_content_tv, evidence_remark_tv;
     private TextView evidence_getLocation_tv, evidence_man_textView, evidence_dept_tv, evidence_pagerCount_tv;
-    private Spinner type_spinner, evidence_source_spinner;
+    private TextView type_spinner, evidence_source_spinner;
     private Button save_button, close_button;
     private GridView video_gridView, sound_gridView;
 
     private SoundSimpleAdapter soundAdapter;
     private CaseSimpleAdapter videoAdapter;
 
-    private ArrayList<GreenMedia> soundList = new ArrayList<>();
-    private ArrayList<GreenMedia> videoList = new ArrayList<>();
+    private ArrayList<GreenEvidenceMedia> soundList = new ArrayList<>();
+    private ArrayList<GreenEvidenceMedia> videoList = new ArrayList<>();
     private int mType;
     private long mEvidenceId;
     //    private Uri photouri, videouri;
@@ -92,6 +102,16 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
 
     private RxDialogSureCancel mRxDialogSureCancel;
     private View mInflate;
+    private TextView mTv_stop;
+    private TextView mTv_cancel;
+    private AlertDialog mAlertDialog;
+    private EvidenceManagerActivity mEvidenceManagerActivity;
+    private ArrayList<SourceArrayOV> mPlandataOVS;
+    private ArrayList<SourceArrayOV> mTypedataOVS;
+    private DialogUtil mDialogUtil;
+    private View mButtonDailog;
+    private TextView mTv_title;
+    private SourceArrayRecyAdapter mSourceArrayRecyAdapter;
 
     public CaseAudioVideoEvidenceFragment() {
         // Required empty public constructor
@@ -137,44 +157,112 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
         super.onDestroyView();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mEvidenceManagerActivity = (EvidenceManagerActivity) context;
+        mEvidenceManagerActivity.setVisibleAdd(false);
+    }
+
     public void initView(View rootView) {
 
 
         evidence_name_tv = (TextView) rootView.findViewById(R.id.evidence_name_tv);
-        evidence_source_spinner = (Spinner) rootView.findViewById(R.id.evidence_source_spinner);
+        evidence_source_spinner = (TextView) rootView.findViewById(R.id.evidence_source_spinner);
         video_gridView = (GridView) rootView.findViewById(R.id.video_gridView);
         sound_gridView = (GridView) rootView.findViewById(R.id.sound_gridView);
 
         String[] plandataset = getResources().getStringArray(R.array.spinner_evidence_source);
-        SpinnerArrayAdapter plandataAdapter = new SpinnerArrayAdapter(plandataset);
-        evidence_source_spinner.setAdapter(plandataAdapter);
+        mPlandataOVS = new ArrayList<>();
+        for (String s : plandataset) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(0);
+            sourceArrayOV.setSource(s);
+            mPlandataOVS.add(sourceArrayOV);
+        }
+        if (mDialogUtil == null) {
 
-        type_spinner = (Spinner) rootView.findViewById(R.id.type_spinner);
-        String[] typedataset = getResources().getStringArray(R.array.spinner_data_type);
-        SpinnerArrayAdapter typedataAdapter = new SpinnerArrayAdapter(typedataset);
-        type_spinner.setAdapter(typedataAdapter);
-        type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        video_gridView.setVisibility(View.VISIBLE);
-                        ((LinearLayout) sound_gridView.getParent()).setVisibility(View.INVISIBLE);
-                        break;
-                    case 1:
-                        video_gridView.setVisibility(View.INVISIBLE);
-                        ((LinearLayout) sound_gridView.getParent()).setVisibility(View.VISIBLE);
-                        break;
-                    default:
-                        break;
+            mDialogUtil = new DialogUtil();
+
+            mButtonDailog = View.inflate(BaseApplication.getApplictaion(), R.layout.maptask_dialog, null);
+            mTv_title = mButtonDailog.findViewById(R.id.tv_title);
+            RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
+            recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
+            recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+            mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
+            mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+            recyList.setAdapter(mSourceArrayRecyAdapter);
+            mSourceArrayRecyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    List<SourceArrayOV> data = adapter.getData();
+                    SourceArrayOV sourceArrayOV = data.get(position);
+                    switch (sourceArrayOV.getType()) {
+                        case 0:
+                            switch (sourceArrayOV.getSource()) {
+                                case "当事人提供":
+                                    myEvidence.setZJLY("DSRTG");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                case "当事人口述":
+                                    myEvidence.setZJLY("DSRKS");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                case "调查搜集":
+                                    myEvidence.setZJLY("DCSJ");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                case "执法人员制作":
+                                    myEvidence.setZJLY("ZFRYZZ");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                case "执法人员拍摄":
+                                    myEvidence.setZJLY("ZFRYPS");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                case "局审批科室":
+                                    myEvidence.setZJLY("JSPKS");
+                                    myEvidence.setZJLYMC(sourceArrayOV.getSource());
+                                    break;
+                                default:
+                                    break;
+                            }
+                            evidence_source_spinner.setText(sourceArrayOV.getSource());
+                            break;
+                        case 1:
+                            switch (position) {
+                                case 0:
+                                    video_gridView.setVisibility(View.VISIBLE);
+                                    ((LinearLayout) sound_gridView.getParent()).setVisibility(View.INVISIBLE);
+                                    break;
+                                case 1:
+                                    video_gridView.setVisibility(View.INVISIBLE);
+                                    ((LinearLayout) sound_gridView.getParent()).setVisibility(View.VISIBLE);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            type_spinner.setText(sourceArrayOV.getSource());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    mDialogUtil.cancelDialog();
                 }
-            }
+            });
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        type_spinner = (TextView) rootView.findViewById(R.id.type_spinner);
+        String[] typedataset = getResources().getStringArray(R.array.spinner_data_type);
+        mTypedataOVS = new ArrayList<>();
+        for (String s : typedataset) {
+            SourceArrayOV sourceArrayOV = new SourceArrayOV();
+            sourceArrayOV.setType(1);
+            sourceArrayOV.setSource(s);
+            mTypedataOVS.add(sourceArrayOV);
+        }
 
         evidence_content_tv = (TextView) rootView.findViewById(R.id.evidence_content_tv);
         evidence_remark_tv = (TextView) rootView.findViewById(R.id.evidence_remark_tv);
@@ -195,18 +283,18 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
 
 
             myEvidence.resetGreenMedia();
-            List<GreenMedia> greenMedia = myEvidence.getGreenMedia();
+            List<GreenEvidenceMedia> greenMedia = myEvidence.getGreenMedia();
             if (greenMedia != null && greenMedia.size() > 0) {
                 videoList.clear();
                 soundList.clear();
-                for (GreenMedia media : greenMedia) {
+                for (GreenEvidenceMedia media : greenMedia) {
                     if (media.getType() == 2) {
 
                         videoList.add(media);
                     }
                 }
 
-                for (GreenMedia media : greenMedia) {
+                for (GreenEvidenceMedia media : greenMedia) {
                     if (media.getType() == 3) {
 
                         soundList.add(media);
@@ -216,19 +304,18 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
 
 
             if (videoList != null && videoList.size() > 0) {
-                type_spinner.setSelection(1);
+                type_spinner.setText("视频");
                 video_gridView.setVisibility(View.VISIBLE);
                 ((LinearLayout) sound_gridView.getParent()).setVisibility(View.INVISIBLE);
             } else if (soundList != null && soundList.size() > 0) {
-                type_spinner.setSelection(2);
+                type_spinner.setText("语音");
                 video_gridView.setVisibility(View.INVISIBLE);
                 ((LinearLayout) sound_gridView.getParent()).setVisibility(View.VISIBLE);
             } else {
-                type_spinner.setSelection(0);
+                type_spinner.setText("视频");
                 video_gridView.setVisibility(View.INVISIBLE);
                 ((LinearLayout) sound_gridView.getParent()).setVisibility(View.INVISIBLE);
             }
-
 
 
         } else {
@@ -238,7 +325,7 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
             myEvidence.setZJID(UUID.randomUUID().toString());
             myEvidence.setAJID(mycase.getAJID());
             myEvidence.setZJLX("STZL");
-            mEvidenceId = GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().insert(myEvidence);
+            mEvidenceId = GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().insert(myEvidence);
 
 
         }
@@ -249,6 +336,22 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
         } else {
             save_button.setVisibility(View.VISIBLE);
         }
+
+        evidence_source_spinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSourceArrayRecyAdapter.setNewData(mPlandataOVS);
+                mDialogUtil.showBottomDialog(mEvidenceManagerActivity, mButtonDailog, 300f);
+            }
+        });
+
+        type_spinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSourceArrayRecyAdapter.setNewData(mTypedataOVS);
+                mDialogUtil.showBottomDialog(mEvidenceManagerActivity, mButtonDailog, 300f);
+            }
+        });
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,6 +364,7 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             rxDialogSure.cancel();
+                            mEvidenceManagerActivity.setVisibleAdd(true);
                             GreenEvidenceSTZJOV greenEvidenceOV = new GreenEvidenceSTZJOV();
                             greenEvidenceOV.setType(mType);
                             greenEvidenceOV.setGreenEvidence(myEvidence);
@@ -279,6 +383,7 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
         close_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mEvidenceManagerActivity.setVisibleAdd(true);
                 getFragmentManager().beginTransaction().remove(CaseAudioVideoEvidenceFragment.this).commit();
 
             }
@@ -299,7 +404,7 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
         if (event.type == 0) {             //保存数据
 
         } else {                            //不保存数据
-            GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().deleteByKey(mEvidenceId);
+            GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().deleteByKey(mEvidenceId);
         }
     }
 
@@ -348,8 +453,10 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
         soundAdapter = new SoundSimpleAdapter(soundList, !myEvidence.getIsUpload());
         soundAdapter.setOnClickListener(new SoundSimpleAdapter.OnClickListener() {
 
+            private AlertDialog.Builder mBuilder;
+
             @Override
-            public void onLongItemClick(final SoundSimpleAdapter adapter, final ArrayList<GreenMedia> data, final int position) {
+            public void onLongItemClick(final SoundSimpleAdapter adapter, final ArrayList<GreenEvidenceMedia> data, final int position) {
                 if (mRxDialogSureCancel == null) {
 
                     mRxDialogSureCancel = new RxDialogSureCancel(getActivity());
@@ -388,31 +495,36 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
 
             @Override
             public void onAddSoundClick() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                View inflate = View.inflate(getActivity(), R.layout.voice_recorder_dialog, null);
-                mMic_image = inflate.findViewById(R.id.mic_image);
-                builder.setView(inflate);
-                builder.setCancelable(false);
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        stopRecoding();
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setPositiveButton("停止", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                if (mBuilder == null) {
+                    mBuilder = new AlertDialog.Builder(getActivity());
+                    View recordingView = View.inflate(getActivity(), R.layout.voice_recorder_dialog, null);
+                    mMic_image = recordingView.findViewById(R.id.mic_image);
+                    mTv_stop = recordingView.findViewById(R.id.tv_stop);
+                    mTv_cancel = recordingView.findViewById(R.id.tv_cancel);
+                    mBuilder.setView(recordingView);
+                    mAlertDialog = mBuilder.create();
+                    mAlertDialog.setCanceledOnTouchOutside(false);
+                    mAlertDialog.show();
+                    WindowManager.LayoutParams params =
+                            mAlertDialog.getWindow().getAttributes();
+                    params.width = 580;
+                    params.height = 530;
+                    mAlertDialog.getWindow().setAttributes(params);
+                }
 
+                startRecording();
+                mTv_stop.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         try {
                             int length = stopRecoding();
                             if (length > 0) {
 
-                                GreenMedia greenMedia = new GreenMedia();
-                                greenMedia.setGreenMissionLogId(myEvidence.getGreenCaseId());
-                                greenMedia.setPath(Environment.getExternalStorageDirectory()+"/oking/mission_voice/"+getVoiceFileName());
+                                GreenEvidenceMedia greenMedia = new GreenEvidenceMedia();
+                                greenMedia.setGreenEvidenceId(myEvidence.getGreenCaseId());
+                                greenMedia.setPath(Environment.getExternalStorageDirectory() + "/oking/mission_voice/" + getVoiceFileName());
                                 greenMedia.setType(3);
-                                GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
+                                GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceMediaDao().insert(greenMedia);
                                 soundList.add(greenMedia);
                                 soundAdapter.notifyDataSetChanged();
                             } else if (length == EMError.FILE_INVALID) {
@@ -426,18 +538,19 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
                         }
 
 
-                        dialogInterface.dismiss();
+                        mAlertDialog.cancel();
+
                     }
                 });
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                WindowManager.LayoutParams params =
-                        alertDialog.getWindow().getAttributes();
-                params.width = 450;
-                params.height = 400;
-                alertDialog.getWindow().setAttributes(params);
-                startRecording();
+                mTv_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        stopRecoding();
+                        mAlertDialog.cancel();
+                    }
+                });
+
             }
         });
 
@@ -497,7 +610,7 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
             }
 
             @Override
-            public void onLongItemClick(final CaseSimpleAdapter adapter, final ArrayList<GreenMedia> data, final int position) {
+            public void onLongItemClick(final CaseSimpleAdapter adapter, final ArrayList<GreenEvidenceMedia> data, final int position) {
 
                 if (mRxDialogSureCancel == null) {
 
@@ -544,11 +657,11 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
                 case VIDEO_FROM_CAMERA:
 
                     Uri videouri = data.getData();
-                    GreenMedia greenMedia = new GreenMedia();
+                    GreenEvidenceMedia greenMedia = new GreenEvidenceMedia();
                     greenMedia.setType(2);
                     greenMedia.setPath(videouri.toString());
-                    greenMedia.setGreenMissionLogId(myEvidence.getId());
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
+                    greenMedia.setGreenEvidenceId(myEvidence.getId());
+                    GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceMediaDao().insert(greenMedia);
                     videoList.add(greenMedia);
                     videoAdapter.notifyDataSetChanged();
 
@@ -559,11 +672,11 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
                     break;
                 case VIDEO_FROM_GALLERY:
                     Uri videoUri = data.getData();
-                    GreenMedia greenMedia2 = new GreenMedia();
+                    GreenEvidenceMedia greenMedia2 = new GreenEvidenceMedia();
                     greenMedia2.setType(2);
                     greenMedia2.setPath(videoUri.toString());
-                    greenMedia2.setGreenMissionLogId(myEvidence.getId());
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia2);
+                    greenMedia2.setGreenEvidenceId(myEvidence.getId());
+                    GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceMediaDao().insert(greenMedia2);
                     videoList.add(greenMedia2);
                     videoAdapter.notifyDataSetChanged();
                     break;
@@ -578,6 +691,14 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
     }
 
     private boolean localSaveEvidence() {
+        if (type_spinner.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("证据类型不能为空！");
+            return false;
+        }
+        if (evidence_source_spinner.getText().toString().trim().equals("*请选择")) {
+            RxToast.warning("证据来源不能为空！");
+            return false;
+        }
 
         if ("".equals(evidence_name_tv.getText().toString())) {
             Toast.makeText(getContext(), "证据名称不能为空！", Toast.LENGTH_SHORT).show();
@@ -605,34 +726,6 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
 
 
         myEvidence.setZJMC(evidence_name_tv.getText().toString());
-        switch (evidence_source_spinner.getSelectedItem().toString()) {
-            case "当事人提供":
-                myEvidence.setZJLY("DSRTG");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            case "当事人口述":
-                myEvidence.setZJLY("DSRKS");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            case "调查搜集":
-                myEvidence.setZJLY("DCSJ");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            case "执法人员制作":
-                myEvidence.setZJLY("ZFRYZZ");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            case "执法人员拍摄":
-                myEvidence.setZJLY("ZFRYPS");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            case "局审批科室":
-                myEvidence.setZJLY("JSPKS");
-                myEvidence.setZJLYMC(evidence_source_spinner.getSelectedItem().toString());
-                break;
-            default:
-                break;
-        }
         myEvidence.setZJNR(evidence_content_tv.getText().toString());
         myEvidence.setBZ(evidence_remark_tv.getText().toString());
         myEvidence.setCJDD(evidence_getLocation_tv.getText().toString());
@@ -654,17 +747,16 @@ public class CaseAudioVideoEvidenceFragment extends Fragment {
             mycase.getGreenEvidence().add(myEvidence);
         }
 
-        GreenEvidence unique = GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().queryBuilder().where(GreenEvidenceDao.Properties.Id.eq(mEvidenceId)).unique();
-        if (unique==null){
+        GreenEvidence unique = GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().queryBuilder().where(GreenEvidenceDao.Properties.Id.eq(mEvidenceId)).unique();
+        if (unique == null) {
             myEvidence.setGreenCaseId(mycase.getId());
-            GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().insert(myEvidence);
-        }else {
-            GreenDAOMannager.getInstence().getDaoSession().getGreenEvidenceDao().update(myEvidence);
+            GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().insert(myEvidence);
+        } else {
+            GreenDAOManager.getInstence().getDaoSession().getGreenEvidenceDao().update(myEvidence);
         }
 
         return true;
     }
-
 
 
     public void setGreenCase(GreenCase greenCase, GreenEvidence greenEvidence) {

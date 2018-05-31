@@ -1,12 +1,11 @@
 package com.zhang.okinglawenforcementphone.mvp.model;
 
-import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMediaDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
@@ -80,7 +79,7 @@ public class GetHttpMissionLogModel implements GetHttpMissionLogContract.Model {
                             mGreenMissionLog.setTime(rows.optString("time"));
                             mGreenMissionLog.setType(rows.optInt("type"));
                             mGreenMissionLog.setWeather(rows.optString("weather"));
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
                             //获取日志图片路径
                             return BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL).getMissionRecordPicPath(mId, 0);
 
@@ -96,13 +95,13 @@ public class GetHttpMissionLogModel implements GetHttpMissionLogContract.Model {
                 JSONArray paths = new JSONArray(result);
                 for (int i = 0;i<paths.length();i++){
                     String path = paths.getJSONObject(i).optString("path");
-                    GreenMedia unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().queryBuilder().where(GreenMediaDao.Properties.Path.eq(path)).unique();
+                    GreenMedia unique = GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().queryBuilder().where(GreenMediaDao.Properties.Path.eq(path)).unique();
                     if(unique==null){
                         GreenMedia greenMedia = new GreenMedia();
                         greenMedia.setType(1);
                         greenMedia.setPath(Api.BASE_URL+path);
                         greenMedia.setGreenMissionLogId(mGreenMissionLog.getId());
-                        GreenDAOMannager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
+                        GreenDAOManager.getInstence().getDaoSession().getGreenMediaDao().insert(greenMedia);
                     }
 
                 }
@@ -126,7 +125,7 @@ public class GetHttpMissionLogModel implements GetHttpMissionLogContract.Model {
                         if (member.getUserid().equals(url)) {
                             String path = paths.getJSONObject(i).optString("path");
                             GreenMedia greenMedia = new GreenMedia();
-                            greenMedia.setType(3);
+                            greenMedia.setType(4);
                             greenMedia.setPath(path);
                             greenMedia.setUserid(member.getUserid());
                         }

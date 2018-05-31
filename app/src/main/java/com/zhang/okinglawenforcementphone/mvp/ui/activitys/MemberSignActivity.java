@@ -14,17 +14,18 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxDialogEditSureCancel;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.FileUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.MissionMemberAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
@@ -69,7 +70,7 @@ public class MemberSignActivity extends BaseActivity {
     @BindView(R.id.member_listView)
     RecyclerView mMemberListView;
     @BindView(R.id.sdv)
-    SimpleDraweeView mSdv;
+    ImageView mSdv;
     private List<GreenMember> memberList = new ArrayList<>();
     private MissionMemberAdapter memberAdapter;
     private GreenMissionTask missionTask;
@@ -92,7 +93,7 @@ public class MemberSignActivity extends BaseActivity {
     private void initView() {
         long id = getIntent().getLongExtra("id", -1L);
         if (id != -1L) {
-            missionTask = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
+            missionTask = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
             memberList = missionTask.getMembers();
         }
 
@@ -128,7 +129,9 @@ public class MemberSignActivity extends BaseActivity {
                     mSaveBtn.setVisibility(View.GONE);
                     mSdv.setVisibility(View.VISIBLE);
                     mSignatureView.setVisibility(View.GONE);
-                    mSdv.setImageURI(Uri.parse("file://" + greenMember.getSignPic()));
+                    Glide.with(MemberSignActivity.this)
+                            .load(Uri.parse("file://" + greenMember.getSignPic()))
+                            .into(mSdv);
                 }
 
             }
@@ -153,7 +156,7 @@ public class MemberSignActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 memberList.remove(position);
-                                GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().delete(member);
+                                GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().delete(member);
                                 memberAdapter.notifyDataSetChanged();
                                 mRxDialogSureCancel.cancel();
                             }
@@ -207,7 +210,7 @@ public class MemberSignActivity extends BaseActivity {
                             member.setUsername(edname);
                             member.setPost("组员");
                             member.setGreenMemberId(missionTask.getId());
-                            GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(member);
+                            GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(member);
                             memberAdapter.addData(member);
                             mRxDialogEditSureCancel.cancel();
                             RxToast.success(BaseApplication.getApplictaion(), "添加队员成功", Toast.LENGTH_SHORT).show();
@@ -304,7 +307,7 @@ public class MemberSignActivity extends BaseActivity {
                                                 }
                                             });
 
-                                            GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().update(greenMember);
+                                            GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().update(greenMember);
                                         }
                                     } else {
                                         AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {

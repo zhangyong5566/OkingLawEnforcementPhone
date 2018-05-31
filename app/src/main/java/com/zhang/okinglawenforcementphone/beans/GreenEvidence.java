@@ -41,8 +41,8 @@ public class GreenEvidence {
     private String Otype;
     private Boolean isUpload = false;
 
-    @ToMany(referencedJoinProperty = "greenMissionLogId")
-    private List<GreenMedia> greenMedia;
+    @ToMany(referencedJoinProperty = "greenEvidenceId")
+    private List<GreenEvidenceMedia> greenMedia;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -291,15 +291,15 @@ public class GreenEvidence {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 356513708)
-    public List<GreenMedia> getGreenMedia() {
+    @Generated(hash = 487484946)
+    public List<GreenEvidenceMedia> getGreenMedia() {
         if (greenMedia == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            GreenMediaDao targetDao = daoSession.getGreenMediaDao();
-            List<GreenMedia> greenMediaNew = targetDao
+            GreenEvidenceMediaDao targetDao = daoSession.getGreenEvidenceMediaDao();
+            List<GreenEvidenceMedia> greenMediaNew = targetDao
                     ._queryGreenEvidence_GreenMedia(id);
             synchronized (this) {
                 if (greenMedia == null) {
@@ -352,11 +352,44 @@ public class GreenEvidence {
         myDao.update(this);
     }
 
+    @Override
+    public String toString() {
+        return "GreenEvidence{" +
+                "id=" + id +
+                ", greenCaseId=" + greenCaseId +
+                ", ZJID='" + ZJID + '\'' +
+                ", AJID='" + AJID + '\'' +
+                ", ZJLX='" + ZJLX + '\'' +
+                ", ZJMC='" + ZJMC + '\'' +
+                ", ZJLY='" + ZJLY + '\'' +
+                ", ZJNR='" + ZJNR + '\'' +
+                ", SL='" + SL + '\'' +
+                ", CJSJ=" + CJSJ +
+                ", CJR='" + CJR + '\'' +
+                ", CJDD='" + CJDD + '\'' +
+                ", JZR='" + JZR + '\'' +
+                ", DW='" + DW + '\'' +
+                ", BZ='" + BZ + '\'' +
+                ", SCR='" + SCR + '\'' +
+                ", SCSJ=" + SCSJ +
+                ", ZT='" + ZT + '\'' +
+                ", WSID='" + WSID + '\'' +
+                ", LXMC='" + LXMC + '\'' +
+                ", ZJLYMC='" + ZJLYMC + '\'' +
+                ", LRSJ='" + LRSJ + '\'' +
+                ", YS='" + YS + '\'' +
+                ", Otype='" + Otype + '\'' +
+                ", isUpload=" + isUpload +
+                ", greenMedia=" + greenMedia +
+                ", daoSession=" + daoSession +
+                ", myDao=" + myDao +
+                '}';
+    }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 1127659830)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGreenEvidenceDao() : null;
     }
-
 }

@@ -4,29 +4,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/sdv"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="60dp"
-        android:scaleType="fitXY"
         android:layout_centerVertical="true"
-        android:layout_marginTop="3dp"
+        android:scaleType="fitXY"
         android:layout_marginLeft="8dp"
-        fresco:actualImageScaleType="focusCrop"
-        fresco:failureImage="@drawable/loadfail"
-        fresco:failureImageScaleType="centerInside"
-        fresco:placeholderImage="@mipmap/ic_launcher_logo"
-        fresco:placeholderImageScaleType="fitCenter"
-        fresco:progressBarAutoRotateInterval="5000"
-        fresco:progressBarImage="@mipmap/loading"
-        fresco:progressBarImageScaleType="centerInside"></com.facebook.drawee.view.SimpleDraweeView>
+        android:layout_marginTop="3dp" />
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/sdv"
         android:layout_alignEnd="@+id/sdv"
+        android:layout_alignStart="@id/sdv"
         android:layout_below="@id/sdv"
         android:layout_marginTop="12dp"
         android:maxLines="2"

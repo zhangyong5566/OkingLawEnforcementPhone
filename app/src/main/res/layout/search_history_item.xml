@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:gravity="center"
+    android:paddingTop="5dp"
+    android:paddingBottom="10dp"
+    android:id="@+id/tv_title"
+    android:textSize="12sp"
+    android:textColor="@color/btn_switch_case_enable"
+    android:background="@drawable/search_flowlayout_bg"
+    >
+
+</TextView>

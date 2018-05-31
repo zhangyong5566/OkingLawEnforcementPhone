@@ -8,7 +8,6 @@
         android:id="@+id/rcy_open_cases"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_02"
         android:layout_marginLeft="10dp"
         android:visibility="gone"
         android:layout_marginRight="10dp"

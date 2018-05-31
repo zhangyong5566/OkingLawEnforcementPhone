@@ -24,4 +24,12 @@ public class GreenEvidenceSZOV {
     public void setGreenEvidence(GreenEvidence greenEvidence) {
         this.greenEvidence = greenEvidence;
     }
+
+    @Override
+    public String toString() {
+        return "GreenEvidenceSZOV{" +
+                "type=" + type +
+                ", greenEvidence=" + greenEvidence +
+                '}';
+    }
 }

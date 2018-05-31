@@ -7,6 +7,7 @@ import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
+import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.htttp.Api;
@@ -41,14 +42,14 @@ public class UploadEvidenceModel implements UploadEvidenceContract.Model {
     }
 
     @Override
-    public void uploadEvidence(Map<String, Object> fields, final GreenEvidence evidence, final List<GreenMedia> picGreenMedias) {
+    public void uploadEvidence(Map<String, Object> fields, final GreenEvidence evidence, final List<GreenEvidenceMedia> picGreenMedias) {
         BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
                 .uploadEvidence(fields)
                 .compose(RxSchedulersHelper.<ResponseBody>io_main())
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<ResponseBody, ObservableSource<GreenMedia>>() {
+                .concatMap(new Function<ResponseBody, ObservableSource<GreenEvidenceMedia>>() {
                     @Override
-                    public Observable<GreenMedia> apply(ResponseBody responseBody) throws Exception {
+                    public Observable<GreenEvidenceMedia> apply(ResponseBody responseBody) throws Exception {
                         //上传文件
                         String result = responseBody.string();
                         Log.i("Oking", "证据日志上传成功" + result);
@@ -57,9 +58,9 @@ public class UploadEvidenceModel implements UploadEvidenceContract.Model {
                         return Observable.fromIterable(picGreenMedias);
 
                     }
-                }).concatMap(new Function<GreenMedia, ObservableSource<ResponseBody>>() {
+                }).concatMap(new Function<GreenEvidenceMedia, ObservableSource<ResponseBody>>() {
             @Override
-            public Observable<ResponseBody> apply(GreenMedia media) throws Exception {
+            public Observable<ResponseBody> apply(GreenEvidenceMedia media) throws Exception {
                 uploadPicCount++;
                 Map<String, RequestBody> picParams = new HashMap<>();
                 picParams.put("zjid", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), evidence.getZJID()));

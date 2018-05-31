@@ -22,7 +22,7 @@ import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.okinglawenforcementphone.GreenDAOMannager;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.EmergencyMemberAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
@@ -109,7 +109,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
     @BindView(R.id.list_item_missionRecord)
     Button list_item_missionRecord;
     private LoadCanSelectMemberPresenter mLoadCanSelectMemberPresenter;
-    private AddMemberPresenter mAddMemberPresenter;
+
     private DialogUtil mButtomDialogUtil;
     private View mButtomContentView;
     private EmergencyMemberAdapter mEmergencyMemberAdapter;
@@ -240,7 +240,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
 
         long id = intent.getLongExtra("id", -1L);
         if (id != -1L) {
-            mGreenMissionTask = GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
+            mGreenMissionTask = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
         }
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -348,7 +348,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
                     confirmMission();
                 } else {
                     mGreenMissionTask.setStatus("3");
-                    GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                    GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                     if (mPosition == -100) {
                         UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
                         updateGreenMissionTaskOV.setPosition(mPosition);
@@ -383,13 +383,14 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
                 @Override
                 public void subscribe(ObservableEmitter<String> e) throws Exception {
 
-                    for (GreenMember m : checkName) {
-                        if (!m.getUsername().equals(mGreenMissionTask.getReceiver_name())) {
+                    for (int i=0;i<checkName.size();i++) {
+                        GreenMember greenMember = checkName.get(i);
+                        if (!greenMember.getUsername().equals(mGreenMissionTask.getReceiver_name())) {
 
-                            addMember(m);
+                            addMember(e,greenMember,i,checkName.size());
                         }
                     }
-                    e.onNext("1");
+
                 }
             }).subscribeOn(Schedulers.io())
                     .subscribe(new Consumer<String>() {
@@ -402,13 +403,13 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
                                         @Override
                                         public void accept(ResponseBody responseBody) throws Exception {
                                             mGreenMissionTask.setStatus("3");
-                                            GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
 
                                             //提示弹窗
                                             AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    GreenDAOMannager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                                                    GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
                                                     if (rxDialogSure == null) {
 
                                                         rxDialogSure = new RxDialogSure(ArrangeTeamMembersActivity.this, false, null);
@@ -443,7 +444,6 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
                                     }, new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) throws Exception {
-                                            Log.i("Oking", "$$$$$$$$$$$$$$$" + throwable.getMessage());
                                         }
                                     });
                         }
@@ -461,18 +461,20 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
 
     }
 
-    private void addMember(final GreenMember m) {
+    private void addMember(final ObservableEmitter<String> e, final GreenMember m, final int position, final int size) {
         m.setTaskid(mGreenMissionTask.getTaskid());
+        m.setPost("组员");
 
-
-        if (mAddMemberPresenter == null) {
-            mAddMemberPresenter = new AddMemberPresenter(new AddMemberContract.View() {
+        AddMemberPresenter addMemberPresenter = new AddMemberPresenter(new AddMemberContract.View() {
                 @Override
                 public void addMemberSucc(String result) {
-                    GreenMember unique = GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mGreenMissionTask.getId()), GreenMemberDao.Properties.Userid.eq(m.getUserid())).unique();
+                    GreenMember unique = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mGreenMissionTask.getId()), GreenMemberDao.Properties.Userid.eq(m.getUserid())).unique();
                     if (unique == null) {
                         m.setGreenMemberId(mGreenMissionTask.getId());
-                        GreenDAOMannager.getInstence().getDaoSession().getGreenMemberDao().insert(m);
+                        long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(m);
+                        if (position==(size-1)){
+                            e.onNext("1");
+                        }
                     }
                 }
 
@@ -483,8 +485,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
                 }
             });
 
-        }
-        mAddMemberPresenter.addMember(OkingContract.CURRENTUSER.getUserid(), m.getTaskid(), m.getUserid());
+        addMemberPresenter.addMember(OkingContract.CURRENTUSER.getUserid(), m.getTaskid(), m.getUserid());
 
 
     }
