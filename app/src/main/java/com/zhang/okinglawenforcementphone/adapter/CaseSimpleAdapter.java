@@ -9,13 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.GlideApp;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
-import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.VideoActivity;
+import com.zhang.okinglawenforcementphone.mvp.ui.activitys.PlayVideoOnlineActivity;
 
 import java.util.ArrayList;
 
@@ -111,8 +109,8 @@ public class CaseSimpleAdapter extends BaseAdapter {
             viewHolder.iv_pic .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(f.getActivity(), VideoActivity.class);
-                    intent.setData(uri);
+                    Intent intent = new Intent(f.getActivity(), PlayVideoOnlineActivity.class);
+                    intent.putExtra("path",uri.getPath());
                     f.startActivity(intent);
                 }
             });

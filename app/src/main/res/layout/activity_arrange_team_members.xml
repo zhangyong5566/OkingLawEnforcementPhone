@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
-                android:hint="下发人：">
+                android:hint="发布人：">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/publisher_tv"
@@ -220,6 +220,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:ellipsize="end"
+                        android:textColor="@color/colorAccent"
                         android:gravity="left|center_vertical"
                         android:maxLines="3"
                         android:enabled="false"

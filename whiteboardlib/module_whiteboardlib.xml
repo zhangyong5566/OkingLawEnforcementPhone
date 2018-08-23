@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_whiteboardlib" default="compile.module.whiteboardlib">
+  <dirname property="module.whiteboardlib.basedir" file="${ant.file.module_whiteboardlib}"/>
+  
+  <property name="module.jdk.home.whiteboardlib" value="${jdk.home.android_api_27_platform}"/>
+  <property name="module.jdk.bin.whiteboardlib" value="${jdk.bin.android_api_27_platform}"/>
+  <property name="module.jdk.classpath.whiteboardlib" value="jdk.classpath.android_api_27_platform"/>
+  
+  <property name="compiler.args.whiteboardlib" value="-encoding UTF-8 -source 1.7 -target 1.8 ${compiler.args}"/>
+  
+  <property name="whiteboardlib.output.dir" value="${module.whiteboardlib.basedir}/build/intermediates/classes/debug"/>
+  <property name="whiteboardlib.testoutput.dir" value="${module.whiteboardlib.basedir}/build/intermediates/classes/test/debug"/>
+  
+  <path id="whiteboardlib.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="whiteboardlib.module.production.classpath">
+    <path refid="${module.jdk.classpath.whiteboardlib}"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.squareup.picasso:picasso:2.4.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-v4-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="whiteboardlib.runtime.production.module.classpath">
+    <pathelement location="${whiteboardlib.output.dir}"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.squareup.picasso:picasso:2.4.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-v4-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="whiteboardlib.module.classpath">
+    <path refid="${module.jdk.classpath.whiteboardlib}"/>
+    <pathelement location="${whiteboardlib.output.dir}"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.squareup.picasso:picasso:2.4.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-v4-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="whiteboardlib.runtime.module.classpath">
+    <pathelement location="${whiteboardlib.testoutput.dir}"/>
+    <pathelement location="${whiteboardlib.output.dir}"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.squareup.picasso:picasso:2.4.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-v4-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.whiteboardlib">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.whiteboardlib">
+    <patternset refid="excluded.from.module.whiteboardlib"/>
+  </patternset>
+  
+  <path id="whiteboardlib.module.sourcepath">
+    <dirset dir="${module.whiteboardlib.basedir}">
+      <include name="build/generated/source/apt/debug"/>
+      <include name="build/generated/source/r/debug"/>
+      <include name="build/generated/source/aidl/debug"/>
+      <include name="build/generated/source/buildConfig/debug"/>
+      <include name="build/generated/source/rs/debug"/>
+      <include name="build/generated/res/rs/debug"/>
+      <include name="src/main/res"/>
+      <include name="src/main/assets"/>
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="whiteboardlib.module.test.sourcepath">
+    <dirset dir="${module.whiteboardlib.basedir}">
+      <include name="build/generated/source/r/androidTest/debug"/>
+      <include name="build/generated/source/aidl/androidTest/debug"/>
+      <include name="build/generated/source/buildConfig/androidTest/debug"/>
+      <include name="build/generated/source/rs/androidTest/debug"/>
+      <include name="build/generated/res/rs/androidTest/debug"/>
+      <include name="src/androidTest/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.whiteboardlib" depends="compile.module.whiteboardlib.production,compile.module.whiteboardlib.tests" description="Compile module whiteboardlib"/>
+  
+  <target name="compile.module.whiteboardlib.production" depends="register.custom.compilers" description="Compile module whiteboardlib; production classes">
+    <mkdir dir="${whiteboardlib.output.dir}"/>
+    <javac2 destdir="${whiteboardlib.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.whiteboardlib}/javac">
+      <compilerarg line="${compiler.args.whiteboardlib}"/>
+      <bootclasspath refid="whiteboardlib.module.bootclasspath"/>
+      <classpath refid="whiteboardlib.module.production.classpath"/>
+      <src refid="whiteboardlib.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.whiteboardlib"/>
+    </javac2>
+    
+    <copy todir="${whiteboardlib.output.dir}">
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/apt/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/r/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/aidl/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/buildConfig/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/rs/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/res/rs/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/src/main/res">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/src/main/assets">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.whiteboardlib.tests" depends="register.custom.compilers,compile.module.whiteboardlib.production" description="compile module whiteboardlib; test classes" unless="skip.tests">
+    <mkdir dir="${whiteboardlib.testoutput.dir}"/>
+    <javac2 destdir="${whiteboardlib.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.whiteboardlib}/javac">
+      <compilerarg line="${compiler.args.whiteboardlib}"/>
+      <bootclasspath refid="whiteboardlib.module.bootclasspath"/>
+      <classpath refid="whiteboardlib.module.classpath"/>
+      <src refid="whiteboardlib.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.whiteboardlib"/>
+    </javac2>
+    
+    <copy todir="${whiteboardlib.testoutput.dir}">
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/r/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/aidl/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/buildConfig/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/source/rs/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/build/generated/res/rs/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.whiteboardlib.basedir}/src/androidTest/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.whiteboardlib" description="cleanup module">
+    <delete dir="${whiteboardlib.output.dir}"/>
+    <delete dir="${whiteboardlib.testoutput.dir}"/>
+  </target>
+</project>

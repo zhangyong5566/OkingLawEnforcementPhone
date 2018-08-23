@@ -19,8 +19,8 @@ import com.zhang.okinglawenforcementphone.adapter.CaseListAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenCaseDao;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 

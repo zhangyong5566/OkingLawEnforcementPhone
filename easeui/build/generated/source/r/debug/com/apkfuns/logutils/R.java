@@ -9,9 +9,9 @@ package com.apkfuns.logutils;
 public final class R {
     public static final class string {
         public static int app_name = 0x7f150046;
-        public static int cancel = 0x7f150052;
-        public static int copy = 0x7f150056;
-        public static int success_copy = 0x7f150082;
-        public static int sure = 0x7f150083;
+        public static int cancel = 0x7f150054;
+        public static int copy = 0x7f150059;
+        public static int success_copy = 0x7f15008a;
+        public static int sure = 0x7f15008b;
     }
 }

@@ -11,8 +11,8 @@ import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.beans.GreenUser;
 import com.zhang.okinglawenforcementphone.beans.GreenUserDao;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoginContract;
 
 import org.json.JSONObject;

@@ -3,15 +3,13 @@ package com.zhang.okinglawenforcementphone.mvp.model;
 import android.net.Uri;
 import android.util.Log;
 
-import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
-import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadEvidenceContract;
 
 import java.io.File;

@@ -32,8 +32,8 @@ import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.ReceptionStaffBean;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.AddMemberContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadCanSelectMemberContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.AddMemberPresenter;
@@ -108,6 +108,8 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
     private boolean isChecked;
     @BindView(R.id.list_item_missionRecord)
     Button list_item_missionRecord;
+    @BindView(R.id.bt_getmember)
+    Button btGetmember;
     private LoadCanSelectMemberPresenter mLoadCanSelectMemberPresenter;
 
     private DialogUtil mButtomDialogUtil;
@@ -116,6 +118,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
     private ListView mLv_members;
     private Button mBtOkselect;
     private String mMembersid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,11 +141,10 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
     private void initData() {
 
 
-
     }
 
     private void loadNetData() {
-        if (mRxDialogLoading==null){
+        if (mRxDialogLoading == null) {
             mRxDialogLoading = new RxDialogLoading(this, false, new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
@@ -209,7 +211,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
 
                             mButtomDialogUtil = new DialogUtil();
                         }
-                        mButtomDialogUtil.showBottomDialog(ArrangeTeamMembersActivity.this, mButtomContentView,400f);
+                        mButtomDialogUtil.showBottomDialog(ArrangeTeamMembersActivity.this, mButtomContentView, 400f);
 
                         Collections.sort(mbList, new ArrangeMissionPinyinComparator());
                         mEmergencyMemberAdapter = new EmergencyMemberAdapter(ArrangeTeamMembersActivity.this, mbList);
@@ -295,6 +297,7 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
         tv_statime.setText(mDateFormat.format(mGreenMissionTask.getBegin_time()));
         tv_type.setText(mGreenMissionTask.getTypename());
 
+
         String memberStr = "";
         //清除dao缓存
         mGreenMissionTask.resetMembers();
@@ -318,7 +321,20 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
             case "1":
 
             case "2":
-                list_item_missionRecord.setText("确认安排");
+                if (mGreenMissionTask.getReceiver().equals(OkingContract.CURRENTUSER.getUserid())) {
+                    //接收人是自己才能去安排人员
+                    list_item_missionRecord.setEnabled(true);
+                    list_item_missionRecord.setText("确认安排");
+                    btGetmember.setVisibility(View.VISIBLE);
+                    sw.setEnabled(false);
+                } else {
+                    list_item_missionRecord.setEnabled(false);
+                    list_item_missionRecord.setText("等候" + mGreenMissionTask.getReceiver_name() + "安排人员");
+                    btGetmember.setVisibility(View.GONE);
+                    sw.setEnabled(false);
+                }
+
+
                 break;
             case "3":
                 list_item_missionRecord.setText("开始任务");
@@ -338,6 +354,8 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
             default:
                 break;
         }
+
+
     }
 
     @OnClick({R.id.list_item_missionRecord, R.id.bt_getmember})
@@ -376,83 +394,91 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
 
     //确认
     private void confirmMission() {
+        list_item_missionRecord.setEnabled(false);
+        if (mEmergencyMemberAdapter != null) {
+            final List<GreenMember> checkName = mEmergencyMemberAdapter.getCheckName();
+            if (checkName != null && checkName.size() > 0) {
+                Observable.create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> e) throws Exception {
 
-        final List<GreenMember> checkName = mEmergencyMemberAdapter.getCheckName();
-        if (mEmergencyMemberAdapter!=null&&checkName.size() > 0) {
-            Observable.create(new ObservableOnSubscribe<String>() {
-                @Override
-                public void subscribe(ObservableEmitter<String> e) throws Exception {
+                        for (int i = 0; i < checkName.size(); i++) {
+                            GreenMember greenMember = checkName.get(i);
+                            if (!greenMember.getUsername().equals(mGreenMissionTask.getReceiver_name())) {
 
-                    for (int i=0;i<checkName.size();i++) {
-                        GreenMember greenMember = checkName.get(i);
-                        if (!greenMember.getUsername().equals(mGreenMissionTask.getReceiver_name())) {
-
-                            addMember(e,greenMember,i,checkName.size());
+                                addMember(e, greenMember, i, checkName.size());
+                            }
                         }
+
                     }
+                }).subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<String>() {
+                            @Override
+                            public void accept(String s) throws Exception {
+                                BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
+                                        .addQRMission("updateqr", mGreenMissionTask.getTaskid(), OkingContract.CURRENTUSER.getUserid())
+                                        .compose(RxSchedulersHelper.<ResponseBody>io_main())
+                                        .subscribe(new Consumer<ResponseBody>() {
+                                            @Override
+                                            public void accept(ResponseBody responseBody) throws Exception {
+                                                mGreenMissionTask.setStatus("3");
+                                                GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+//                                                mGreenMissionTask.resetMembers();0
 
-                }
-            }).subscribeOn(Schedulers.io())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
-                            BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
-                                    .addQRMission("updateqr", mGreenMissionTask.getTaskid(), OkingContract.CURRENTUSER.getUserid())
-                                    .compose(RxSchedulersHelper.<ResponseBody>io_main())
-                                    .subscribe(new Consumer<ResponseBody>() {
-                                        @Override
-                                        public void accept(ResponseBody responseBody) throws Exception {
-                                            mGreenMissionTask.setStatus("3");
-                                            GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                                                //提示弹窗
+                                                AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        list_item_missionRecord.setEnabled(true);
+                                                        GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
+                                                        if (rxDialogSure == null) {
 
-                                            //提示弹窗
-                                            AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mGreenMissionTask);
-                                                    if (rxDialogSure == null) {
+                                                            rxDialogSure = new RxDialogSure(ArrangeTeamMembersActivity.this, false, null);
+                                                            rxDialogSure.setContent("任务确认成功！");
+                                                        }
+                                                        rxDialogSure.getTvSure().setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                rxDialogSure.cancel();
 
-                                                        rxDialogSure = new RxDialogSure(ArrangeTeamMembersActivity.this, false, null);
-                                                        rxDialogSure.setContent("任务确认成功！");
-                                                    }
-                                                    rxDialogSure.getTvSure().setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            rxDialogSure.cancel();
+                                                                if (mPosition == -100) {
+                                                                    UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
+                                                                    updateGreenMissionTaskOV.setPosition(mPosition);
+                                                                    updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
+                                                                    EventBus.getDefault().post(updateGreenMissionTaskOV);
+                                                                } else if (mPosition != -1) {
+                                                                    UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
+                                                                    updateGreenMissionTaskOV.setPosition(mPosition);
+                                                                    updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
+                                                                    EventBus.getDefault().post(updateGreenMissionTaskOV);
+                                                                }
 
-                                                            if (mPosition == -100) {
-                                                                UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
-                                                                updateGreenMissionTaskOV.setPosition(mPosition);
-                                                                updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
-                                                                EventBus.getDefault().post(updateGreenMissionTaskOV);
-                                                            } else if (mPosition != -1) {
-                                                                UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
-                                                                updateGreenMissionTaskOV.setPosition(mPosition);
-                                                                updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
-                                                                EventBus.getDefault().post(updateGreenMissionTaskOV);
+                                                                finish();
                                                             }
 
-                                                            finish();
-                                                        }
+                                                        });
+                                                        rxDialogSure.show();
+                                                    }
+                                                });
 
-                                                    });
-                                                    rxDialogSure.show();
-                                                }
-                                            });
+                                            }
+                                        }, new Consumer<Throwable>() {
+                                            @Override
+                                            public void accept(Throwable throwable) throws Exception {
+                                                list_item_missionRecord.setEnabled(true);
+                                            }
+                                        });
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                list_item_missionRecord.setEnabled(true);
+                            }
+                        });
 
-                                        }
-                                    }, new Consumer<Throwable>() {
-                                        @Override
-                                        public void accept(Throwable throwable) throws Exception {
-                                        }
-                                    });
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-
-                        }
-                    });
+            } else {
+                RxToast.warning("没有选择队员");
+            }
 
         } else {
             RxToast.warning("没有选择队员");
@@ -466,24 +492,26 @@ public class ArrangeTeamMembersActivity extends BaseActivity {
         m.setPost("组员");
 
         AddMemberPresenter addMemberPresenter = new AddMemberPresenter(new AddMemberContract.View() {
-                @Override
-                public void addMemberSucc(String result) {
-                    GreenMember unique = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mGreenMissionTask.getId()), GreenMemberDao.Properties.Userid.eq(m.getUserid())).unique();
-                    if (unique == null) {
-                        m.setGreenMemberId(mGreenMissionTask.getId());
-                        long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(m);
-                        if (position==(size-1)){
-                            e.onNext("1");
-                        }
+            @Override
+            public void addMemberSucc(String result) {
+                GreenMember unique = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().queryBuilder().where(GreenMemberDao.Properties.GreenMemberId.eq(mGreenMissionTask.getId()), GreenMemberDao.Properties.Userid.eq(m.getUserid())).unique();
+                if (unique == null) {
+                    m.setGreenMemberId(mGreenMissionTask.getId());
+                    GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(m);
+                    if (position == (size - 1)) {
+
+
+                        e.onNext("1");
                     }
                 }
+            }
 
-                @Override
-                public void addMemberFail(Throwable ex) {
-                    RxToast.error(BaseApplication.getApplictaion(), "选择失败" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            @Override
+            public void addMemberFail(Throwable ex) {
+                RxToast.error(BaseApplication.getApplictaion(), "选择失败" + ex.getMessage(), Toast.LENGTH_SHORT).show();
 
-                }
-            });
+            }
+        });
 
         addMemberPresenter.addMember(OkingContract.CURRENTUSER.getUserid(), m.getTaskid(), m.getUserid());
 

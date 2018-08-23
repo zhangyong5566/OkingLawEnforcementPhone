@@ -31,7 +31,6 @@ import java.util.List;
 
 public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolder> {
 
-    private OnClickListener onClickListener;
     private Activity activity;
     private boolean canAdd;
     private String typeName;
@@ -43,15 +42,9 @@ public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolde
         this.typeName = typeName;
     }
 
-
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
     @Override
     protected void convert(BaseViewHolder helper, final GreenMedia item) {
         ImageView sdv = helper.getView(R.id.sdv);
-        final int layoutPosition = helper.getLayoutPosition();
         String path = item.getPath();
         final Uri uri = Uri.parse(path);
         GlideApp.with(activity)
@@ -59,31 +52,11 @@ public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolde
                 .placeholder(R.mipmap.ic_launcher_logo)
                 .error(R.drawable.loadfail)
                 .into(sdv);
-//        sdv.setImageURI(uri);
-        sdv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onClickListener != null && canAdd) {
-                    onClickListener.onLongItemClick(PicSimpleAdapter.this, item, layoutPosition);
-                }
-                return false;
-            }
-        });
-        sdv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ImageViewActivity.class);
-                GreenLocation location = item.getLocation();
-                if (location != null) {
-                    intent.putExtra("picLocation", location.getLongitude() + "," + location.getLatitude());
-                }
-                //file:///storage/emulated/0/oking/mission_pic/e9f8735f-066b-42da-85ed-e8ec0676a18c.jpg
-                //file:///storage/emulated/0/oking/mission_pic/e9f8735f-066b-42da-85ed-e8ec0676a18c.jpg
-                Log.i("Oking", uri.toString() + ">>>>>>>>");
-                intent.setData(uri);
-                activity.startActivity(intent);
-            }
-        });
+        helper.addOnClickListener(R.id.sdv);
+
+        if (canAdd) {
+            helper.addOnLongClickListener(R.id.sdv);
+        }
         String picName = uri.getPath();
 
         String s = picName.substring(picName.lastIndexOf("/") + 1, picName.length());
@@ -91,9 +64,5 @@ public class PicSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHolde
 
     }
 
-    public interface OnClickListener {
-
-        void onLongItemClick(PicSimpleAdapter adapter, GreenMedia greenMedia, int position);
-    }
 
 }

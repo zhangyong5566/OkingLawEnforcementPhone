@@ -36,7 +36,7 @@ public class ImageViewActivity extends Activity {
         mBind = ButterKnife.bind(this);
 
         Intent intent = getIntent();
-
+        String time = intent.getStringExtra("time");
         Uri imageUri = intent.getData();
         if (imageUri != null) {
             Glide.with(ImageViewActivity.this)
@@ -49,7 +49,13 @@ public class ImageViewActivity extends Activity {
         if (picLocation != null) {
             TextView tvLocation = findViewById(R.id.tv_location);
 
-            tvLocation.setText("经纬度：" + picLocation);
+            tvLocation.setText("经纬度：" + picLocation + "\n拍摄时间：" + time);
+        } else {
+            if (time != null) {
+                TextView tvLocation = findViewById(R.id.tv_location);
+                tvLocation.setText("拍摄时间：" + time);
+            }
+
         }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

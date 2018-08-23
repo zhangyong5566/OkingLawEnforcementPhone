@@ -5,13 +5,12 @@
     android:background="@drawable/hot_tagflow_item_selector"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:padding="@dimen/x_px_10">
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/x_px_40"
+        android:layout_height="@dimen/x_px_40"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:scaleType="fitXY"
@@ -29,12 +28,12 @@
 
     <TextView
         android:text="0"
-        android:layout_width="18dp"
+        android:layout_width="@dimen/x_px_24"
         android:gravity="center"
         android:visibility="gone"
         android:id="@+id/tv_msgcout"
-        android:layout_height="18dp"
-        android:layout_alignEnd="@id/iv_icon"
+        android:layout_height="@dimen/x_px_24"
+        android:layout_toRightOf="@id/iv_icon"
         android:background="@drawable/btn_msg_bg"
         android:textColor="@color/white"
         android:textSize="8sp" />

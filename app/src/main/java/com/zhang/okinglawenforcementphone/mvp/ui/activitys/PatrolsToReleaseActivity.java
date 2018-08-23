@@ -3,29 +3,20 @@ package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
@@ -37,20 +28,18 @@ import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.TextUtil;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
-import com.zhang.okinglawenforcementphone.adapter.AllMenuSubRecyAdapter;
-import com.zhang.okinglawenforcementphone.adapter.MapTaskRecyAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
-import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.ApproverBean;
 import com.zhang.okinglawenforcementphone.beans.InspectTaskBean;
 import com.zhang.okinglawenforcementphone.beans.LatLngListOV;
-import com.zhang.okinglawenforcementphone.beans.MemberOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.RecipientBean;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.ApproverPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.CBRPinyinComparator;
@@ -65,7 +54,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -124,12 +112,13 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private String mApproverId;    //选中的审批人ID
     private String mApprover;    //选中的审批人
     private String mSource;     //选中的线索来源
-    private String mTasknature;   //选中的任务性质
+    private int mTasknature;   //选中的任务性质
     private String mMcoordinateJson;
     private ArrayList<RecipientBean> mRecipientBeans;
     private RecipientBean mReBean;
     private InspectTaskBean inspectTaskBean;
     private long mBeginMillseconds = 0;
+    private long mEndMillseconds = 0;
     private String mTasktype;
     private Intent mIntent;
     private DialogUtil mDialogUtil;
@@ -142,8 +131,11 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private List<SourceArrayOV> mTasktypeArrayOVS;
     private List<SourceArrayOV> mApproversOVS;
     private List<SourceArrayOV> mRecipientsOVS;
-
+    private Handler mainHandler;
+    private int mPosition;
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private long mId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +158,8 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private void initData() {
         EventBus.getDefault().register(this);
         Intent intent = getIntent();
+        mPosition = intent.getIntExtra("position", -1);
+        mId = intent.getLongExtra("id", -1L);
         inspectTaskBean = (InspectTaskBean) intent.getParcelableExtra("inspectTaskBean");
 
         TextUtil.setEditTextInhibitInputSpace(mEt_taskname);
@@ -228,11 +222,11 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                         case 1:
 
                             if ("日常执法".equals(sourceArrayOV.getSource())) {
-                                mTasknature = "0";
+                                mTasknature = 0;
                             } else if ("联合执法".equals(sourceArrayOV.getSource())) {
-                                mTasknature = "1";
+                                mTasknature = 1;
                             } else if ("专项执法".equals(sourceArrayOV.getSource())) {
-                                mTasknature = "2";
+                                mTasknature = 2;
                             }
                             mSp_tasknature.setText(sourceArrayOV.getSource());
                             break;
@@ -415,7 +409,6 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     }
 
     private void initLister() {
-
 
 
     }
@@ -631,9 +624,8 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
         String taskName = mEt_taskname.getText().toString().trim();
         String missionDetail = mList_item_missionDetail.getText().toString().trim();
         String description = mEt_description.getText().toString().trim();
-        String beginTime = mBt_select_begintime.getText().toString();
-        String endTime = mBt_select_endtime.getText().toString();
-
+        String beginTime = mBt_select_begintime.getText().toString().trim();
+        String endTime = mBt_select_endtime.getText().toString().trim();
         if (!TextUtils.isEmpty(taskName) && !TextUtils.isEmpty(missionDetail)
                 && !TextUtils.isEmpty(description)
                 && !"选择".equals(beginTime) && !"选择".equals(endTime)) {
@@ -682,6 +674,13 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                                 JSONObject jsonObject = new JSONObject(result);
                                 int code = jsonObject.getInt("code");
                                 if (code == 400) {
+                                    UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
+                                    updateGreenMissionTaskOV.setType(100);
+                                    updateGreenMissionTaskOV.setPosition(mPosition);
+
+                                    EventBus.getDefault().post(updateGreenMissionTaskOV);
+                                    GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().deleteByKey(mId);
+                                    finish();
                                     finish();
                                     RxToast.success(BaseApplication.getApplictaion(), "巡查任务发布成功", Toast.LENGTH_LONG).show();
 
@@ -749,12 +748,11 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             return;
         }
 
-        String taskName = mEt_taskname.getText().toString().trim();
-        String missionDetail = mList_item_missionDetail.getText().toString().trim();
-        String description = mEt_description.getText().toString().trim();
-        String beginTime = mBt_select_begintime.getText().toString();
-        String endTime = mBt_select_endtime.getText().toString();
-
+        final String taskName = mEt_taskname.getText().toString().trim();
+        final String missionDetail = mList_item_missionDetail.getText().toString().trim();
+        final String description = mEt_description.getText().toString().trim();
+        final String beginTime = mBt_select_begintime.getText().toString();
+        final String endTime = mBt_select_endtime.getText().toString();
 
 
         if (!TextUtils.isEmpty(taskName) && !TextUtils.isEmpty(missionDetail)
@@ -762,7 +760,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                 && !"选择".equals(beginTime) && !"选择".equals(endTime)) {
             mBt_ok.setEnabled(false);
             mSubRxDialogLoading.show();
-            Map<String, Object> stringObjectMap = new HashMap<>();
+            final Map<String, Object> stringObjectMap = new HashMap<>();
             stringObjectMap.put("fid", "0");
             stringObjectMap.put("rwms", description);
             stringObjectMap.put("rwmc", taskName);
@@ -785,7 +783,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             stringObjectMap.put("rwcd", "0");
             stringObjectMap.put("typeoftask", mTasktype);
             stringObjectMap.put("receiver", mReBean.getUSERID());
-            Log.i("Oking",stringObjectMap.toString()+">>>>");
+            Log.i("Oking", stringObjectMap.toString() + ">>>>");
             if (mMcoordinateJson != null) {
 
                 stringObjectMap.put("coordinateJson", RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), mMcoordinateJson));
@@ -799,12 +797,61 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                             mSubRxDialogLoading.cancel();
                             String result = responseBody.string();
                             //需要返回个id
+                            //{"code":400,"taskid":"15282003115825056957","msg":"数据添加成功"}
                             Log.i("Oking", "巡查任务发布成功：" + result);
+
                             try {
                                 JSONObject jsonObject = new JSONObject(result);
                                 int code = jsonObject.getInt("code");
                                 if (code == 400) {
-                                    finish();
+                                    String taskid = jsonObject.getString("taskid");
+//                                    GreenMissionTask greenMissionTask = new GreenMissionTask();
+//                                    //返回个id
+//                                    greenMissionTask.setTaskid(taskid);
+//                                    greenMissionTask.setStatus("1");
+//                                    greenMissionTask.setTask_name(taskName);
+//                                    greenMissionTask.setJjcd(mEmergency);
+//                                    greenMissionTask.setTask_content(description);
+//                                    greenMissionTask.setRwqyms(missionDetail);
+//                                    greenMissionTask.setBegin_time(mBeginMillseconds);
+//                                    greenMissionTask.setEnd_time(mEndMillseconds);
+//                                    greenMissionTask.setUserid(OkingContract.CURRENTUSER.getUserid());
+//                                    greenMissionTask.setTypeoftask(mTasktype);
+//                                    greenMissionTask.setRwly(mSource);
+//                                    greenMissionTask.setBegin_time(mBeginMillseconds);
+//                                    greenMissionTask.setEnd_time(mEndMillseconds);
+//                                    greenMissionTask.setTask_type(mTasknature);
+//                                    greenMissionTask.setJsr(mSelecRecipient);
+//                                    greenMissionTask.setJsdw(mReBean.getDEPTNAME());
+//                                    greenMissionTask.setTypename(mSpTasknature);
+//                                    greenMissionTask.setApproved_person(mApproverId);
+//                                    greenMissionTask.setApproved_person_name(mApprover);
+//                                    greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
+//                                    greenMissionTask.setPublisher(OkingContract.CURRENTUSER.getUserid());
+//                                    greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
+//                                    greenMissionTask.setReceiver(mReBean.getUSERID());
+//                                    greenMissionTask.setTask_area(missionDetail);
+//                                    long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(greenMissionTask);
+//                                    Intent intent = new Intent(BaseApplication.getApplictaion(), AuditActivity.class);
+//                                    intent.putExtra("id", insert);
+//                                    PendingIntent pendingIntent = PendingIntent.getActivity(BaseApplication.getApplictaion(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                                    OkingNotificationManager.getInstence().showTaskNotification(greenMissionTask, pendingIntent);
+//                                    EmergencyTaskOV emergencyTaskOV = new EmergencyTaskOV();
+//                                    emergencyTaskOV.setType(0);
+//                                    emergencyTaskOV.setGreenMissionTask(greenMissionTask);
+//                                    EventBus.getDefault().post(emergencyTaskOV);
+
+                                    if (mainHandler == null) {
+
+                                        mainHandler = new Handler();
+                                    }
+                                    mainHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+
+                                        }
+                                    }, 100);
                                     RxToast.success(BaseApplication.getApplictaion(), "巡查任务发布成功", Toast.LENGTH_LONG).show();
 
                                 } else {
@@ -851,6 +898,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             mBt_select_begintime.setText(sf.format(millseconds));
         } else {
             mBt_select_endtime.setText(sf.format(millseconds));
+            mEndMillseconds = millseconds;
         }
     }
 

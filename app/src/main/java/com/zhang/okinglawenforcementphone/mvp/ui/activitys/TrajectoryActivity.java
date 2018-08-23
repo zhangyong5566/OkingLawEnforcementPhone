@@ -1,5 +1,6 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -27,6 +28,7 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.google.gson.reflect.TypeToken;
+import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.utils.DataUtil;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
@@ -155,7 +157,7 @@ public class TrajectoryActivity extends BaseActivity implements AMap.OnMyLocatio
         //添加终点
 
         MarkerOptions markerOptionEnd = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.amap_end))
-                .position(mLatLngs.get(0))
+                .position(mLatLngs.get(mLatLngs.size()-1))
                 .draggable(true);
         Marker markerEnd = mAMap.addMarker(markerOptionEnd);
         markerEnd.setClickable(false);
@@ -206,6 +208,14 @@ public class TrajectoryActivity extends BaseActivity implements AMap.OnMyLocatio
         super.onPause();
         mMap.onPause();
 
+    }
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMap.onResume();
     }
 
     /**

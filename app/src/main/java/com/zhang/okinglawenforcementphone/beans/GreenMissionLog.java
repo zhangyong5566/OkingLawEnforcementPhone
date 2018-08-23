@@ -39,6 +39,8 @@ public class GreenMissionLog {
     private String dzyj;
     private String flowTagPos;
     private String locJson;
+    private boolean summarySwisopen = false;
+    private boolean leaderSummarySwisopen = false;
     @ToMany(referencedJoinProperty = "greenMissionLogId")
     private List<GreenMedia> greenMedia;
     /** Used to resolve relations */
@@ -47,13 +49,14 @@ public class GreenMissionLog {
     /** Used for active entity operations. */
     @Generated(hash = 771362723)
     private transient GreenMissionLogDao myDao;
-    @Generated(hash = 552827286)
+    @Generated(hash = 1450077660)
     public GreenMissionLog(Long id, String server_id, String task_id, String name,
             String post, String id_card, String other_part, int other_person,
             String weather, String equipment, String addr, String time, int plan,
             int item, int type, String area, String route, String patrol,
             int status, String deal, String result, String dzyj, String flowTagPos,
-            String locJson) {
+            String locJson, boolean summarySwisopen,
+            boolean leaderSummarySwisopen) {
         this.id = id;
         this.server_id = server_id;
         this.task_id = task_id;
@@ -78,6 +81,8 @@ public class GreenMissionLog {
         this.dzyj = dzyj;
         this.flowTagPos = flowTagPos;
         this.locJson = locJson;
+        this.summarySwisopen = summarySwisopen;
+        this.leaderSummarySwisopen = leaderSummarySwisopen;
     }
     @Generated(hash = 569752963)
     public GreenMissionLog() {
@@ -226,6 +231,18 @@ public class GreenMissionLog {
     public void setLocJson(String locJson) {
         this.locJson = locJson;
     }
+    public boolean getSummarySwisopen() {
+        return this.summarySwisopen;
+    }
+    public void setSummarySwisopen(boolean summarySwisopen) {
+        this.summarySwisopen = summarySwisopen;
+    }
+    public boolean getLeaderSummarySwisopen() {
+        return this.leaderSummarySwisopen;
+    }
+    public void setLeaderSummarySwisopen(boolean leaderSummarySwisopen) {
+        this.leaderSummarySwisopen = leaderSummarySwisopen;
+    }
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -313,6 +330,8 @@ public class GreenMissionLog {
                 ", dzyj='" + dzyj + '\'' +
                 ", flowTagPos='" + flowTagPos + '\'' +
                 ", locJson='" + locJson + '\'' +
+                ", summarySwisopen=" + summarySwisopen +
+                ", leaderSummarySwisopen=" + leaderSummarySwisopen +
                 ", greenMedia=" + greenMedia +
                 ", daoSession=" + daoSession +
                 ", myDao=" + myDao +

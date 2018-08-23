@@ -52,10 +52,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'com.roughike:bottom-bar:2.3.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation 'com.airbnb.android:lottie:2.5.0'
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     implementation project(':CircularProgressButtonLibrary')
@@ -73,6 +71,7 @@ dependencies {
     implementation files('libs/mail.jar')
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
+    implementation 'cn.ittiger:TigerVideoPlayer:1.7'
     implementation files('libs/AMap3DMap_5.2.0_AMapNavi_5.1.0_AMapSearch_5.1.0_AMapLocation_3.4.0_20170602.jar')
 }
 

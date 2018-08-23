@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
@@ -15,9 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
@@ -31,22 +30,14 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.exceptions.HyphenateException;
-import com.roughike.bottombar.BadgeContainer;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarTab;
-import com.roughike.bottombar.OnTabSelectListener;
 import com.zhang.baselib.BaseApplication;
-import com.zhang.baselib.DefaultContants;
-import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.ActivityUtil;
-import com.zhang.baselib.utils.AppUtil;
 import com.zhang.baselib.utils.DeviceUtil;
 import com.zhang.baselib.utils.FileUtil;
-import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.OkingEMManager;
 import com.zhang.okinglawenforcementphone.OkingFileManager;
 import com.zhang.okinglawenforcementphone.OkingLocationManager;
@@ -55,15 +46,11 @@ import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.SendEmailManager;
 import com.zhang.okinglawenforcementphone.adapter.StatisRcyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
-import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
-import com.zhang.okinglawenforcementphone.beans.GreenUser;
 import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.RefreshTaskMissionEvent;
 import com.zhang.okinglawenforcementphone.beans.StopSwipeRefreshEvent;
 import com.zhang.okinglawenforcementphone.db.LawDao;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadHttpMissionContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadLocationToServerContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.LoadHttpMissionPresenter;
@@ -72,11 +59,12 @@ import com.zhang.okinglawenforcementphone.mvp.ui.fragments.IndexFragment;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.UserFragment;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
+import com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabsIndicator;
+import com.zhang.okinglawenforcementphone.views.bottonbar.OnTabChangedListner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,7 +74,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,9 +85,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.tv_title)
@@ -108,8 +93,8 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.tv_doing)
     TextView mTvDoing;
     private Unbinder unbinder;
-    @BindView(R.id.bottom_navigation_bar_container)
-    BottomBar bottom_navigation_bar_container;
+    @BindView(R.id.alphaIndicator)
+    AlphaTabsIndicator mAlphaTabsIndicator;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     private IndexFragment mIndexFragment;
@@ -126,7 +111,6 @@ public class MainActivity extends BaseActivity {
     private EaseConversationListFragment mEaseConversationListFragment;
     private Intent mIntent;
     private boolean mIsLoginIMErro = false;
-    private BottomBarTab mNearby;
     private boolean isMessageFragmentShow = false;
     private ArrayList<GreenMissionTask> mNewsGreenMissionTasks = new ArrayList<>();
     private RxDialogSureCancel mRxDialogSureCancel;
@@ -208,8 +192,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
-
     private void login() {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -228,7 +210,7 @@ public class MainActivity extends BaseActivity {
                     public void onNext(String s) {
                         Log.i("Oking", "s:" + mUnreadMsgCount);
                         if (s.equals("1")) {
-                            mNearby.setBadgeCount(mUnreadMsgCount);
+                            mAlphaTabsIndicator.getTabView(1).showNumber(mUnreadMsgCount);
                         }
 
 
@@ -352,25 +334,51 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-        bottom_navigation_bar_container.setOnTabSelectListener(new OnTabSelectListener() {
+
+        mAlphaTabsIndicator.setOnTabChangedListner(new OnTabChangedListner() {
             @Override
-            public void onTabSelected(int tabId) {
-                hideAllFrag();//先隐藏所有frag
-                switch (tabId) {
-                    case R.id.tab_index:            //首页
+            public void onTabSelected(int tabNum) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                switch (tabNum) {
+                    case 0:                 //首页
                         isMessageFragmentShow = false;
-                        if (mIndexFragment == null) {
+                        if (mEaseConversationListFragment != null) {
+
+                            fragmentTransaction.hide(mEaseConversationListFragment);
+                        }
+                        if (mEaseContactListFragment != null) {
+
+                            fragmentTransaction.hide(mEaseContactListFragment);
+                        }
+                        if (mUserFragment != null) {
+
+                            fragmentTransaction.hide(mUserFragment);
+                        }
+                        if (mIndexFragment != null) {
+                            fragmentTransaction.show(mIndexFragment);
+                        } else {
                             mIndexFragment = IndexFragment.newInstance(null, null);
+                            fragmentTransaction.add(R.id.bottom_nav_content, mIndexFragment, "IndexFragment");
                         }
-                        addFrag(mIndexFragment);
-                        getSupportFragmentManager().beginTransaction().show(mIndexFragment).commit();
+                        fragmentTransaction.commit();
                         break;
-                    case R.id.tab_message:          //消息
+                    case 1:                 //消息
                         isMessageFragmentShow = true;
-                        if (mIsLoginIMErro) {
-                            login();
+                        if (mIndexFragment != null) {
+
+                            fragmentTransaction.hide(mIndexFragment);
                         }
-                        if (mEaseConversationListFragment == null) {
+                        if (mEaseContactListFragment != null) {
+
+                            fragmentTransaction.hide(mEaseContactListFragment);
+                        }
+                        if (mUserFragment != null) {
+
+                            fragmentTransaction.hide(mUserFragment);
+                        }
+                        if (mEaseConversationListFragment != null) {
+                            fragmentTransaction.show(mEaseConversationListFragment);
+                        } else {
                             mEaseConversationListFragment = new EaseConversationListFragment();
                             mEaseConversationListFragment.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
                                 @Override
@@ -381,23 +389,34 @@ public class MainActivity extends BaseActivity {
                                     startActivity(mIntent);
                                 }
                             });
-
-
+                            fragmentTransaction.add(R.id.bottom_nav_content, mEaseConversationListFragment, "EaseConversationListFragment");
                         }
-
                         mUnreadMsgCount = 0;
-                        mNearby.removeBadge();
-                        addFrag(mEaseConversationListFragment);
-                        getSupportFragmentManager().beginTransaction().show(mEaseConversationListFragment).commit();
-
+                        mAlphaTabsIndicator.removeAllBadge();
+                        fragmentTransaction.commit();
                         break;
-                    case R.id.tab_addressBook:          //通讯录
+                    case 2:                     //通讯录
                         isMessageFragmentShow = false;
+                        if (mIndexFragment != null) {
+
+                            fragmentTransaction.hide(mIndexFragment);
+                        }
+                        if (mEaseConversationListFragment != null) {
+
+                            fragmentTransaction.hide(mEaseConversationListFragment);
+                        }
+                        if (mUserFragment != null) {
+
+                            fragmentTransaction.hide(mUserFragment);
+                        }
                         if (mIsLoginIMErro) {
                             login();
                         }
-                        if (mEaseContactListFragment == null) {
+                        if (mEaseContactListFragment != null) {
 
+                            fragmentTransaction.show(mEaseContactListFragment);
+
+                        } else {
                             mEaseContactListFragment = new EaseContactListFragment();
 
                             mEaseContactListFragment.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
@@ -409,26 +428,33 @@ public class MainActivity extends BaseActivity {
                                     startActivity(mIntent);
                                 }
                             });
+                            fragmentTransaction.add(R.id.bottom_nav_content, mEaseContactListFragment, "EaseContactListFragment");
 
                         }
-                        mEaseContactListFragment.setContactsMap(mContacts);
-//                if (mAddressBookFragment == null) {
-//
-//                    mAddressBookFragment = AddressBookFragment.newInstance(null, null);
-//                }
-                        addFrag(mEaseContactListFragment);
-                        getSupportFragmentManager().beginTransaction().show(mEaseContactListFragment).commit();
-
+                        fragmentTransaction.commit();
                         break;
-                    case R.id.tab_user:
+                    case 3:
                         isMessageFragmentShow = false;
-                        if (mUserFragment == null) {
+                        if (mIndexFragment != null) {
 
-                            mUserFragment = UserFragment.newInstance(null, null);
+                            fragmentTransaction.hide(mIndexFragment);
                         }
+                        if (mEaseConversationListFragment != null) {
 
-                        addFrag(mUserFragment);
-                        getSupportFragmentManager().beginTransaction().show(mUserFragment).commit();
+                            fragmentTransaction.hide(mEaseConversationListFragment);
+                        }
+                        if (mEaseContactListFragment != null) {
+
+                            fragmentTransaction.hide(mEaseContactListFragment);
+                        }
+                        if (mUserFragment != null) {
+                            fragmentTransaction.show(mUserFragment);
+                        } else {
+                            mUserFragment = UserFragment.newInstance(null, null);
+                            fragmentTransaction.add(R.id.bottom_nav_content, mUserFragment, "UserFragment");
+
+                        }
+                        fragmentTransaction.commit();
                         break;
                     default:
                         break;
@@ -442,42 +468,15 @@ public class MainActivity extends BaseActivity {
      */
     private void initBottomNavBar() {
         mTvTitle.setText(OkingContract.CURRENTUSER.getDeptname());
-        mNearby = bottom_navigation_bar_container.getTabWithId(R.id.tab_message);
-
-        bottom_navigation_bar_container.selectTabAtPosition(0);
-
+        mIndexFragment = IndexFragment.newInstance(null, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_nav_content, mIndexFragment, "IndexFragment").commit();
+        mAlphaTabsIndicator.setCurrentItem(0);
     }
 
 
-    private void addFrag(Fragment fragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        if (fragment != null && !fragment.isAdded()) {
-            ft.add(R.id.bottom_nav_content, fragment);
-        }
-        ft.commit();
-    }
-
-    private void hideAllFrag() {
-        hideFrag(mIndexFragment);
-        hideFrag(mEaseConversationListFragment);
-        hideFrag(mEaseContactListFragment);
-        hideFrag(mUserFragment);
-    }
 
 
-    /**
-     * 隐藏fragment
-     *
-     * @param frag
-     */
-    private void hideFrag(Fragment frag) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (frag != null && frag.isAdded()) {
-            ft.hide(frag);
-        }
-        ft.commit();
-    }
+
 
 
     private void getHttpMissionList() {
@@ -643,7 +642,11 @@ public class MainActivity extends BaseActivity {
                     case "0":
 
                     case "1":
-
+                        mIntent = new Intent(MainActivity.this, AuditActivity.class);
+                        mIntent.putExtra("id", greenMissionTask.getId());
+                        mIntent.putExtra("position", position);
+                        startActivity(mIntent);
+                        break;
                     case "2":
                         mIntent = new Intent(MainActivity.this, ArrangeTeamMembersActivity.class);
                         mIntent.putExtra("id", greenMissionTask.getId());
@@ -745,7 +748,7 @@ public class MainActivity extends BaseActivity {
                 AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        mNearby.setBadgeCount(mUnreadMsgCount);
+                        mAlphaTabsIndicator.getTabView(1).showNumber(mUnreadMsgCount);
                     }
                 });
             } else {
@@ -786,7 +789,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EMClient.getInstance().logout(true);
+            if (EMClient.getInstance().isLoggedInBefore()) {
+
+                EMClient.getInstance().logout(true);
+            }
             ActivityUtil.AppExit(BaseApplication.getApplictaion());
             return true;//return true;拦截事件传递,从而屏蔽back键。
         }

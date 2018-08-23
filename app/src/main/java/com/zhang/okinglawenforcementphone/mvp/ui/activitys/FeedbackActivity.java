@@ -66,6 +66,7 @@ public class FeedbackActivity extends BaseActivity {
         mBind = ButterKnife.bind(this);
         initData();
         setListener();
+
     }
 
     private void setListener() {

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:textColor="@android:color/white"
-    android:background="@drawable/tagflow_item_selector"
+    android:background="@drawable/feedback_tag_item_selector"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:textSize="10sp"/>

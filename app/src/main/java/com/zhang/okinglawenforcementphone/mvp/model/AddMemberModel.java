@@ -2,8 +2,8 @@ package com.zhang.okinglawenforcementphone.mvp.model;
 
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.AddMemberContract;
 
 import io.reactivex.functions.Consumer;

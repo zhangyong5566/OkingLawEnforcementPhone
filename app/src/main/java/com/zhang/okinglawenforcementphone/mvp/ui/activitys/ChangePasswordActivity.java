@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
@@ -21,8 +19,8 @@ import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.ActivityUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 
 import java.util.HashMap;

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_ocr_ui" default="compile.module.ocr_ui">
+  <dirname property="module.ocr_ui.basedir" file="${ant.file.module_ocr_ui}"/>
+  
+  <property name="module.jdk.home.ocr_ui" value="${jdk.home.android_api_27_platform}"/>
+  <property name="module.jdk.bin.ocr_ui" value="${jdk.bin.android_api_27_platform}"/>
+  <property name="module.jdk.classpath.ocr_ui" value="jdk.classpath.android_api_27_platform"/>
+  
+  <property name="compiler.args.ocr_ui" value="-encoding UTF-8 -source 1.7 -target 1.8 ${compiler.args}"/>
+  
+  <property name="ocr_ui.output.dir" value="${module.ocr_ui.basedir}/build/intermediates/classes/debug"/>
+  <property name="ocr_ui.testoutput.dir" value="${module.ocr_ui.basedir}/build/intermediates/classes/test/debug"/>
+  
+  <path id="ocr_ui.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ocr_ui.module.production.classpath">
+    <path refid="${module.jdk.classpath.ocr_ui}"/>
+    <path refid="library.__local_aars__:g.\androidworkspace\okinglawenforcementphone\ocr_ui\libs\license.jar:unspecified@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="ocr_ui.runtime.production.module.classpath">
+    <pathelement location="${ocr_ui.output.dir}"/>
+    <path refid="library.__local_aars__:g.\androidworkspace\okinglawenforcementphone\ocr_ui\libs\license.jar:unspecified@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="ocr_ui.module.classpath">
+    <path refid="${module.jdk.classpath.ocr_ui}"/>
+    <pathelement location="${ocr_ui.output.dir}"/>
+    <path refid="library.__local_aars__:g.\androidworkspace\okinglawenforcementphone\ocr_ui\libs\license.jar:unspecified@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support.test:exposed-instrumentation-api-publish-0.5.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.junit:junit:4.12@jar.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.javax.inject:javax.inject:1@jar.classpath"/>
+    <path refid="library.com.squareup:javawriter:2.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.google.code.findbugs:jsr305:2.0.1@jar.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-core:1.3@jar.classpath"/>
+    <path refid="library.com.android.support.test.espresso:espresso-core-2.2.2.classpath"/>
+    <path refid="library.com.android.support.test:rules-0.5.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-library:1.3@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-integration:1.3@jar.classpath"/>
+    <path refid="library.com.android.support.test:runner-0.5.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support.test.espresso:espresso-idling-resource-2.2.2.classpath"/>
+    <path refid="library.javax.annotation:javax.annotation-api:1.2@jar.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  <path id="ocr_ui.runtime.module.classpath">
+    <pathelement location="${ocr_ui.testoutput.dir}"/>
+    <pathelement location="${ocr_ui.output.dir}"/>
+    <path refid="library.__local_aars__:g.\androidworkspace\okinglawenforcementphone\ocr_ui\libs\license.jar:unspecified@jar.classpath"/>
+    <path refid="library.com.android.support:animated-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.android.support.test:exposed-instrumentation-api-publish-0.5.classpath"/>
+    <path refid="library.com.android.support:appcompat-v7-27.1.1.classpath"/>
+    <path refid="library.junit:junit:4.12@jar.classpath"/>
+    <path refid="library.android.arch.core:common:1.1.0@jar.classpath"/>
+    <path refid="library.javax.inject:javax.inject:1@jar.classpath"/>
+    <path refid="library.com.squareup:javawriter:2.1.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-vector-drawable-27.1.1.classpath"/>
+    <path refid="library.com.google.code.findbugs:jsr305:2.0.1@jar.classpath"/>
+    <path refid="library.android.arch.lifecycle:runtime-1.1.0.classpath"/>
+    <path refid="library.android.arch.lifecycle:common:1.1.0@jar.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-core:1.3@jar.classpath"/>
+    <path refid="library.com.android.support.test.espresso:espresso-core-2.2.2.classpath"/>
+    <path refid="library.com.android.support.test:rules-0.5.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-27.1.1.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-library:1.3@jar.classpath"/>
+    <path refid="library.com.android.support:support-compat-27.1.1.classpath"/>
+    <path refid="library.android.arch.lifecycle:viewmodel-1.1.0.classpath"/>
+    <path refid="library.org.hamcrest:hamcrest-integration:1.3@jar.classpath"/>
+    <path refid="library.com.android.support.test:runner-0.5.classpath"/>
+    <path refid="library.android.arch.lifecycle:livedata-core-1.1.0.classpath"/>
+    <path refid="library.com.android.support:support-core-utils-27.1.1.classpath"/>
+    <path refid="library.com.android.support.test.espresso:espresso-idling-resource-2.2.2.classpath"/>
+    <path refid="library.javax.annotation:javax.annotation-api:1.2@jar.classpath"/>
+    <path refid="library.com.android.support:support-fragment-27.1.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:27.1.1@jar.classpath"/>
+    <path refid="library.android.arch.core:runtime-1.1.0.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ocr_ui">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ocr_ui">
+    <patternset refid="excluded.from.module.ocr_ui"/>
+  </patternset>
+  
+  <path id="ocr_ui.module.sourcepath">
+    <dirset dir="${module.ocr_ui.basedir}">
+      <include name="build/generated/source/apt/debug"/>
+      <include name="build/generated/source/r/debug"/>
+      <include name="build/generated/source/aidl/debug"/>
+      <include name="build/generated/source/buildConfig/debug"/>
+      <include name="src/main/res"/>
+      <include name="src/main/assets"/>
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="ocr_ui.module.test.sourcepath">
+    <dirset dir="${module.ocr_ui.basedir}">
+      <include name="build/generated/source/r/androidTest/debug"/>
+      <include name="build/generated/source/aidl/androidTest/debug"/>
+      <include name="build/generated/source/buildConfig/androidTest/debug"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ocr_ui" depends="compile.module.ocr_ui.production,compile.module.ocr_ui.tests" description="Compile module ocr_ui"/>
+  
+  <target name="compile.module.ocr_ui.production" depends="register.custom.compilers" description="Compile module ocr_ui; production classes">
+    <mkdir dir="${ocr_ui.output.dir}"/>
+    <javac2 destdir="${ocr_ui.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ocr_ui}/javac">
+      <compilerarg line="${compiler.args.ocr_ui}"/>
+      <bootclasspath refid="ocr_ui.module.bootclasspath"/>
+      <classpath refid="ocr_ui.module.production.classpath"/>
+      <src refid="ocr_ui.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ocr_ui"/>
+    </javac2>
+    
+    <copy todir="${ocr_ui.output.dir}">
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/apt/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/r/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/aidl/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/buildConfig/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/src/main/res">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/src/main/assets">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ocr_ui.tests" depends="register.custom.compilers,compile.module.ocr_ui.production" description="compile module ocr_ui; test classes" unless="skip.tests">
+    <mkdir dir="${ocr_ui.testoutput.dir}"/>
+    <javac2 destdir="${ocr_ui.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ocr_ui}/javac">
+      <compilerarg line="${compiler.args.ocr_ui}"/>
+      <bootclasspath refid="ocr_ui.module.bootclasspath"/>
+      <classpath refid="ocr_ui.module.classpath"/>
+      <src refid="ocr_ui.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ocr_ui"/>
+    </javac2>
+    
+    <copy todir="${ocr_ui.testoutput.dir}">
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/r/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/aidl/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ocr_ui.basedir}/build/generated/source/buildConfig/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.ocr_ui" description="cleanup module">
+    <delete dir="${ocr_ui.output.dir}"/>
+    <delete dir="${ocr_ui.testoutput.dir}"/>
+  </target>
+</project>

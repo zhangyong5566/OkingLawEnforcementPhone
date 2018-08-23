@@ -8,8 +8,8 @@ import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadSignaturePicContract;
 
 import org.json.JSONObject;

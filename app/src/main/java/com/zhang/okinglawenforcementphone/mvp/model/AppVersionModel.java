@@ -3,8 +3,8 @@ package com.zhang.okinglawenforcementphone.mvp.model;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.utils.DeviceUtil;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.AppVersionContract;
 
 import org.json.JSONArray;

@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/bottom_nav_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_scrollFlags="scroll|enterAlways">
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -41,25 +33,99 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottom_navigation_bar_container"
+    <LinearLayout
+        android:layout_below="@id/appbar"
+        android:layout_above="@id/alphaIndicator"
+        android:id="@+id/bottom_nav_content"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+
+    <View
+        android:layout_above="@id/alphaIndicator"
+        android:background="@color/divider_color"
+        android:layout_width="match_parent"
+        android:layout_height="2px"></View>
+
+    <com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabsIndicator
+        android:background="@color/white"
+        android:id="@+id/alphaIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_55"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        app:bb_behavior="underNavbar|shy"
-        app:bb_tabXmlResource="@xml/bottombar_tabs_five" />
+        android:orientation="horizontal">
+
+        <com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:badgeBackgroundColor="@null"
+            app:paddingTexwithIcon="5dp"
+            app:tabIconNormal="@mipmap/icon_index_normal"
+            app:tabIconSelected="@mipmap/icon_index_selected"
+            app:tabText="首页"
+            app:tabTextSize="12sp"
+            app:textColorNormal="@color/bottom_nav_normal"
+            app:textColorSelected="@color/bottom_nav_selected" />
+
+        <com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:badgeBackgroundColor="@null"
+            app:paddingTexwithIcon="5dp"
+            app:tabIconNormal="@mipmap/icon_message_normal"
+            app:tabIconSelected="@mipmap/icon_message_selected"
+            app:tabText="消息"
+            app:tabTextSize="12sp"
+            app:textColorNormal="@color/bottom_nav_normal"
+            app:textColorSelected="@color/bottom_nav_selected" />
+
+        <com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:badgeBackgroundColor="@null"
+            app:paddingTexwithIcon="5dp"
+            app:tabIconNormal="@mipmap/icon_navigation_normal"
+            app:tabIconSelected="@mipmap/icon_navigation_selected"
+            app:tabText="通讯录"
+            app:tabTextSize="12sp"
+            app:textColorNormal="@color/bottom_nav_normal"
+            app:textColorSelected="@color/bottom_nav_selected" />
+
+        <com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:paddingTexwithIcon="5dp"
+            app:tabIconNormal="@mipmap/icon_user_normal"
+            app:tabIconSelected="@mipmap/icon_user_selected"
+            app:tabText="我的"
+            app:tabTextSize="12sp"
+            app:textColorNormal="@color/bottom_nav_normal"
+            app:textColorSelected="@color/bottom_nav_selected"/>
+
+
+    </com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabsIndicator>
 
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_doing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="1dp"
         android:background="@drawable/btn_waiting_selector"
-        android:padding="5dp"
+        android:padding="@dimen/x_px_5"
         android:text="有任务正在执行"
         android:textColor="@color/white"
-        android:textSize="10sp" />
-</android.support.design.widget.CoordinatorLayout>
+        android:textSize="10sp"
+        android:visibility="gone" />
+</RelativeLayout>

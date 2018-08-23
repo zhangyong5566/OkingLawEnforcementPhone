@@ -25,8 +25,8 @@ import com.zhang.okinglawenforcementphone.beans.Dept;
 import com.zhang.okinglawenforcementphone.beans.GreenDept;
 import com.zhang.okinglawenforcementphone.beans.GreenDeptDao;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.SettingActivity;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 

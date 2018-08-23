@@ -1,349 +1,30 @@
 package com.zhang.okinglawenforcementphone.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by zhao on 2016/9/7.
  */
 public class Mission implements Serializable {
 
-    private String id;
-    private String task_name;
-    private Long delivery_time;
-    private Long begin_time;
-    private Long end_time;
-    private String publisher;
-    private int task_type;
-    private String AreaId;
-    private String assignment;
+    /**
+     * msg : 查询成功！
+     * records : [{"APPROVED_PERSON":"b1484c915f8640adbd2f62c51b708942","APPROVED_PERSON_NAME":"张伟民","BEGIN_TIME":1507685040000,"CREATE_TIME":1507684889000,"DELIVERY_TIME":1507684889000,"END_TIME":1507771440000,"FBDW":"广东省水利厅水利水政监察局","FBR":"张伟民","ID":"15076848893176047705","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"b1484c915f8640adbd2f62c51b708942","PUBLISHER_NAME":"张伟民","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"珠江","SPR":"张伟民","STATUS":"3","TASK_NAME":"水政监察局【巡】201710031","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1516267820000,"BEGIN_TIME":1516267980000,"CREATE_TIME":1516267795000,"DELIVERY_TIME":1516267820000,"END_TIME":1516354380000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15162677954281146818","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"1111111111","SPR":"何子福","SPYJ":"同意","STATUS":"3","TASK_NAME":"水政监察局【巡】201801019","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"1"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1516266691000,"BEGIN_TIME":1516266840000,"CREATE_TIME":1516266652000,"DELIVERY_TIME":1516266691000,"END_TIME":1516353240000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15162666528688178007","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"11111111111111","SPR":"何子福","SPYJ":"同意","STATUS":"3","TASK_NAME":"水政监察局【巡】201801016","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1516266103000,"BEGIN_TIME":1516266420000,"CREATE_TIME":1516266103000,"DELIVERY_TIME":1516266103000,"END_TIME":1516377600000,"EXECUTE_END_TIME":1517476674000,"EXECUTE_START_TIME":1516266740000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15162661036231413249","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"ffsfsfs","SPR":"何子福","STATUS":"5","TASK_NAME":"水政监察局【急】201801014","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517482761000,"BEGIN_TIME":1517483040000,"CREATE_TIME":1517482751000,"DELIVERY_TIME":1517482761000,"END_TIME":1517587200000,"EXECUTE_END_TIME":1517531735000,"EXECUTE_START_TIME":1517483084000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174827515705769227","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"古古怪怪","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"GPS测试1","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517476298000,"BEGIN_TIME":1517476560000,"CREATE_TIME":1517476290000,"DELIVERY_TIME":1517476298000,"END_TIME":1517587200000,"EXECUTE_END_TIME":1517476765000,"EXECUTE_START_TIME":1517476711000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174762906288360124","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Ttggg","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"Yyyyyy","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517475914000,"BEGIN_TIME":1517476200000,"CREATE_TIME":1517475903000,"DELIVERY_TIME":1517475914000,"END_TIME":1517500800000,"EXECUTE_END_TIME":1517476270000,"EXECUTE_START_TIME":1517476265000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174759037944180752","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Fcggggh","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"Kkkkkk","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"b5a8676f24264541958aef2f8d2e5c3a","APPROVED_PERSON_NAME":"谢四清","APPROVED_TIME":1516263929000,"BEGIN_TIME":1516264140000,"CREATE_TIME":1516263908000,"DELIVERY_TIME":1516263929000,"END_TIME":1516350540000,"EXECUTE_END_TIME":1516264433000,"EXECUTE_START_TIME":1516264405000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15162639080172637433","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"afadf","SPR":"谢四清","SPYJ":"同意","STATUS":"5","TASK_NAME":"水政监察局【巡】201801010","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517476232000,"BEGIN_TIME":1517476560000,"CREATE_TIME":1517476224000,"DELIVERY_TIME":1517476232000,"END_TIME":1517500800000,"EXECUTE_END_TIME":1517476811000,"EXECUTE_START_TIME":1517476794000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174762241879973757","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Tfttttttty","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"333333","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517482843000,"BEGIN_TIME":1517483160000,"CREATE_TIME":1517482835000,"DELIVERY_TIME":1517482843000,"END_TIME":1517587200000,"EXECUTE_END_TIME":1517498572000,"EXECUTE_START_TIME":1517483168000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174828350931667676","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"改善伙食","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"GPS测试2","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517475002000,"BEGIN_TIME":1517475300000,"CREATE_TIME":1517474988000,"DELIVERY_TIME":1517475002000,"END_TIME":1517500800000,"EXECUTE_END_TIME":1517476368000,"EXECUTE_START_TIME":1517476342000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174749883080370816","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Tttt","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"Yhhhhh","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1517472088000,"BEGIN_TIME":1517472360000,"CREATE_TIME":1517472071000,"DELIVERY_TIME":1517472088000,"END_TIME":1517500800000,"EXECUTE_END_TIME":1517472444000,"EXECUTE_START_TIME":1517472405000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15174720710307716358","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Yyyyy","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"Ttttttt","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"da40394f32624b92b443d0fcaa73dbc2","APPROVED_PERSON_NAME":"邓桂林","BEGIN_TIME":1528201680000,"CREATE_TIME":1528201774000,"DELIVERY_TIME":1528201774000,"END_TIME":1528387200000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15282016664112197059","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"测试","SPR":"邓桂林","STATUS":"1","TASK_NAME":"测试001","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1516274253000,"BEGIN_TIME":1516274520000,"CREATE_TIME":1516274216000,"DELIVERY_TIME":1516274253000,"END_TIME":1519833600000,"EXECUTE_END_TIME":1517364849000,"EXECUTE_START_TIME":1517364437000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15162742164972976241","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"fffggg","SPR":"何子福","SPYJ":"同意","STATUS":"5","TASK_NAME":"rrrffff","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1517364662000,"BEGIN_TIME":1517364960000,"CREATE_TIME":1517364662000,"DELIVERY_TIME":1517364662000,"END_TIME":1517414400000,"EXECUTE_END_TIME":1517365017000,"EXECUTE_START_TIME":1517364973000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15173646627588835763","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Tdgdggdgdy","SPR":"何子福","STATUS":"5","TASK_NAME":"水政监察局【急】201801059","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"13e91a2a321e40cbbf767cf66b90406f","APPROVED_PERSON_NAME":"欧阳志刚","APPROVED_TIME":1507879716000,"BEGIN_TIME":1507879860000,"CREATE_TIME":1507879716000,"DELIVERY_TIME":1507879716000,"END_TIME":1507996800000,"EXECUTE_END_TIME":1507880016000,"EXECUTE_START_TIME":1507879924000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15078798997680080513","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"西江某某河段","SPR":"欧阳志刚","STATUS":"5","TASK_NAME":"西江巡查","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508137182000,"BEGIN_TIME":1508136900000,"CREATE_TIME":1508136702000,"DELIVERY_TIME":1508137182000,"END_TIME":1508169600000,"EXECUTE_END_TIME":1508146344000,"EXECUTE_START_TIME":1508138668000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15081367028571419708","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"默默","SPR":"张立强","SPYJ":"同意","STATUS":"5","TASK_NAME":"噢噢噢哦哦","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508137166000,"BEGIN_TIME":1508136660000,"CREATE_TIME":1508136418000,"DELIVERY_TIME":1508137166000,"END_TIME":1508256000000,"EXECUTE_END_TIME":1508146267000,"EXECUTE_START_TIME":1508137460000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15081364184530256717","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"也9弄","SPR":"张立强","SPYJ":"同意","STATUS":"5","TASK_NAME":"Ozone","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1515147115000,"BEGIN_TIME":1515147300000,"CREATE_TIME":1515147035000,"DELIVERY_TIME":1515147115000,"END_TIME":1515254400000,"EXECUTE_END_TIME":1515147581000,"EXECUTE_START_TIME":1515147516000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15151470350571529227","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"Zh珠江","SPR":"张立强","SPYJ":"同意","STATUS":"5","TASK_NAME":"巡001","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508814236000,"BEGIN_TIME":1508814420000,"CREATE_TIME":1508814236000,"DELIVERY_TIME":1508814236000,"END_TIME":1508860800000,"EXECUTE_START_TIME":1508814421000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15088142365434707444","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"256666","SPR":"张立强","STATUS":"4","TASK_NAME":"14444","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508317889000,"BEGIN_TIME":1508318100000,"CREATE_TIME":1508317889000,"DELIVERY_TIME":1508317889000,"END_TIME":1508601600000,"EXECUTE_END_TIME":1508489211000,"EXECUTE_START_TIME":1508318157000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15083180702173952165","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"nkm;o","SPR":"张立强","STATUS":"5","TASK_NAME":"cyvuuhuhi","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c11ed181cdfb4cf8a47ef556eff7376f","APPROVED_PERSON_NAME":"何子福","APPROVED_TIME":1515393252000,"BEGIN_TIME":1515393540000,"CREATE_TIME":1515393252000,"DELIVERY_TIME":1515393252000,"END_TIME":1515513600000,"EXECUTE_END_TIME":1515393589000,"EXECUTE_START_TIME":1515393558000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15153932521225815125","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"勾股壁柜","SPR":"何子福","STATUS":"5","TASK_NAME":"水政监察局【急】201801004","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"b5a8676f24264541958aef2f8d2e5c3a","APPROVED_PERSON_NAME":"谢四清","APPROVED_TIME":1515146460000,"BEGIN_TIME":1515146640000,"CREATE_TIME":1515146382000,"DELIVERY_TIME":1515146460000,"END_TIME":1515254400000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15151463823761359337","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"珠江","SPR":"谢四清","SPYJ":"同意","STATUS":"3","TASK_NAME":"省巡002","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"b5a8676f24264541958aef2f8d2e5c3a","APPROVED_PERSON_NAME":"谢四清","APPROVED_TIME":1515138831000,"BEGIN_TIME":1515138180000,"CREATE_TIME":1515138662000,"DELIVERY_TIME":1515138831000,"END_TIME":1515168000000,"EXECUTE_END_TIME":1515139238000,"EXECUTE_START_TIME":1515139193000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15151386621679028981","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"珠江","SPR":"谢四清","SPYJ":"同意","STATUS":"5","TASK_NAME":"省巡001","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"b5a8676f24264541958aef2f8d2e5c3a","APPROVED_PERSON_NAME":"谢四清","APPROVED_TIME":1514532373000,"BEGIN_TIME":1514532540000,"CREATE_TIME":1514532346000,"DELIVERY_TIME":1514532373000,"END_TIME":1514618940000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15145323468406340107","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"asdf","SPR":"谢四清","SPYJ":"同意","STATUS":"2","TASK_NAME":"水政监察局【巡】201712001","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508223863000,"BEGIN_TIME":1508224020000,"CREATE_TIME":1508223863000,"DELIVERY_TIME":1508223863000,"END_TIME":1508342400000,"EXECUTE_END_TIME":1508234862000,"EXECUTE_START_TIME":1508224066000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15082240449867068777","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"可特么","SPR":"张立强","STATUS":"5","TASK_NAME":"7rattle","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1507620803000,"BEGIN_TIME":1507620840000,"CREATE_TIME":1507620751000,"DELIVERY_TIME":1507620803000,"END_TIME":1507793640000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15076207516755740071","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"测试","SPR":"曾建生","SPYJ":"同意","STATUS":"3","TASK_NAME":"水政监察局【巡】201710020","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508317395000,"BEGIN_TIME":1508317560000,"CREATE_TIME":1508317395000,"DELIVERY_TIME":1508317395000,"END_TIME":1508601600000,"EXECUTE_START_TIME":1508317604000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15083175762282567961","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"iooop","SPR":"张立强","STATUS":"4","TASK_NAME":"yuyuuiuiuiuiuiui","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"0"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1507707022000,"BEGIN_TIME":1507707240000,"CREATE_TIME":1507707022000,"DELIVERY_TIME":1507707022000,"END_TIME":1507737600000,"EXECUTE_END_TIME":1508146382000,"EXECUTE_START_TIME":1507711097000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15077072071468021654","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":".com墨镜","SPR":"张立强","STATUS":"5","TASK_NAME":"8木","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"13e91a2a321e40cbbf767cf66b90406f","APPROVED_PERSON_NAME":"欧阳志刚","APPROVED_TIME":1505739751000,"BEGIN_TIME":1505664000000,"CREATE_TIME":1505739577000,"DELIVERY_TIME":1505739751000,"END_TIME":1505750400000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15057395773167755038","JJCD":"1","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"3","RWQYMS":"东江东莞石龙至博罗河段","SPR":"欧阳志刚","SPYJ":"同意","STATUS":"3","TASK_NAME":"【巡】201709056","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"4b7d309839db41e18a3439623c4fdf1d","APPROVED_PERSON_NAME":"张立强","APPROVED_TIME":1508145652000,"BEGIN_TIME":1507948740000,"CREATE_TIME":1507948528000,"DELIVERY_TIME":1508145652000,"END_TIME":1507996800000,"FBDW":"广东省水利厅水利水政监察局","FBR":"邓桂林","ID":"15079487117330111103","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"da40394f32624b92b443d0fcaa73dbc2","PUBLISHER_NAME":"邓桂林","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"86HK7","SPR":"张立强","SPYJ":"同意","STATUS":"3","TASK_NAME":"446898","TASK_TYPE":"0","TYPENAME":"日常执法","TYPEOFTASK":"4"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1507546253000,"BEGIN_TIME":1507546260000,"CREATE_TIME":1507546156000,"DELIVERY_TIME":1507546253000,"END_TIME":1508323860000,"EXECUTE_START_TIME":1507599373000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15075463385070658494","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"嗖嗖嗖","SPR":"曾建生","SPYJ":"同意","STATUS":"4","TASK_NAME":"null【巡】201710001","TASK_TYPE":"1","TYPENAME":"专项执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506324091000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506324085000,"DELIVERY_TIME":1506324091000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506324528000,"EXECUTE_START_TIME":1506324255000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063240854071254754","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709107","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506323969000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506323961000,"DELIVERY_TIME":1506323969000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506324207000,"EXECUTE_START_TIME":1506324185000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063239615805743073","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709106","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506323478000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506323473000,"DELIVERY_TIME":1506323478000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506324083000,"EXECUTE_START_TIME":1506323645000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063234735161766461","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709104","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506322614000,"BEGIN_TIME":1506322680000,"CREATE_TIME":1506322606000,"DELIVERY_TIME":1506322614000,"END_TIME":1506495480000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063226060752915935","JJCD":"2","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"噩噩噩噩噩噩噩噩噩","SPR":"曾建生","SPYJ":"不同意","STATUS":"7","TASK_NAME":"【巡】201709098····","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506323232000,"BEGIN_TIME":1506322740000,"CREATE_TIME":1506323218000,"DELIVERY_TIME":1506323232000,"END_TIME":1506495540000,"EXECUTE_END_TIME":1506323568000,"EXECUTE_START_TIME":1506323433000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063232189285293266","JJCD":"2","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709103","TASK_TYPE":"3"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506323058000,"BEGIN_TIME":1506322740000,"CREATE_TIME":1506323053000,"DELIVERY_TIME":1506323058000,"END_TIME":1506495540000,"EXECUTE_END_TIME":1506323275000,"EXECUTE_START_TIME":1506323223000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063230536880404398","JJCD":"2","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709102","TASK_TYPE":"3"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506322685000,"BEGIN_TIME":1506322740000,"CREATE_TIME":1506322680000,"DELIVERY_TIME":1506322685000,"END_TIME":1506495540000,"EXECUTE_END_TIME":1506323164000,"EXECUTE_START_TIME":1506322884000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063226800790386931","JJCD":"2","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709101··············","TASK_TYPE":"3"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506321604000,"BEGIN_TIME":1506321660000,"CREATE_TIME":1506321596000,"DELIVERY_TIME":1506321604000,"END_TIME":1506408060000,"EXECUTE_END_TIME":1506322662000,"EXECUTE_START_TIME":1506321797000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063215968369190739","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"噢噢噢噢哦","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709086","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506309021000,"BEGIN_TIME":1506309060000,"CREATE_TIME":1506309002000,"DELIVERY_TIME":1506309021000,"END_TIME":1506481860000,"EXECUTE_END_TIME":1506309291000,"EXECUTE_START_TIME":1506309246000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063090026182504602","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"0","RWQYMS":"呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709058","TASK_TYPE":"0","TYPENAME":"日常执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506327085000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506327079000,"DELIVERY_TIME":1506327085000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506327800000,"EXECUTE_START_TIME":1506327306000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063270790813578926","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709118","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506326652000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506326644000,"DELIVERY_TIME":1506326652000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506327163000,"EXECUTE_START_TIME":1506326822000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063266444925182118","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709117","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506326201000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506326193000,"DELIVERY_TIME":1506326201000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506326772000,"EXECUTE_START_TIME":1506326355000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063261937221369396","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709116","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506325991000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506325979000,"DELIVERY_TIME":1506325991000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506326306000,"EXECUTE_START_TIME":1506326154000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063259796286635778","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709115","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506325580000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506325561000,"DELIVERY_TIME":1506325580000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506326092000,"EXECUTE_START_TIME":1506325748000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063255612568214495","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709114","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506325419000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506325394000,"DELIVERY_TIME":1506325419000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506325668000,"EXECUTE_START_TIME":1506325601000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063253941378554553","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709113","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506325045000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506325036000,"DELIVERY_TIME":1506325045000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506325510000,"EXECUTE_START_TIME":1506325201000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063250363212289725","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709111","TASK_TYPE":"2","TYPENAME":"联合执法"},{"APPROVED_PERSON":"c16e105ada884d9fb7fdcb4ef626cf62","APPROVED_PERSON_NAME":"曾建生","APPROVED_TIME":1506324416000,"BEGIN_TIME":1506323580000,"CREATE_TIME":1506324405000,"DELIVERY_TIME":1506324416000,"END_TIME":1506582780000,"EXECUTE_END_TIME":1506325152000,"EXECUTE_START_TIME":1506324625000,"FBDW":"广东省水利厅水利水政监察局","FBR":"曾建生","ID":"15063244053595286506","JJCD":"0","JSDW":"广东省水利厅水利水政监察局","JSR":"邓桂林","PUBLISHER":"c16e105ada884d9fb7fdcb4ef626cf62","PUBLISHER_NAME":"曾建生","RECEIVER":"da40394f32624b92b443d0fcaa73dbc2","RECEIVER_NAME":"邓桂林","RWLY":"1","RWQYMS":"呜呜呜呜呜呜呜呜呜","SPR":"曾建生","SPYJ":"同意","STATUS":"5","TASK_NAME":"【巡】201709108","TASK_TYPE":"2","TYPENAME":"联合执法"}]
+     * status : 1
+     */
+
+    private String msg;
     private String status;
-    private String task_content;
-    private String contact;
-    private String approved_person;
-    private String approved_person_name;
-    private String typename;
-    private String receiver_name;
-    private String publisher_name;
-    private String receiver;
-    private Long create_time;
-    private Long approved_time;
-    private Long execute_start_time;
-    private Long execute_end_time;
-    private String spyj;
-    private String rwqyms;
-    private String jjcd;
-    private String rwly;
-    private String jsr;
-    private String jsdw;
-    private String fbr;
-    private String fbdw;
-    private String spr;
+    private List<RecordsBean> records;
 
-    private String typeoftask;
-
-
-    //private boolean isShowDetail;//用于判断任务列表中是否已展开
-
-
-    public String getTypeoftask() {
-        return typeoftask;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setTypeoftask(String typeoftask) {
-        this.typeoftask = typeoftask;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTask_name() {
-        return task_name;
-    }
-
-    public void setTask_name(String task_name) {
-        this.task_name = task_name;
-    }
-
-    public Long getDelivery_time() {
-        return delivery_time;
-    }
-
-    public void setDelivery_time(Long delivery_time) {
-        this.delivery_time = delivery_time;
-    }
-
-    public Long getBegin_time() {
-        return begin_time;
-    }
-
-    public void setBegin_time(Long begin_time) {
-        this.begin_time = begin_time;
-    }
-
-    public Long getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(Long end_time) {
-        this.end_time = end_time;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public int getTask_type() {
-        return task_type;
-    }
-
-    public void setTask_type(int task_type) {
-        this.task_type = task_type;
-    }
-
-    public String getAreaId() {
-        return AreaId;
-    }
-
-    public void setAreaId(String areaId) {
-        AreaId = areaId;
-    }
-
-    public String getAssignment() {
-        return assignment;
-    }
-
-    public void setAssignment(String assignment) {
-        this.assignment = assignment;
-    }
-
-
-    public String getTask_content() {
-        return task_content;
-    }
-
-    public void setTask_content(String task_content) {
-        this.task_content = task_content;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public Long getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(Long create_time) {
-        this.create_time = create_time;
-    }
-
-    public String getApproved_person() {
-        return approved_person;
-    }
-
-    public void setApproved_person(String approved_person) {
-        this.approved_person = approved_person;
-    }
-
-    public String getApproved_person_name() {
-        return approved_person_name;
-    }
-
-    public void setApproved_person_name(String approved_person_name) {
-        this.approved_person_name = approved_person_name;
-    }
-
-    public String getTypename() {
-        return typename;
-    }
-
-    public void setTypename(String typename) {
-        this.typename = typename;
-    }
-
-    public String getReceiver_name() {
-        return receiver_name;
-    }
-
-    public void setReceiver_name(String receiver_name) {
-        this.receiver_name = receiver_name;
-    }
-
-    public String getPublisher_name() {
-        return publisher_name;
-    }
-
-    public void setPublisher_name(String publisher_name) {
-        this.publisher_name = publisher_name;
-    }
-
-    public Long getApproved_time() {
-        return approved_time;
-    }
-
-    public void setApproved_time(Long approved_time) {
-        this.approved_time = approved_time;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-//    public boolean isShowDetail() {
-//        return isShowDetail;
-//    }
-//
-//    public void setShowDetail(boolean showDetail) {
-//        isShowDetail = showDetail;
-//    }
-
-    public Long getExecute_start_time() {
-        return execute_start_time;
-    }
-
-    public void setExecute_start_time(Long execute_start_time) {
-        this.execute_start_time = execute_start_time;
-    }
-
-    public Long getExecute_end_time() {
-        return execute_end_time;
-    }
-
-    public void setExecute_end_time(Long execute_end_time) {
-        this.execute_end_time = execute_end_time;
-    }
-
-    public String getSpyj() {
-        return spyj;
-    }
-
-    public void setSpyj(String spyj) {
-        this.spyj = spyj;
-    }
-
-    public String getRwqyms() {
-        return rwqyms;
-    }
-
-    public void setRwqyms(String rwqyms) {
-        this.rwqyms = rwqyms;
-    }
-
-    public String getJjcd() {
-        return jjcd;
-    }
-
-    public void setJjcd(String jjcd) {
-        this.jjcd = jjcd;
-    }
-
-    public String getRwly() {
-        return rwly;
-    }
-
-    public void setRwly(String rwly) {
-        this.rwly = rwly;
-    }
-
-    public String getJsr() {
-        return jsr;
-    }
-
-    public void setJsr(String jsr) {
-        this.jsr = jsr;
-    }
-
-    public String getJsdw() {
-        return jsdw;
-    }
-
-    public void setJsdw(String jsdw) {
-        this.jsdw = jsdw;
-    }
-
-    public String getFbr() {
-        return fbr;
-    }
-
-    public void setFbr(String fbr) {
-        this.fbr = fbr;
-    }
-
-    public String getFbdw() {
-        return fbdw;
-    }
-
-    public void setFbdw(String fbdw) {
-        this.fbdw = fbdw;
-    }
-
-    public String getSpr() {
-        return spr;
-    }
-
-    public void setSpr(String spr) {
-        this.spr = spr;
-    }
-
-//    public void insertDB(final LocalSqlite db) {
-//
-//        ContentValues values = new ContentValues();
-//        values.put("mid", Mission.this.getId());
-//        values.put("task_name", Mission.this.getTask_name());
-//        values.put("delivery_time", Mission.this.getDelivery_time());
-//        values.put("begin_time", Mission.this.getBegin_time());
-//        values.put("end_time", Mission.this.getEnd_time());
-//        values.put("publisher", Mission.this.getPublisher());
-//        values.put("task_type", Mission.this.getTask_type());
-//        values.put("AreaId", Mission.this.getAreaId());
-//        values.put("assignment", Mission.this.getAssignment());
-//        values.put("status", Mission.this.getStatus());
-//        values.put("task_content", Mission.this.getTask_content());
-//        values.put("contact", Mission.this.getContact());
-//        values.put("create_time", Mission.this.getCreate_time());
-//        values.put("approved_person", Mission.this.getApproved_person());
-//        values.put("approved_person_name", Mission.this.getApproved_person_name());
-//        values.put("typename", Mission.this.getTypename());
-//        values.put("receiver_name", Mission.this.getReceiver_name());
-//        values.put("publisher_name", Mission.this.getPublisher_name());
-//        values.put("approved_time", Mission.this.getApproved_time());
-//        values.put("receiver", Mission.this.getReceiver());
-//        values.put("execute_start_time", Mission.this.getExecute_start_time());
-//        values.put("execute_end_time", Mission.this.getExecute_end_time());
-//        values.put("spyj", Mission.this.getSpyj());
-//        values.put("rwqyms", Mission.this.getRwqyms());
-//        values.put("jjcd", Mission.this.getJjcd());
-//        values.put("rwly", Mission.this.getRwly());
-//        values.put("jsr", Mission.this.getJsr());
-//        values.put("jsdw", Mission.this.getJsdw());
-//        values.put("fbr", Mission.this.getFbr());
-//        values.put("fbdw", Mission.this.getFbdw());
-//        values.put("spr", Mission.this.getSpr());
-//        values.put("typeoftask", Mission.this.getTypeoftask());
-//        values.put("jsonStr", DataUtil.toJson(Mission.this));
-//
-//        db.insert(LocalSqlite.MISSION_TABLE, values);
-//
-//
-//    }
-
 
     public String getStatus() {
         return status;
@@ -353,42 +34,316 @@ public class Mission implements Serializable {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Mission{" +
-                "id='" + id + '\'' +
-                ", task_name='" + task_name + '\'' +
-                ", delivery_time=" + delivery_time +
-                ", begin_time=" + begin_time +
-                ", end_time=" + end_time +
-                ", publisher='" + publisher + '\'' +
-                ", task_type=" + task_type +
-                ", AreaId='" + AreaId + '\'' +
-                ", assignment='" + assignment + '\'' +
-                ", status='" + status + '\'' +
-                ", task_content='" + task_content + '\'' +
-                ", contact='" + contact + '\'' +
-                ", approved_person='" + approved_person + '\'' +
-                ", approved_person_name='" + approved_person_name + '\'' +
-                ", typename='" + typename + '\'' +
-                ", receiver_name='" + receiver_name + '\'' +
-                ", publisher_name='" + publisher_name + '\'' +
-                ", receiver='" + receiver + '\'' +
-                ", create_time=" + create_time +
-                ", approved_time=" + approved_time +
-                ", execute_start_time=" + execute_start_time +
-                ", execute_end_time=" + execute_end_time +
-                ", spyj='" + spyj + '\'' +
-                ", rwqyms='" + rwqyms + '\'' +
-                ", jjcd='" + jjcd + '\'' +
-                ", rwly='" + rwly + '\'' +
-                ", jsr='" + jsr + '\'' +
-                ", jsdw='" + jsdw + '\'' +
-                ", fbr='" + fbr + '\'' +
-                ", fbdw='" + fbdw + '\'' +
-                ", spr='" + spr + '\'' +
-                ", typeoftask='" + typeoftask + '\'' +
-                '}';
+    public List<RecordsBean> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<RecordsBean> records) {
+        this.records = records;
+    }
+
+    public static class RecordsBean {
+        /**
+         * APPROVED_PERSON : b1484c915f8640adbd2f62c51b708942
+         * APPROVED_PERSON_NAME : 张伟民
+         * BEGIN_TIME : 1507685040000
+         * CREATE_TIME : 1507684889000
+         * DELIVERY_TIME : 1507684889000
+         * END_TIME : 1507771440000
+         * FBDW : 广东省水利厅水利水政监察局
+         * FBR : 张伟民
+         * ID : 15076848893176047705
+         * JJCD : 0
+         * JSDW : 广东省水利厅水利水政监察局
+         * JSR : 邓桂林
+         * PUBLISHER : b1484c915f8640adbd2f62c51b708942
+         * PUBLISHER_NAME : 张伟民
+         * RECEIVER : da40394f32624b92b443d0fcaa73dbc2
+         * RECEIVER_NAME : 邓桂林
+         * RWLY : 0
+         * RWQYMS : 珠江
+         * SPR : 张伟民
+         * STATUS : 3
+         * TASK_NAME : 水政监察局【巡】201710031
+         * TASK_TYPE : 0
+         * TYPENAME : 日常执法
+         * APPROVED_TIME : 1516267820000
+         * SPYJ : 同意
+         * TYPEOFTASK : 1
+         * EXECUTE_END_TIME : 1517476674000
+         * EXECUTE_START_TIME : 1516266740000
+         */
+
+        private String APPROVED_PERSON;
+        private String APPROVED_PERSON_NAME;
+        private long BEGIN_TIME;
+        private long CREATE_TIME;
+        private long DELIVERY_TIME;
+        private long END_TIME;
+        private String FBDW;
+        private String FBR;
+        private String ID;
+        private String JJCD;
+        private String JSDW;
+        private String JSR;
+        private String PUBLISHER;
+        private String PUBLISHER_NAME;
+        private String RECEIVER;
+        private String RECEIVER_NAME;
+        private String RWLY;
+        private String RWQYMS;
+        private String RWMS;
+        private String SPR;
+        private String STATUS;
+        private String TASK_NAME;
+        private String TASK_TYPE;
+        private String TYPENAME;
+        private long APPROVED_TIME;
+        private String SPYJ;
+        private String TYPEOFTASK;
+        private long EXECUTE_END_TIME;
+        private long EXECUTE_START_TIME;
+        private int EXAMINE_STATUS;
+
+        public int getEXAMINE_STATUS() {
+            return EXAMINE_STATUS;
+        }
+
+        public void setEXAMINE_STATUS(int EXAMINE_STATUS) {
+            this.EXAMINE_STATUS = EXAMINE_STATUS;
+        }
+
+        public String getAPPROVED_PERSON() {
+            return APPROVED_PERSON;
+        }
+
+        public void setAPPROVED_PERSON(String APPROVED_PERSON) {
+            this.APPROVED_PERSON = APPROVED_PERSON;
+        }
+
+        public String getAPPROVED_PERSON_NAME() {
+            return APPROVED_PERSON_NAME;
+        }
+
+        public void setAPPROVED_PERSON_NAME(String APPROVED_PERSON_NAME) {
+            this.APPROVED_PERSON_NAME = APPROVED_PERSON_NAME;
+        }
+
+        public long getBEGIN_TIME() {
+            return BEGIN_TIME;
+        }
+
+        public void setBEGIN_TIME(long BEGIN_TIME) {
+            this.BEGIN_TIME = BEGIN_TIME;
+        }
+
+        public long getCREATE_TIME() {
+            return CREATE_TIME;
+        }
+
+        public void setCREATE_TIME(long CREATE_TIME) {
+            this.CREATE_TIME = CREATE_TIME;
+        }
+
+        public long getDELIVERY_TIME() {
+            return DELIVERY_TIME;
+        }
+
+        public void setDELIVERY_TIME(long DELIVERY_TIME) {
+            this.DELIVERY_TIME = DELIVERY_TIME;
+        }
+
+        public long getEND_TIME() {
+            return END_TIME;
+        }
+
+        public void setEND_TIME(long END_TIME) {
+            this.END_TIME = END_TIME;
+        }
+
+        public String getFBDW() {
+            return FBDW;
+        }
+
+        public void setFBDW(String FBDW) {
+            this.FBDW = FBDW;
+        }
+
+        public String getFBR() {
+            return FBR;
+        }
+
+        public void setFBR(String FBR) {
+            this.FBR = FBR;
+        }
+
+        public String getID() {
+            return ID;
+        }
+
+        public void setID(String ID) {
+            this.ID = ID;
+        }
+
+        public String getJJCD() {
+            return JJCD;
+        }
+
+        public void setJJCD(String JJCD) {
+            this.JJCD = JJCD;
+        }
+
+        public String getJSDW() {
+            return JSDW;
+        }
+
+        public void setJSDW(String JSDW) {
+            this.JSDW = JSDW;
+        }
+
+        public String getJSR() {
+            return JSR;
+        }
+
+        public void setJSR(String JSR) {
+            this.JSR = JSR;
+        }
+
+        public String getPUBLISHER() {
+            return PUBLISHER;
+        }
+
+        public void setPUBLISHER(String PUBLISHER) {
+            this.PUBLISHER = PUBLISHER;
+        }
+
+        public String getPUBLISHER_NAME() {
+            return PUBLISHER_NAME;
+        }
+
+        public void setPUBLISHER_NAME(String PUBLISHER_NAME) {
+            this.PUBLISHER_NAME = PUBLISHER_NAME;
+        }
+
+        public String getRECEIVER() {
+            return RECEIVER;
+        }
+
+        public void setRECEIVER(String RECEIVER) {
+            this.RECEIVER = RECEIVER;
+        }
+
+        public String getRECEIVER_NAME() {
+            return RECEIVER_NAME;
+        }
+
+        public void setRECEIVER_NAME(String RECEIVER_NAME) {
+            this.RECEIVER_NAME = RECEIVER_NAME;
+        }
+
+        public String getRWLY() {
+            return RWLY;
+        }
+
+        public void setRWLY(String RWLY) {
+            this.RWLY = RWLY;
+        }
+
+        public String getRWQYMS() {
+            return RWQYMS;
+        }
+
+        public void setRWQYMS(String RWQYMS) {
+            this.RWQYMS = RWQYMS;
+        }
+
+        public String getSPR() {
+            return SPR;
+        }
+
+        public void setSPR(String SPR) {
+            this.SPR = SPR;
+        }
+
+        public String getSTATUS() {
+            return STATUS;
+        }
+
+        public void setSTATUS(String STATUS) {
+            this.STATUS = STATUS;
+        }
+
+        public String getTASK_NAME() {
+            return TASK_NAME;
+        }
+
+        public void setTASK_NAME(String TASK_NAME) {
+            this.TASK_NAME = TASK_NAME;
+        }
+
+        public String getTASK_TYPE() {
+            return TASK_TYPE;
+        }
+
+        public void setTASK_TYPE(String TASK_TYPE) {
+            this.TASK_TYPE = TASK_TYPE;
+        }
+
+        public String getTYPENAME() {
+            return TYPENAME;
+        }
+
+        public void setTYPENAME(String TYPENAME) {
+            this.TYPENAME = TYPENAME;
+        }
+
+        public long getAPPROVED_TIME() {
+            return APPROVED_TIME;
+        }
+
+        public void setAPPROVED_TIME(long APPROVED_TIME) {
+            this.APPROVED_TIME = APPROVED_TIME;
+        }
+
+        public String getSPYJ() {
+            return SPYJ;
+        }
+
+        public void setSPYJ(String SPYJ) {
+            this.SPYJ = SPYJ;
+        }
+
+        public String getTYPEOFTASK() {
+            return TYPEOFTASK;
+        }
+
+        public void setTYPEOFTASK(String TYPEOFTASK) {
+            this.TYPEOFTASK = TYPEOFTASK;
+        }
+
+        public long getEXECUTE_END_TIME() {
+            return EXECUTE_END_TIME;
+        }
+
+        public void setEXECUTE_END_TIME(long EXECUTE_END_TIME) {
+            this.EXECUTE_END_TIME = EXECUTE_END_TIME;
+        }
+
+        public long getEXECUTE_START_TIME() {
+            return EXECUTE_START_TIME;
+        }
+
+        public void setEXECUTE_START_TIME(long EXECUTE_START_TIME) {
+            this.EXECUTE_START_TIME = EXECUTE_START_TIME;
+        }
+
+        public String getRWMS() {
+            return RWMS;
+        }
+
+        public void setRWMS(String RWMS) {
+            this.RWMS = RWMS;
+        }
     }
 }
 

@@ -90,38 +90,64 @@ public class ToDoActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GreenMissionTask greenMissionTask = (GreenMissionTask) adapter.getData().get(position);
-                switch (greenMissionTask.getStatus()) {
-                    case "0":
+                if (greenMissionTask.getExamine_status() == -1) {
 
-                    case "1":
 
-                    case "2":
+                    switch (greenMissionTask.getStatus()) {
+                        case "0":
 
-                        mIntent = new Intent(ToDoActivity.this, ArrangeTeamMembersActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
+                        case "1":
+                            mIntent = new Intent(ToDoActivity.this, AuditActivity.class);
+                            mIntent.putExtra("id", greenMissionTask.getId());
+                            mIntent.putExtra("position", position);
+                            startActivity(mIntent);
+                            break;
 
-                        break;
-                    case "3":
-                    case "4":
-                        mIntent = new Intent(ToDoActivity.this, MissionActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
-                        break;
-                    case "100":
-                    case "5":
-                    case "9":
-                        mIntent = new Intent(ToDoActivity.this, MissionRecorActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("taskId", greenMissionTask.getTaskid());
-                        startActivity(mIntent);
+                        case "2":
 
-                        break;
-                    default:
-                        break;
+                            mIntent = new Intent(ToDoActivity.this, ArrangeTeamMembersActivity.class);
+                            mIntent.putExtra("id", greenMissionTask.getId());
+                            mIntent.putExtra("position", position);
+                            startActivity(mIntent);
+
+                            break;
+                        case "3":
+                        case "4":
+                            mIntent = new Intent(ToDoActivity.this, MissionActivity.class);
+                            mIntent.putExtra("id", greenMissionTask.getId());
+                            mIntent.putExtra("position", position);
+                            startActivity(mIntent);
+                            break;
+                        case "7":
+                            mIntent = new Intent(ToDoActivity.this, AuditActivity.class);
+                            mIntent.putExtra("id", greenMissionTask.getId());
+                            mIntent.putExtra("position", position);
+
+                            startActivity(mIntent);
+                            break;
+                        case "100":
+                        case "5":
+
+                        case "9":
+                            mIntent = new Intent(ToDoActivity.this, MissionRecorActivity.class);
+                            mIntent.putExtra("id", greenMissionTask.getId());
+                            mIntent.putExtra("taskId", greenMissionTask.getTaskid());
+                            startActivity(mIntent);
+                            break;
+                        default:
+                            break;
+                    }
+
+                } else {
+                    //领导批示
+                    mIntent = new Intent(ToDoActivity.this, ApprovalActivity.class);
+                    mIntent.putExtra("id", greenMissionTask.getId());
+                    mIntent.putExtra("position", position);
+                    mIntent.putExtra("taskId", greenMissionTask.getTaskid());
+                    startActivity(mIntent);
+
                 }
+
             }
         });
 
@@ -139,12 +165,11 @@ public class ToDoActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length()==0){
+                if (editable.length() == 0) {
                     mNoCompleteTaskListRecyAdapter.setNewData(mGreenMissionTasks);
                 }
             }
         });
-
 
 
         mEtSeach.setOnKeyListener(new View.OnKeyListener() {
@@ -159,8 +184,8 @@ public class ToDoActivity extends BaseActivity {
                     String trim = mEtSeach.getText().toString().trim();
                     if (!TextUtils.isEmpty(trim)) {
                         List<GreenMissionTask> greenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
-                                .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()),GreenMissionTaskDao.Properties.Task_name.like("%" + trim + "%"))
-                                .whereOr(GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("100"))
+                                .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Task_name.like("%" + trim + "%"))
+                                .whereOr(GreenMissionTaskDao.Properties.Examine_status.eq(6),GreenMissionTaskDao.Properties.Examine_status.eq(5),GreenMissionTaskDao.Properties.Examine_status.eq(4),GreenMissionTaskDao.Properties.Examine_status.eq(2),GreenMissionTaskDao.Properties.Examine_status.eq(1),GreenMissionTaskDao.Properties.Examine_status.eq(0),GreenMissionTaskDao.Properties.Status.eq("1"), GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("7"), GreenMissionTaskDao.Properties.Status.eq("100"))
                                 .list();
                         mNoCompleteTaskListRecyAdapter.setNewData(greenMissionTasks);
                     }
@@ -176,8 +201,15 @@ public class ToDoActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent1(UpdateGreenMissionTaskOV event) {
+        int type = event.getType();
         int position = event.getPosition();
-        mNoCompleteTaskListRecyAdapter.setData(position, event.getMissionTask());
+        if (type==100){
+            mNoCompleteTaskListRecyAdapter.remove(position);
+        }else {
+
+            mNoCompleteTaskListRecyAdapter.setData(position, event.getMissionTask());
+        }
+
     }
 
     //'执行状态 0-未发布  1-已发布 2-已经审核 3-确认接受  4-任务开始  5-任务完成 7-不通过审核 9-退回修改(日志审核)';
@@ -195,7 +227,7 @@ public class ToDoActivity extends BaseActivity {
     private List<GreenMissionTask> getNoCompleteGreenMissionTasks() {
         mGreenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                 .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()))
-                .whereOr(GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("100"))
+                .whereOr(GreenMissionTaskDao.Properties.Examine_status.eq(6),GreenMissionTaskDao.Properties.Examine_status.eq(5),GreenMissionTaskDao.Properties.Examine_status.eq(4),GreenMissionTaskDao.Properties.Examine_status.eq(2),GreenMissionTaskDao.Properties.Examine_status.eq(1),GreenMissionTaskDao.Properties.Examine_status.eq(0),GreenMissionTaskDao.Properties.Status.eq("1"), GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("7"), GreenMissionTaskDao.Properties.Status.eq("100"))
                 .list();
         return mGreenMissionTasks;
     }

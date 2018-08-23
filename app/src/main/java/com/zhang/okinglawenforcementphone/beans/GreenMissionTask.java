@@ -47,7 +47,7 @@ public class GreenMissionTask {
     private String typename;
     private String typeoftask;
     private String userid;
-    private Boolean todo;       //是否已经加入代办
+    private int examine_status;
     private int drawLaLoType;                       //绘制类型（圆4或者多边形5）
     private String mcoordinateJson;             //经纬度范围
     @ToMany(referencedJoinProperty = "greenMemberId")
@@ -58,7 +58,7 @@ public class GreenMissionTask {
     /** Used for active entity operations. */
     @Generated(hash = 499486839)
     private transient GreenMissionTaskDao myDao;
-    @Generated(hash = 789338819)
+    @Generated(hash = 2056803312)
     public GreenMissionTask(Long id, String approved_person,
             String approved_person_name, Long approved_time, Long begin_time,
             Long create_time, Long delivery_time, Long end_time,
@@ -67,7 +67,7 @@ public class GreenMissionTask {
             String publisher_name, String receiver, String receiver_name,
             String rwly, String rwqyms, String spr, String spyj, String status,
             String task_area, String task_content, String task_name, int task_type,
-            String typename, String typeoftask, String userid, Boolean todo,
+            String typename, String typeoftask, String userid, int examine_status,
             int drawLaLoType, String mcoordinateJson) {
         this.id = id;
         this.approved_person = approved_person;
@@ -101,7 +101,7 @@ public class GreenMissionTask {
         this.typename = typename;
         this.typeoftask = typeoftask;
         this.userid = userid;
-        this.todo = todo;
+        this.examine_status = examine_status;
         this.drawLaLoType = drawLaLoType;
         this.mcoordinateJson = mcoordinateJson;
     }
@@ -300,11 +300,11 @@ public class GreenMissionTask {
     public void setUserid(String userid) {
         this.userid = userid;
     }
-    public Boolean getTodo() {
-        return this.todo;
+    public int getExamine_status() {
+        return this.examine_status;
     }
-    public void setTodo(Boolean todo) {
-        this.todo = todo;
+    public void setExamine_status(int examine_status) {
+        this.examine_status = examine_status;
     }
     public int getDrawLaLoType() {
         return this.drawLaLoType;
@@ -413,7 +413,7 @@ public class GreenMissionTask {
                 ", typename='" + typename + '\'' +
                 ", typeoftask='" + typeoftask + '\'' +
                 ", userid='" + userid + '\'' +
-                ", todo=" + todo +
+                ", examine_status=" + examine_status +
                 ", drawLaLoType=" + drawLaLoType +
                 ", mcoordinateJson='" + mcoordinateJson + '\'' +
                 ", members=" + members +

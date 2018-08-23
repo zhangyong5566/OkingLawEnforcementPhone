@@ -5,6 +5,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToOne;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.sql.Date;
 
@@ -20,6 +21,8 @@ public class GreenMedia {
     private String path;
     private String userid;
     private String taskid;
+    @Transient
+    private GreenLocation souceLocation;
     private Integer type;               //1表示日志图片  2表示视频  3表示语音   4签名图片
     private Long greenGreenLocationId;
     @ToOne(joinProperty = "greenGreenLocationId")
@@ -93,6 +96,15 @@ public class GreenMedia {
     public void setGreenGreenLocationId(Long greenGreenLocationId) {
         this.greenGreenLocationId = greenGreenLocationId;
     }
+
+    public GreenLocation getSouceLocation() {
+        return souceLocation;
+    }
+
+    public void setSouceLocation(GreenLocation souceLocation) {
+        this.souceLocation = souceLocation;
+    }
+
     @Generated(hash = 1068795426)
     private transient Long location__resolvedKey;
     /** To-one relationship, resolved on first access. */
@@ -164,6 +176,7 @@ public class GreenMedia {
                 ", path='" + path + '\'' +
                 ", userid='" + userid + '\'' +
                 ", taskid='" + taskid + '\'' +
+                ", souceLocation=" + souceLocation +
                 ", type=" + type +
                 ", greenGreenLocationId=" + greenGreenLocationId +
                 ", location=" + location +

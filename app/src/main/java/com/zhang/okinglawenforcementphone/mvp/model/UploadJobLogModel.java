@@ -11,8 +11,8 @@ import com.zhang.baselib.utils.Util;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.Point;
 import com.zhang.okinglawenforcementphone.beans.RecordLogOV;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadJobLogContract;
 
 import org.json.JSONArray;
@@ -63,6 +63,7 @@ public class UploadJobLogModel implements UploadJobLogContract.Model {
                         //提交文本资料
                         String result = responseBody.string();
                         Log.i("Oking", ">>>>>>>>>>>>>>>>>1" + result);
+                        Log.i("Oking5", ">>>>>>>>>>>>>>>>>1" + recordLogOV.toString());
                         JSONObject jsonObject = new JSONObject(result);
                         int count = jsonObject.getInt("total");
                         HashMap<String, Object> stringStringHashMap = new HashMap<>();
@@ -92,9 +93,9 @@ public class UploadJobLogModel implements UploadJobLogContract.Model {
                         stringStringHashMap.put("patrol", recordLogOV.getSummary());
                         stringStringHashMap.put("dzyj", recordLogOV.getLeaderSummary());
                         stringStringHashMap.put("status", 0);
-                        stringStringHashMap.put("other_part", recordLogOV.getParts());
+                        stringStringHashMap.put("other_part", recordLogOV.getParts()==null?"":recordLogOV.getParts());
                         stringStringHashMap.put("examine_status", 0);
-                        stringStringHashMap.put("equipment", recordLogOV.getEquipment());
+                        stringStringHashMap.put("equipment", recordLogOV.getEquipment()==null?"":recordLogOV.getEquipment());
 
                         //获取轨迹
                         getLocationTrajectory(recordLogOV, mGson);

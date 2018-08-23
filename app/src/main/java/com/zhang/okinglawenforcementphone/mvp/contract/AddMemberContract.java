@@ -21,4 +21,5 @@ public interface AddMemberContract {
 
         void addMemberFail(Throwable ex);
     }
+
 }

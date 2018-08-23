@@ -8,10 +8,10 @@ package com.apkfuns.logutils;
 
 public final class R {
     public static final class string {
-        public static final int app_name = 0x7f0b0045;
-        public static final int cancel = 0x7f0b0051;
-        public static final int copy = 0x7f0b0055;
-        public static final int success_copy = 0x7f0b0081;
-        public static final int sure = 0x7f0b0082;
+        public static final int app_name = 0x7f0c0045;
+        public static final int cancel = 0x7f0c0053;
+        public static final int copy = 0x7f0c0058;
+        public static final int success_copy = 0x7f0c0089;
+        public static final int sure = 0x7f0c008a;
     }
 }

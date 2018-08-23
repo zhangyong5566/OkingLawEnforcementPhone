@@ -31,10 +31,9 @@ import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceSTZJOV;
-import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

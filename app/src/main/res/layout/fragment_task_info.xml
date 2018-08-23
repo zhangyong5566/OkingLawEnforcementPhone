@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_bg"
+    android:padding="6dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_40"
+        android:layout_margin="@dimen/x_px_5"
+        android:hint="任务名称："
+        android:textColorHint="@color/bottom_nav_selected">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tv_taskname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:gravity="left|center_vertical"
+            android:maxLines="3"
+            android:padding="3dp"
+            android:textColor="#000"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_01"
+        android:layout_marginTop="@dimen/x_px_3"
+        android:background="@color/login_bg"></View>
+
+    <LinearLayout
+        android:id="@+id/ll_02"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_40"
+        android:layout_below="@id/ll_01"
+        android:layout_marginLeft="@dimen/x_px_5"
+        android:layout_marginRight="@dimen/x_px_5"
+        android:layout_marginTop="@dimen/y_px_5"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="性质："
+            android:textColorHint="@color/bottom_nav_selected">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/type_nature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:enabled="false"
+                android:gravity="left|center_vertical"
+                android:padding="@dimen/x_px_3"
+                android:textColor="#000"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="类型："
+            android:textColorHint="@color/bottom_nav_selected">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tv_tasktype"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:enabled="false"
+                android:gravity="left|center_vertical"
+                android:padding="@dimen/x_px_3"
+                android:textColor="#000"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_02"
+        android:layout_marginTop="@dimen/y_px_3"
+        android:background="@color/login_bg"></View>
+
+    <LinearLayout
+        android:id="@+id/ll_03"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_40"
+        android:layout_below="@id/ll_02"
+        android:layout_marginLeft="@dimen/x_px_5"
+        android:layout_marginRight="@dimen/x_px_5"
+        android:layout_marginTop="@dimen/y_px_5"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:id="@+id/tl_plan"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="计划："
+            android:textColorHint="@color/bottom_nav_selected">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/plan_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:enabled="false"
+                android:text="月计划"
+                android:gravity="left|center_vertical"
+                android:padding="@dimen/x_px_3"
+                android:textColor="#000"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/tl_item"
+            android:hint="事项："
+            android:textColorHint="@color/bottom_nav_selected">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/item_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:enabled="false"
+                android:text="河道管理执法巡查"
+                android:gravity="left|center_vertical"
+                android:padding="@dimen/x_px_3"
+                android:textColor="#000"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_03"
+        android:layout_marginTop="@dimen/y_px_3"
+        android:background="@color/login_bg"></View>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_04"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_100"
+        android:layout_below="@id/ll_03"
+        android:layout_marginLeft="@dimen/x_px_10"
+        android:layout_marginRight="@dimen/x_px_10"
+        android:layout_marginTop="@dimen/y_px_10"
+        android:hint="巡查区域："
+        android:textColorHint="@color/bottom_nav_selected">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/area_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:gravity="left|top"
+            android:maxLines="3"
+            android:padding="@dimen/x_px_3"
+            android:textColor="#000"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_04"
+        android:layout_marginTop="@dimen/y_px_3"
+        android:background="@color/login_bg"></View>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_05"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_100"
+        android:layout_below="@id/ll_04"
+        android:layout_marginLeft="@dimen/x_px_10"
+        android:layout_marginRight="@dimen/x_px_10"
+        android:layout_marginTop="@dimen/y_px_10"
+        android:hint="任务描述："
+        android:textColorHint="@color/bottom_nav_selected">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:enabled="false"
+            android:gravity="left|top"
+            android:padding="@dimen/x_px_3"
+            android:textColor="#000"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_05"
+        android:layout_marginTop="@dimen/x_px_3"
+        android:background="@color/login_bg"></View>
+
+    <TextView
+        android:id="@+id/tv_05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_05"
+        android:layout_marginTop="@dimen/y_px_6"
+        android:text="联合执法部门："
+        android:textColor="@color/bottom_nav_selected"
+        android:textSize="12sp" />
+
+
+    <com.zhy.view.flowlayout.TagFlowLayout
+        android:id="@+id/part_flow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_05"
+        android:layout_marginBottom="@dimen/y_px_3"
+        android:layout_marginTop="@dimen/y_px_6"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/part_other_editText"
+        android:layout_width="@dimen/x_px_80"
+        android:layout_height="@dimen/y_px_40"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/part_flow_layout"
+        android:layout_marginLeft="@dimen/x_px_6"
+        android:hint="其他"
+        android:maxLines="1"
+        android:textColor="@color/bottom_nav_selected"
+        android:textColorHint="@color/task_other_tx"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/part_other_editText"
+        android:layout_marginTop="@dimen/y_px_3"
+        android:background="@color/login_bg"></View>
+
+    <LinearLayout
+        android:id="@+id/ll_06"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_px_60"
+        android:layout_below="@id/part_other_editText"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left|center_vertical"
+            android:text="执法装备："
+            android:textColor="@color/bottom_nav_selected"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/equipment_textView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:maxLines="2"
+            android:textColor="@color/task_other_tx"
+            android:textSize="12sp" />
+
+
+        <Button
+            android:id="@+id/edit_Equipment_Btn"
+            android:layout_width="@dimen/x_px_40"
+            android:layout_height="@dimen/y_px_18"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/x_px_6"
+            android:background="@drawable/btn_waiting_selector"
+            android:text="..."
+            android:textColor="@color/colorMain6"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_06"
+        android:layout_marginTop="@dimen/y_px_3"
+        android:background="@color/login_bg"></View>
+</RelativeLayout>

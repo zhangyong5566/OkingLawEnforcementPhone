@@ -2,7 +2,6 @@ package com.zhang.okinglawenforcementphone.beans;
 
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.zhang.okinglawenforcementphone.adapter.ExpandableItemAdapter;
 import com.zhang.okinglawenforcementphone.adapter.ExpandableWrittenRecordAdapter;
 
 /**

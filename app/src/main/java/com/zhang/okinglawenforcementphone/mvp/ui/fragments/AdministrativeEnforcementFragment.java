@@ -59,6 +59,7 @@ public class AdministrativeEnforcementFragment extends Fragment {
             mInflate = inflater.inflate(R.layout.fragment_administrative_enforcement, container, false);
         }
         initView(mInflate);
+
         return mInflate;
     }
 

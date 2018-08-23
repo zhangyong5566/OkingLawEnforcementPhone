@@ -2,6 +2,8 @@ package com.zhang.okinglawenforcementphone;
 
 import android.content.Context;
 
+import com.zhang.baselib.ui.views.RxDialogSureCancel;
+import com.zhang.baselib.utils.ActivityUtil;
 import com.zhang.okinglawenforcementphone.beans.DaoMaster;
 import com.zhang.okinglawenforcementphone.beans.DaoSession;
 import com.zhang.okinglawenforcementphone.db.MyGreenDaoDbHelper;
@@ -44,6 +46,7 @@ public class GreenDAOManager {
 
     //升级表
     public void updateTable(){
+
        mDevOpenHelper.onUpgrade(mDevOpenHelper.getWritableDatabase(), 1, 1);
     }
 }

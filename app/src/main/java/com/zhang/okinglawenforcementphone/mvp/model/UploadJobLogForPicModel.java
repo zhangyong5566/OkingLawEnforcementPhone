@@ -11,15 +11,13 @@ import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.Point;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadJobLogForPicContract;
 
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +95,7 @@ public class UploadJobLogForPicModel implements UploadJobLogForPicContract.Model
                                 map.put("datetime", OkingContract.SDF.format(media.getTime()));
                                 ext = gson.toJson(map);
                             }
-
+                            Log.i("Oking5",ext);
                             photoParams.put("ext", RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), ext));
 
                             photoParams.put("files" + "\"; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/png"), file));

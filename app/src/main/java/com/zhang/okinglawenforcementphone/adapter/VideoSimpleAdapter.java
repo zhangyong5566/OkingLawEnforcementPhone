@@ -10,9 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhang.baselib.BaseApplication;
@@ -20,10 +18,12 @@ import com.zhang.baselib.GlideApp;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.VideoActivity;
+import com.zhang.okinglawenforcementphone.mvp.ui.activitys.PlayVideoOnlineActivity;
 
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/4/25/025.
@@ -72,29 +72,21 @@ public class VideoSimpleAdapter extends BaseQuickAdapter<GreenMedia, BaseViewHol
                 .error(R.drawable.loadfail)
                 .into(sdv);
 
-        sdv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        helper.addOnClickListener(R.id.sdv);
+        if (onClickListener != null && canAdd) {
+            sdv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
 
-
-                Intent intent = new Intent(activity, VideoActivity.class);
-                intent.setData(uri);
-                activity.startActivity(intent);
-            }
-        });
-        sdv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onClickListener != null && canAdd) {
                     onClickListener.onLongItemClick(VideoSimpleAdapter.this, item, layoutPosition);
+                    bitmapCache.remove(uri);
+
+
+                    return false;
                 }
+            });
+        }
 
-                bitmapCache.remove(uri);
-
-
-                return false;
-            }
-        });
 
         String path = uri.getPath();
 

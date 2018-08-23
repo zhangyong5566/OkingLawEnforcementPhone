@@ -2,9 +2,8 @@ package com.zhang.okinglawenforcementphone.mvp.model;
 
 import android.util.Log;
 
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.zhang.baselib.http.BaseHttpFactory;
-import com.zhang.baselib.utils.DataUtil;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.beans.GreenMember;
 import com.zhang.okinglawenforcementphone.beans.GreenMemberDao;
@@ -12,8 +11,8 @@ import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
 import com.zhang.okinglawenforcementphone.beans.Mission;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadHttpMissionContract;
 
 import org.json.JSONArray;
@@ -37,118 +36,117 @@ import okhttp3.ResponseBody;
 public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
     private LoadHttpMissionContract.Presenter mPresenter;
     private int mPosition = 0;
+    private Gson mGson = new Gson();
     private ArrayList<GreenMissionTask> mGreenMissionTasks = new ArrayList<>();
-    private ArrayList<Mission> missions;
     private GreenMissionTask mUnique;
+    private List<Mission.RecordsBean> mRecords;
+
     public LoadHttpMissionModel(LoadHttpMissionContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
 
     @Override
-    public void loadHttpMission(int classify, String receiver) {
+    public void loadHttpMission(int classify, final String receiver) {
         BaseHttpFactory.getInstence()
                 .createService(GDWaterService.class, Api.BASE_URL)
                 .loadHttpMission(receiver, classify, "-1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<ResponseBody, Observable<Mission>>() {
+                .concatMap(new Function<ResponseBody, Observable<Mission.RecordsBean>>() {
                     @Override
-                    public Observable<Mission> apply(ResponseBody responseBody) throws Exception {
+                    public Observable<Mission.RecordsBean> apply(ResponseBody responseBody) throws Exception {
                         mGreenMissionTasks .clear();
                         mPosition = 0;
                         final String result = responseBody.string();
-                        final JSONObject object = new JSONObject(result);
-                        final JSONArray missionJSONArray = object.getJSONArray("rows");
-
-
-                        missions = DataUtil.praseJson(missionJSONArray.toString(),
-                                new TypeToken<ArrayList<Mission>>() {
-                                });
-
-                        if (missions.size()>0){
-                            return Observable.fromIterable(missions);
-                        }else{
+                        Log.i("Oking1",result);
+                        Mission mission = mGson.fromJson(result, Mission.class);
+                        mRecords = mission.getRecords();
+                        if (mRecords !=null&& mRecords.size()>0){
+                            return Observable.fromIterable(mRecords);
+                        }else {
                             return Observable.error(new Throwable("NONE"));
                         }
 
                     }
-                }).concatMap(new Function<Mission, ObservableSource<ResponseBody>>() {
+                }).concatMap(new Function<Mission.RecordsBean, ObservableSource<ResponseBody>>() {
             @Override
-            public Observable<ResponseBody> apply(Mission mission) throws Exception {
+            public Observable<ResponseBody> apply(Mission.RecordsBean mission) throws Exception {
 
-
-                mUnique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mission.getId())).unique();
+                mUnique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mission.getID())).unique();
                 if (mUnique != null) {
-                    mUnique.setApproved_person(mission.getApproved_person());
-                    mUnique.setApproved_person_name(mission.getApproved_person_name());
-                    mUnique.setApproved_time(mission.getApproved_time());
-                    mUnique.setBegin_time(mission.getBegin_time());
-                    mUnique.setCreate_time(mission.getCreate_time());
-                    mUnique.setDelivery_time(mission.getDelivery_time());
-                    mUnique.setEnd_time(mission.getEnd_time());
-                    mUnique.setExecute_end_time(mission.getExecute_end_time());
-                    mUnique.setExecute_start_time(mission.getExecute_start_time());
-                    mUnique.setFbdw(mission.getFbdw());
-                    mUnique.setFbr(mission.getFbr());
-                    mUnique.setJjcd(mission.getJjcd());
-                    mUnique.setJsdw(mission.getJsdw());
-                    mUnique.setJsr(mission.getJsr());
-                    mUnique.setPublisher(mission.getPublisher());
-                    mUnique.setPublisher_name(mission.getPublisher_name());
-                    mUnique.setReceiver(mission.getReceiver());
-                    mUnique.setReceiver_name(mission.getReceiver_name());
-                    mUnique.setRwly(mission.getRwly());
-                    mUnique.setRwqyms(mission.getRwqyms());
-                    mUnique.setTask_name(mission.getTask_name());
-                    mUnique.setSpr(mission.getSpr());
-                    mUnique.setSpyj(mission.getSpyj());
-                    mUnique.setTask_area(mission.getTask_content());
-                    mUnique.setTask_content(mission.getTask_content());
-                    mUnique.setTypename(mission.getTypename());
-                    mUnique.setTypeoftask(mission.getTypeoftask());
-                    mUnique.setTaskid(mission.getId());
+                    mUnique.setApproved_person(mission.getAPPROVED_PERSON());
+                    mUnique.setApproved_person_name(mission.getAPPROVED_PERSON_NAME());
+                    mUnique.setApproved_time(mission.getAPPROVED_TIME());
+                    mUnique.setBegin_time(mission.getBEGIN_TIME());
+                    mUnique.setStatus(mission.getSTATUS());
+                    mUnique.setCreate_time(mission.getCREATE_TIME());
+                    mUnique.setDelivery_time(mission.getDELIVERY_TIME());
+                    mUnique.setEnd_time(mission.getEND_TIME());
+                    mUnique.setExecute_end_time(mission.getEXECUTE_END_TIME());
+                    mUnique.setExecute_start_time(mission.getEXECUTE_START_TIME());
+                    mUnique.setFbdw(mission.getFBDW());
+                    mUnique.setFbr(mission.getFBR());
+                    mUnique.setExamine_status(mission.getEXAMINE_STATUS());
+                    mUnique.setJjcd(mission.getJJCD());
+                    mUnique.setJsdw(mission.getJSDW());
+                    mUnique.setJsr(mission.getJSR());
+                    mUnique.setPublisher(mission.getPUBLISHER());
+                    mUnique.setPublisher_name(mission.getPUBLISHER_NAME());
+                    mUnique.setReceiver(mission.getRECEIVER());
+                    mUnique.setReceiver_name(mission.getRECEIVER_NAME());
+                    mUnique.setRwly(mission.getRWLY());
+                    mUnique.setRwqyms(mission.getRWQYMS());
+                    mUnique.setTask_name(mission.getTASK_NAME());
+                    mUnique.setSpr(mission.getSPR());
+                    mUnique.setSpyj(mission.getSPYJ());
+                    mUnique.setTask_area(mission.getRWQYMS());
+                    mUnique.setTask_content(mission.getRWMS());
+                    mUnique.setTypename(mission.getTYPENAME());
+                    mUnique.setTypeoftask(mission.getTYPEOFTASK());
+                    mUnique.setTaskid(mission.getID());
                     mUnique.setUserid(OkingContract.CURRENTUSER.getUserid());
 
 
                 } else {
                     mUnique = new GreenMissionTask();
-                    mUnique.setApproved_person(mission.getApproved_person());
-                    mUnique.setApproved_person_name(mission.getApproved_person_name());
-                    mUnique.setApproved_time(mission.getApproved_time());
-                    mUnique.setBegin_time(mission.getBegin_time());
-                    mUnique.setCreate_time(mission.getCreate_time());
-                    mUnique.setDelivery_time(mission.getDelivery_time());
-                    mUnique.setEnd_time(mission.getEnd_time());
-                    mUnique.setExecute_end_time(mission.getExecute_end_time());
-                    mUnique.setExecute_start_time(mission.getExecute_start_time());
-                    mUnique.setFbdw(mission.getFbdw());
-                    mUnique.setFbr(mission.getFbr());
-                    mUnique.setJjcd(mission.getJjcd());
-                    mUnique.setJsdw(mission.getJsdw());
-                    mUnique.setJsr(mission.getJsr());
-                    mUnique.setPublisher(mission.getPublisher());
-                    mUnique.setPublisher_name(mission.getPublisher_name());
-                    mUnique.setReceiver(mission.getReceiver());
-                    mUnique.setReceiver_name(mission.getReceiver_name());
-                    mUnique.setRwly(mission.getRwly());
-                    mUnique.setRwqyms(mission.getRwqyms());
-                    mUnique.setSpr(mission.getSpr());
-                    mUnique.setSpyj(mission.getSpyj());
-                    mUnique.setStatus(mission.getStatus());
-                    mUnique.setTask_area(mission.getTask_content());
-                    mUnique.setTask_name(mission.getTask_name());
-                    mUnique.setTask_content(mission.getTask_content());
-                    mUnique.setTypename(mission.getTypename());
-                    mUnique.setTypeoftask(mission.getTypeoftask());
-                    mUnique.setTaskid(mission.getId());
+                    mUnique.setApproved_person(mission.getAPPROVED_PERSON());
+                    mUnique.setApproved_person_name(mission.getAPPROVED_PERSON_NAME());
+                    mUnique.setApproved_time(mission.getAPPROVED_TIME());
+                    mUnique.setBegin_time(mission.getBEGIN_TIME());
+                    mUnique.setCreate_time(mission.getCREATE_TIME());
+                    mUnique.setDelivery_time(mission.getDELIVERY_TIME());
+                    mUnique.setEnd_time(mission.getEND_TIME());
+                    mUnique.setExecute_end_time(mission.getEXECUTE_END_TIME());
+                    mUnique.setExecute_start_time(mission.getEXECUTE_START_TIME());
+                    mUnique.setFbdw(mission.getFBDW());
+                    mUnique.setFbr(mission.getFBR());
+                    mUnique.setJjcd(mission.getJJCD());
+                    mUnique.setJsdw(mission.getJSDW());
+                    mUnique.setJsr(mission.getJSR());
+                    mUnique.setPublisher(mission.getPUBLISHER());
+                    mUnique.setPublisher_name(mission.getPUBLISHER_NAME());
+                    mUnique.setReceiver(mission.getRECEIVER());
+                    mUnique.setReceiver_name(mission.getRECEIVER_NAME());
+                    mUnique.setRwly(mission.getRWLY());
+                    mUnique.setRwqyms(mission.getRWQYMS());
+                    mUnique.setExamine_status(mission.getEXAMINE_STATUS());
+                    mUnique.setSpr(mission.getSPR());
+                    mUnique.setSpyj(mission.getSPYJ());
+                    mUnique.setStatus(mission.getSTATUS());
+                    mUnique.setTask_area(mission.getRWQYMS());
+                    mUnique.setTask_name(mission.getTASK_NAME());
+                    mUnique.setTask_content(mission.getRWMS());
+                    mUnique.setTypename(mission.getTYPENAME());
+                    mUnique.setTypeoftask(mission.getTYPEOFTASK());
+                    mUnique.setTaskid(mission.getID());
                     mUnique.setUserid(OkingContract.CURRENTUSER.getUserid());
                     long id = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(mUnique);
 
                     GreenMember leader = new GreenMember();
-                    leader.setUsername(mission.getReceiver_name());
-                    leader.setUserid(mission.getReceiver());
-                    leader.setTaskid(mission.getId());
+                    leader.setUsername(mission.getRECEIVER_NAME());
+                    leader.setUserid(mission.getRECEIVER());
+                    leader.setTaskid(mission.getID());
                     leader.setGreenMemberId(id);
                     leader.setPost("任务负责人");
                     GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(leader);
@@ -158,7 +156,7 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
 
                 return BaseHttpFactory.getInstence()
                         .createService(GDWaterService.class, Api.BASE_URL)
-                        .loadMember(mission.getId());
+                        .loadMember(mission.getID());
             }
         }).retry(1, new Predicate<Throwable>() {
             @Override
@@ -200,11 +198,11 @@ public class LoadHttpMissionModel implements LoadHttpMissionContract.Model {
 
                 }
                 mPosition++;
-                mPresenter.loadHttpMissionProgress(missions.size(), mPosition);
+                mPresenter.loadHttpMissionProgress(mRecords.size(), mPosition);
 
                 GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mUnique);
                 mGreenMissionTasks.add(mUnique);
-                if (mPosition == missions.size()) {
+                if (mPosition == mRecords.size()) {
                     mPresenter.loadHttpMissionSucc(mGreenMissionTasks);
                 }
             }

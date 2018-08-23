@@ -784,7 +784,7 @@ public class ExpandableWrittenRecordAdapter extends BaseMultiItemQuickAdapter<Mu
         params.put("bxwrname", askingPeople);
         params.put("bxwridcode", askingIdcard);
         params.put("bxwrposition", askingPosition);
-        params.put("bxwrdept", askingPosition);
+        params.put("bxwrdept", askingWorkUnits);
         params.put("bxwraddr", address2);
         params.put("zfryintroduction", "我是" + enforcementName + "执法人员，现在我需要问一些问题，你要如实回答。");
         params.put("jllrrid", OkingContract.CURRENTUSER.getUserid());

@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
@@ -52,12 +53,12 @@ public class VideoRecordActivity extends EaseBaseActivity implements
     private VideoView mVideoView;// to display video
     String localPath = "";// path to save recorded video
     private Camera mCamera;
-    private int previewWidth = 480;
+    private int previewWidth = 640;
     private int previewHeight = 480;
     private Chronometer chronometer;
     private int frontCamera = 0; // 0 is back camera，1 is front camera
     private Button btn_switch;
-    Camera.Parameters cameraParameters = null;
+
     private SurfaceHolder mSurfaceHolder;
     int defaultVideoFrameRate = -1;
     SimpleDateFormat mSdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -124,9 +125,11 @@ public class VideoRecordActivity extends EaseBaseActivity implements
             Camera.Parameters camParams = mCamera.getParameters();
             mCamera.lock();
             mSurfaceHolder = mVideoView.getHolder();
+            mCamera.cancelAutoFocus();          //自动对焦
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
             mCamera.setDisplayOrientation(90);
+
 
         } catch (RuntimeException ex) {
             EMLog.e("video", "init Camera fail " + ex.getMessage());
@@ -276,6 +279,7 @@ public class VideoRecordActivity extends EaseBaseActivity implements
             if (!initRecorder())
                 return false;
         }
+
         mediaRecorder.setOnInfoListener(this);
         mediaRecorder.setOnErrorListener(this);
         mediaRecorder.start();
@@ -303,18 +307,18 @@ public class VideoRecordActivity extends EaseBaseActivity implements
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 //        mediaRecorder.setOrientationHint(90);
-//        if (frontCamera == 1) {
-//            mediaRecorder.setOrientationHint(270);
-//        } else {
-//            mediaRecorder.setOrientationHint(90);
-//        }
+        if (frontCamera == 1) {
+            mediaRecorder.setOrientationHint(270);
+        } else {
+            mediaRecorder.setOrientationHint(90);
+        }
 
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         // set resolution, should be set after the format and encoder was set
         mediaRecorder.setVideoSize(previewWidth, previewHeight);
-        mediaRecorder.setVideoEncodingBitRate(384 * 1024);
+        mediaRecorder.setVideoEncodingBitRate(900*1024);
         // set frame rate, should be set after the format and encoder was set
         if (defaultVideoFrameRate != -1) {
             mediaRecorder.setVideoFrameRate(defaultVideoFrameRate);
@@ -348,8 +352,10 @@ public class VideoRecordActivity extends EaseBaseActivity implements
         if (mediaRecorder != null) {
             mediaRecorder.setOnErrorListener(null);
             mediaRecorder.setOnInfoListener(null);
+
             try {
                 mediaRecorder.stop();
+
             } catch (Exception e) {
                 EMLog.e("video", "stopRecording error:" + e.getMessage());
             }

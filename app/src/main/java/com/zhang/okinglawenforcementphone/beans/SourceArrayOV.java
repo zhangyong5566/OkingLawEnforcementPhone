@@ -9,6 +9,15 @@ import java.util.List;
 public class SourceArrayOV {
     private int mType;
     private String mSource;
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public int getType() {
         return mType;
@@ -31,6 +40,7 @@ public class SourceArrayOV {
         return "SourceArrayOV{" +
                 "mType=" + mType +
                 ", mSource='" + mSource + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

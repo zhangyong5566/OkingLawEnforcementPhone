@@ -13,15 +13,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.dd.CircularProgressButton;
+import com.jaeger.library.StatusBarUtil;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.http.progress.ProgressListener;
@@ -31,15 +29,12 @@ import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.CrashUtil;
-import com.zhang.baselib.utils.DeviceUtil;
-import com.zhang.baselib.utils.FileUtil;
 import com.zhang.baselib.utils.LocationUtil;
 import com.zhang.baselib.utils.NetUtil;
 import com.zhang.baselib.utils.PermissionUtil;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
-import com.zhang.okinglawenforcementphone.SendEmailManager;
-import com.zhang.okinglawenforcementphone.htttp.Api;
+import com.zhang.okinglawenforcementphone.http.Api;
 import com.zhang.okinglawenforcementphone.mvp.contract.AppVersionContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoginContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.AppVersionPresenter;
@@ -51,7 +46,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,13 +66,9 @@ public class LoginActivity extends BaseActivity {
     EditText passwordEditText;
     @BindView(R.id.save_pwd_button)
     CheckBox savePwdCheckBox;
-    @BindView(R.id.animation_view)
-    LottieAnimationView mAnimationView;
     private String mName;
     private String mPwd;
     private Unbinder mBind;
-    @BindView(R.id.tv_version)
-    TextView tvVersion;
     private String mNewDownloadUrl;
     private RxDialogSure mRxDialogSure;
     private RxDialogLoading mRxDialogLoading;
@@ -91,6 +81,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        StatusBarUtil.setTransparent(this);
         mBind = ButterKnife.bind(this, this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPm();
@@ -122,7 +113,6 @@ public class LoginActivity extends BaseActivity {
         //初始化化数据存储
         GreenDAOManager.getInstence().initGreenDao(this);
         CrashUtil.getInstance(BaseApplication.getApplictaion()).init();
-        tvVersion.setText("当前版本号：v" + DeviceUtil.getAppVersionName(BaseApplication.getApplictaion()));
 
 //        int o =  1/0;
         //检测更新

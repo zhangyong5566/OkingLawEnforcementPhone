@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_okinglawenforcementphone" default="compile.module.okinglawenforcementphone">
+  <dirname property="module.okinglawenforcementphone.basedir" file="${ant.file.module_okinglawenforcementphone}"/>
+  
+  <property name="module.jdk.home.okinglawenforcementphone" value="${jdk.home.1.8}"/>
+  <property name="module.jdk.bin.okinglawenforcementphone" value="${jdk.bin.1.8}"/>
+  <property name="module.jdk.classpath.okinglawenforcementphone" value="jdk.classpath.1.8"/>
+  
+  <property name="compiler.args.okinglawenforcementphone" value="-encoding UTF-8 -source 1.7 -target 1.8 ${compiler.args}"/>
+  
+  <property name="okinglawenforcementphone.output.dir" value="${module.okinglawenforcementphone.basedir}/build/classes/production/OkingLawEnforcementPhone"/>
+  <property name="okinglawenforcementphone.testoutput.dir" value="${module.okinglawenforcementphone.basedir}/build/classes/test/OkingLawEnforcementPhone"/>
+  
+  <path id="okinglawenforcementphone.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="okinglawenforcementphone.module.production.classpath">
+    <path refid="${module.jdk.classpath.okinglawenforcementphone}"/>
+  </path>
+  
+  <path id="okinglawenforcementphone.runtime.production.module.classpath">
+    <pathelement location="${okinglawenforcementphone.output.dir}"/>
+  </path>
+  
+  <path id="okinglawenforcementphone.module.classpath">
+    <path refid="${module.jdk.classpath.okinglawenforcementphone}"/>
+    <pathelement location="${okinglawenforcementphone.output.dir}"/>
+  </path>
+  
+  <path id="okinglawenforcementphone.runtime.module.classpath">
+    <pathelement location="${okinglawenforcementphone.testoutput.dir}"/>
+    <pathelement location="${okinglawenforcementphone.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.okinglawenforcementphone">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.okinglawenforcementphone">
+    <patternset refid="excluded.from.module.okinglawenforcementphone"/>
+  </patternset>
+  
+  
+  <target name="compile.module.okinglawenforcementphone" depends="compile.module.okinglawenforcementphone.production,compile.module.okinglawenforcementphone.tests" description="Compile module OkingLawEnforcementPhone"/>
+  
+  <target name="compile.module.okinglawenforcementphone.production" depends="register.custom.compilers" description="Compile module OkingLawEnforcementPhone; production classes"/>
+  
+  <target name="compile.module.okinglawenforcementphone.tests" depends="register.custom.compilers,compile.module.okinglawenforcementphone.production" description="compile module OkingLawEnforcementPhone; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.okinglawenforcementphone" description="cleanup module">
+    <delete dir="${okinglawenforcementphone.output.dir}"/>
+    <delete dir="${okinglawenforcementphone.testoutput.dir}"/>
+  </target>
+</project>

@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <uses-feature android:name="android.hardware.camera2.full" />
     <uses-feature android:name="android.hardware.camera" />
@@ -41,13 +42,21 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".mvp.ui.activitys.LoginActivity"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/LoginAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 设置key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="26c7c12d8952b9db18af6439616b25aa" />
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -67,7 +76,8 @@
 
         <activity
             android:name=".mvp.ui.activitys.MainActivity"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".mvp.ui.activitys.PatrolsToReleaseActivity"
             android:screenOrientation="portrait" />
@@ -91,12 +101,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activitys.ShootActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name=".mvp.ui.activitys.VideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -207,7 +211,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activitys.ToDoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".mvp.ui.activitys.SerchActivity"
             android:screenOrientation="portrait" />
@@ -257,8 +262,23 @@
         <activity
             android:name=".mvp.ui.activitys.ChangePasswordActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activitys.BinnerContentActivity" />
-        <activity android:name=".mvp.ui.activitys.EvidenceManagerActivity"></activity>
+        <activity
+            android:name=".mvp.ui.activitys.BinnerContentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.EvidenceManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.AuditActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".mvp.ui.activitys.ApprovalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activitys.PlayVideoOnlineActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

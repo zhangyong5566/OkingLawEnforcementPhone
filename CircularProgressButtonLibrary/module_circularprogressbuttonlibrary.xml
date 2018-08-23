@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_circularprogressbuttonlibrary" default="compile.module.circularprogressbuttonlibrary">
+  <dirname property="module.circularprogressbuttonlibrary.basedir" file="${ant.file.module_circularprogressbuttonlibrary}"/>
+  
+  <property name="module.jdk.home.circularprogressbuttonlibrary" value="${jdk.home.android_api_27_platform}"/>
+  <property name="module.jdk.bin.circularprogressbuttonlibrary" value="${jdk.bin.android_api_27_platform}"/>
+  <property name="module.jdk.classpath.circularprogressbuttonlibrary" value="jdk.classpath.android_api_27_platform"/>
+  
+  <property name="compiler.args.circularprogressbuttonlibrary" value="-encoding UTF-8 -source 1.7 -target 1.8 ${compiler.args}"/>
+  
+  <property name="circularprogressbuttonlibrary.output.dir" value="${module.circularprogressbuttonlibrary.basedir}/build/intermediates/classes/debug"/>
+  <property name="circularprogressbuttonlibrary.testoutput.dir" value="${module.circularprogressbuttonlibrary.basedir}/build/intermediates/classes/test/debug"/>
+  
+  <path id="circularprogressbuttonlibrary.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="circularprogressbuttonlibrary.module.production.classpath">
+    <path refid="${module.jdk.classpath.circularprogressbuttonlibrary}"/>
+  </path>
+  
+  <path id="circularprogressbuttonlibrary.runtime.production.module.classpath">
+    <pathelement location="${circularprogressbuttonlibrary.output.dir}"/>
+  </path>
+  
+  <path id="circularprogressbuttonlibrary.module.classpath">
+    <path refid="${module.jdk.classpath.circularprogressbuttonlibrary}"/>
+    <pathelement location="${circularprogressbuttonlibrary.output.dir}"/>
+  </path>
+  
+  <path id="circularprogressbuttonlibrary.runtime.module.classpath">
+    <pathelement location="${circularprogressbuttonlibrary.testoutput.dir}"/>
+    <pathelement location="${circularprogressbuttonlibrary.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.circularprogressbuttonlibrary">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.circularprogressbuttonlibrary">
+    <patternset refid="excluded.from.module.circularprogressbuttonlibrary"/>
+  </patternset>
+  
+  <path id="circularprogressbuttonlibrary.module.sourcepath">
+    <dirset dir="${module.circularprogressbuttonlibrary.basedir}">
+      <include name="build/generated/source/apt/debug"/>
+      <include name="build/generated/source/r/debug"/>
+      <include name="build/generated/source/aidl/debug"/>
+      <include name="build/generated/source/buildConfig/debug"/>
+      <include name="src/main/res"/>
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="circularprogressbuttonlibrary.module.test.sourcepath">
+    <dirset dir="${module.circularprogressbuttonlibrary.basedir}">
+      <include name="build/generated/source/r/androidTest/debug"/>
+      <include name="build/generated/source/aidl/androidTest/debug"/>
+      <include name="build/generated/source/buildConfig/androidTest/debug"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.circularprogressbuttonlibrary" depends="compile.module.circularprogressbuttonlibrary.production,compile.module.circularprogressbuttonlibrary.tests" description="Compile module CircularProgressButtonLibrary"/>
+  
+  <target name="compile.module.circularprogressbuttonlibrary.production" depends="register.custom.compilers" description="Compile module CircularProgressButtonLibrary; production classes">
+    <mkdir dir="${circularprogressbuttonlibrary.output.dir}"/>
+    <javac2 destdir="${circularprogressbuttonlibrary.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.circularprogressbuttonlibrary}/javac">
+      <compilerarg line="${compiler.args.circularprogressbuttonlibrary}"/>
+      <bootclasspath refid="circularprogressbuttonlibrary.module.bootclasspath"/>
+      <classpath refid="circularprogressbuttonlibrary.module.production.classpath"/>
+      <src refid="circularprogressbuttonlibrary.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.circularprogressbuttonlibrary"/>
+    </javac2>
+    
+    <copy todir="${circularprogressbuttonlibrary.output.dir}">
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/apt/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/r/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/aidl/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/buildConfig/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/src/main/res">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.circularprogressbuttonlibrary.tests" depends="register.custom.compilers,compile.module.circularprogressbuttonlibrary.production" description="compile module CircularProgressButtonLibrary; test classes" unless="skip.tests">
+    <mkdir dir="${circularprogressbuttonlibrary.testoutput.dir}"/>
+    <javac2 destdir="${circularprogressbuttonlibrary.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.circularprogressbuttonlibrary}/javac">
+      <compilerarg line="${compiler.args.circularprogressbuttonlibrary}"/>
+      <bootclasspath refid="circularprogressbuttonlibrary.module.bootclasspath"/>
+      <classpath refid="circularprogressbuttonlibrary.module.classpath"/>
+      <src refid="circularprogressbuttonlibrary.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.circularprogressbuttonlibrary"/>
+    </javac2>
+    
+    <copy todir="${circularprogressbuttonlibrary.testoutput.dir}">
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/r/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/aidl/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.circularprogressbuttonlibrary.basedir}/build/generated/source/buildConfig/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.circularprogressbuttonlibrary" description="cleanup module">
+    <delete dir="${circularprogressbuttonlibrary.output.dir}"/>
+    <delete dir="${circularprogressbuttonlibrary.testoutput.dir}"/>
+  </target>
+</project>

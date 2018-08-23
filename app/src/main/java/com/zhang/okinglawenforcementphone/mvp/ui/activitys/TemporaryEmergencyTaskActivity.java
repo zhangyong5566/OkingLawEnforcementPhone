@@ -14,11 +14,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +36,6 @@ import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.EmergencyMemberAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
-import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.ApproverBean;
 import com.zhang.okinglawenforcementphone.beans.EmergencyMemberGson;
 import com.zhang.okinglawenforcementphone.beans.EmergencyTaskOV;
@@ -47,8 +44,8 @@ import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.LatLngListOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
-import com.zhang.okinglawenforcementphone.htttp.Api;
-import com.zhang.okinglawenforcementphone.htttp.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.http.Api;
+import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.ApproverPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
@@ -426,7 +423,6 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                     mIntent.putExtra("bottom", mLatLngListOV.getBottom());
                     mIntent.putExtra("zoom", mLatLngListOV.getZoom());
                 }
-
                 startActivity(mIntent);
                 break;
             default:
@@ -602,7 +598,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
         final String taskName = mEtTaskname.getText().toString().trim();
         String members = mListItemMissionMember.getText().toString().trim();
         final String missionDetail = mListItemMissionDetail.getText().toString().trim();
-        String description = mEtDescription.getText().toString().trim();
+        final String description = mEtDescription.getText().toString().trim();
         final String beginTime = mBtSelectBegintime.getText().toString();
         final String endTime = mBtSelectEndtime.getText().toString();
         if (mSpTasktype.getText().toString().trim().equals("*请选择")) {
@@ -664,7 +660,6 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                 int code = jsonObject.getInt("code");
                                 if (code == 400) {
                                     final String taskid = jsonObject.getString("taskid");
-
                                     Schedulers.io().createWorker().schedule(new Runnable() {
                                         @Override
                                         public void run() {
@@ -674,15 +669,20 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                             greenMissionTask.setStatus("3");
                                             greenMissionTask.setTask_name(taskName);
                                             greenMissionTask.setJjcd("1");
+                                            greenMissionTask.setTask_content(description);
                                             greenMissionTask.setRwqyms(missionDetail);
                                             greenMissionTask.setBegin_time(mBeginMillseconds);
                                             greenMissionTask.setEnd_time(mEndMillseconds);
                                             greenMissionTask.setUserid(OkingContract.CURRENTUSER.getUserid());
                                             greenMissionTask.setTypeoftask(mTasktype);
+                                            greenMissionTask.setRwly(mSource);
+                                            greenMissionTask.setExamine_status(-1);
                                             greenMissionTask.setTypename(mSpTasknature.getText().toString());
                                             greenMissionTask.setApproved_person_name(mApprover);
+                                            greenMissionTask.setApproved_person(OkingContract.CURRENTUSER.getUserid());
                                             greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
                                             greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
+                                            greenMissionTask.setTask_area(missionDetail);
                                             if (mLatLngListOV != null) {
                                                 greenMissionTask.setDrawLaLoType(mLatLngListOV.getType());
 

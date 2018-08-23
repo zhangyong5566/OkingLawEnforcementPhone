@@ -27,6 +27,9 @@ public class ReLoginInterceptor implements Interceptor {
         source.request(Long.MAX_VALUE);
         String respString = source.buffer().clone().readString(Charset.defaultCharset());
         Log.i("Oking", "############>>>" + respString);
+        if (respString.contains("parent.location.href='/gdWater/login/initPage")) {
+            Log.i("Oking", "登录信息已失效请重新登录");
+        }
         return response;
     }
 }

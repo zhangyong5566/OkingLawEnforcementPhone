@@ -47,8 +47,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     //加密
     compile 'net.zetetic:android-database-sqlcipher:3.5.6'
-    implementation files('libs/commons-lang3-3.0-beta.jar')
+    compile files('libs/commons-lang3-3.0-beta.jar')
     compile 'com.apkfuns.logutils:library:1.0.6'
     compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'com.jaeger.statusbarutil:library:1.5.1'
 
 }

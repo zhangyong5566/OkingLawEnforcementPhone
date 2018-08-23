@@ -6,8 +6,17 @@ package com.zhang.okinglawenforcementphone.beans;
  */
 
 public class UpdateGreenMissionTaskOV {
+    private int type;
     private int position;
     private GreenMissionTask missionTask;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getPosition() {
         return position;

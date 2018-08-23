@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_android-pdf-viewer" default="compile.module.android-pdf-viewer">
+  <dirname property="module.android-pdf-viewer.basedir" file="${ant.file.module_android-pdf-viewer}"/>
+  
+  <property name="module.jdk.home.android-pdf-viewer" value="${jdk.home.android_api_27_platform}"/>
+  <property name="module.jdk.bin.android-pdf-viewer" value="${jdk.bin.android_api_27_platform}"/>
+  <property name="module.jdk.classpath.android-pdf-viewer" value="jdk.classpath.android_api_27_platform"/>
+  
+  <property name="compiler.args.android-pdf-viewer" value="-encoding UTF-8 -source 1.7 -target 1.8 ${compiler.args}"/>
+  
+  <property name="android-pdf-viewer.output.dir" value="${module.android-pdf-viewer.basedir}/build/intermediates/classes/debug"/>
+  <property name="android-pdf-viewer.testoutput.dir" value="${module.android-pdf-viewer.basedir}/build/intermediates/classes/test/debug"/>
+  
+  <path id="android-pdf-viewer.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="android-pdf-viewer.module.production.classpath">
+    <path refid="${module.jdk.classpath.android-pdf-viewer}"/>
+    <path refid="library.com.android.support:support-core-utils-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-v4-25.3.1.classpath"/>
+    <path refid="library.com.github.barteksc:pdfium-android-1.8.2.classpath"/>
+    <path refid="library.com.android.support:support-fragment-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:25.3.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-25.3.1.classpath"/>
+  </path>
+  
+  <path id="android-pdf-viewer.runtime.production.module.classpath">
+    <pathelement location="${android-pdf-viewer.output.dir}"/>
+    <path refid="library.com.android.support:support-core-utils-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-v4-25.3.1.classpath"/>
+    <path refid="library.com.github.barteksc:pdfium-android-1.8.2.classpath"/>
+    <path refid="library.com.android.support:support-fragment-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:25.3.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-25.3.1.classpath"/>
+  </path>
+  
+  <path id="android-pdf-viewer.module.classpath">
+    <path refid="${module.jdk.classpath.android-pdf-viewer}"/>
+    <pathelement location="${android-pdf-viewer.output.dir}"/>
+    <path refid="library.com.android.support:support-core-utils-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-v4-25.3.1.classpath"/>
+    <path refid="library.com.github.barteksc:pdfium-android-1.8.2.classpath"/>
+    <path refid="library.com.android.support:support-fragment-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:25.3.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-25.3.1.classpath"/>
+  </path>
+  
+  <path id="android-pdf-viewer.runtime.module.classpath">
+    <pathelement location="${android-pdf-viewer.testoutput.dir}"/>
+    <pathelement location="${android-pdf-viewer.output.dir}"/>
+    <path refid="library.com.android.support:support-core-utils-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-v4-25.3.1.classpath"/>
+    <path refid="library.com.github.barteksc:pdfium-android-1.8.2.classpath"/>
+    <path refid="library.com.android.support:support-fragment-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-annotations:25.3.1@jar.classpath"/>
+    <path refid="library.com.android.support:support-core-ui-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-media-compat-25.3.1.classpath"/>
+    <path refid="library.com.android.support:support-compat-25.3.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.android-pdf-viewer">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.android-pdf-viewer">
+    <patternset refid="excluded.from.module.android-pdf-viewer"/>
+  </patternset>
+  
+  <path id="android-pdf-viewer.module.sourcepath">
+    <dirset dir="${module.android-pdf-viewer.basedir}">
+      <include name="build/generated/source/apt/debug"/>
+      <include name="build/generated/source/r/debug"/>
+      <include name="build/generated/source/aidl/debug"/>
+      <include name="build/generated/source/buildConfig/debug"/>
+      <include name="build/generated/source/rs/debug"/>
+      <include name="build/generated/res/rs/debug"/>
+      <include name="src/main/res"/>
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="android-pdf-viewer.module.test.sourcepath">
+    <dirset dir="${module.android-pdf-viewer.basedir}">
+      <include name="build/generated/source/r/androidTest/debug"/>
+      <include name="build/generated/source/aidl/androidTest/debug"/>
+      <include name="build/generated/source/buildConfig/androidTest/debug"/>
+      <include name="build/generated/source/rs/androidTest/debug"/>
+      <include name="build/generated/res/rs/androidTest/debug"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.android-pdf-viewer" depends="compile.module.android-pdf-viewer.production,compile.module.android-pdf-viewer.tests" description="Compile module android-pdf-viewer"/>
+  
+  <target name="compile.module.android-pdf-viewer.production" depends="register.custom.compilers" description="Compile module android-pdf-viewer; production classes">
+    <mkdir dir="${android-pdf-viewer.output.dir}"/>
+    <javac2 destdir="${android-pdf-viewer.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.android-pdf-viewer}/javac">
+      <compilerarg line="${compiler.args.android-pdf-viewer}"/>
+      <bootclasspath refid="android-pdf-viewer.module.bootclasspath"/>
+      <classpath refid="android-pdf-viewer.module.production.classpath"/>
+      <src refid="android-pdf-viewer.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.android-pdf-viewer"/>
+    </javac2>
+    
+    <copy todir="${android-pdf-viewer.output.dir}">
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/apt/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/r/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/aidl/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/buildConfig/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/rs/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/res/rs/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/src/main/res">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.android-pdf-viewer.tests" depends="register.custom.compilers,compile.module.android-pdf-viewer.production" description="compile module android-pdf-viewer; test classes" unless="skip.tests">
+    <mkdir dir="${android-pdf-viewer.testoutput.dir}"/>
+    <javac2 destdir="${android-pdf-viewer.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.android-pdf-viewer}/javac">
+      <compilerarg line="${compiler.args.android-pdf-viewer}"/>
+      <bootclasspath refid="android-pdf-viewer.module.bootclasspath"/>
+      <classpath refid="android-pdf-viewer.module.classpath"/>
+      <src refid="android-pdf-viewer.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.android-pdf-viewer"/>
+    </javac2>
+    
+    <copy todir="${android-pdf-viewer.testoutput.dir}">
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/r/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/aidl/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/buildConfig/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/source/rs/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.android-pdf-viewer.basedir}/build/generated/res/rs/androidTest/debug">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.android-pdf-viewer" description="cleanup module">
+    <delete dir="${android-pdf-viewer.output.dir}"/>
+    <delete dir="${android-pdf-viewer.testoutput.dir}"/>
+  </target>
+</project>

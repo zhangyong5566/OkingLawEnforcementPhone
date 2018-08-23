@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.amap.api.location.AMapLocation;
@@ -122,11 +123,11 @@ public class IRemoteLocationService extends Service {
                         result[6] = mAltitude + "";  //获取海拔
                         result[7] = mSatellites + ""; //卫星个数
 
-
                         mGpsAccuracyStatus = aMapLocation.getGpsAccuracyStatus();
 
 
                     } else {
+                        Log.i("Oking","定位错误"+aMapLocation.getErrorCode()+aMapLocation.getErrorInfo().toString());
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                     }
                 }

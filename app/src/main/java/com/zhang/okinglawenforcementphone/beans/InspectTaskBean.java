@@ -91,7 +91,7 @@ public class InspectTaskBean implements Parcelable{
     private long EXECUTE_END_TIME;
     private String TYPEOFTASK;
 
-    protected InspectTaskBean(Parcel in) {
+    public InspectTaskBean(Parcel in) {
         APPROVED_PERSON = in.readString();
         APPROVED_TIME = in.readLong();
         BEGIN_TIME = in.readLong();

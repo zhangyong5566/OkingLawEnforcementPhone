@@ -1,24 +1,19 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.fragments;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -163,7 +158,7 @@ public class IndexFragment extends Fragment {
         mBanner = mHeadView.findViewById(R.id.banner);
 
         ryIndex.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        ryIndex.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 25, Color.WHITE));
+        ryIndex.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 30, Color.argb(255,236,236,236)));
 
 
         //设置banner样式
@@ -272,13 +267,13 @@ public class IndexFragment extends Fragment {
         mBinnerItems.add(mBinnerItem);
 
         mBinnerItem = new BinnerItem();
-        mBinnerItem.setTitle("马兴瑞调研备汛防汛河涌整治及水利基础设施建设工作强调 利用信息化手段提高防灾抗灾减灾能力");
+        mBinnerItem.setTitle("马兴瑞调研备汛防汛河涌整治及水利基础设施建设工作强调利用信息化手段提高防灾抗灾减灾能力");
         mBinnerItem.setPicPath(R.mipmap.binner03);
         mBinnerItem.setToContent("http://www.gdwater.gov.cn/yszx/slyw/gdtp/201805/t20180501_354104.shtml");
         mBinnerItems.add(mBinnerItem);
 
         mBinnerItem = new BinnerItem();
-        mBinnerItem.setTitle("叶贞琴到我厅调研督导时强调 准确把握新时代水利工作发展方向不断提升我省水利现代化水平");
+        mBinnerItem.setTitle("叶贞琴到我厅调研督导时强调准确把握新时代水利工作发展方向不断提升我省水利现代化水平");
         mBinnerItem.setPicPath(R.mipmap.binner04);
         mBinnerItem.setToContent("http://www.gdwater.gov.cn/yszx/slyw/gdtp/201804/t20180408_324080.shtml");
         mBinnerItems.add(mBinnerItem);
@@ -434,7 +429,7 @@ public class IndexFragment extends Fragment {
             mLayoutSwipeRefresh.setRefreshing(false);
             long count = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                     .queryBuilder().where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()))
-                    .whereOr(GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("100"))
+                    .whereOr(GreenMissionTaskDao.Properties.Examine_status.eq(6),GreenMissionTaskDao.Properties.Examine_status.eq(5),GreenMissionTaskDao.Properties.Examine_status.eq(4),GreenMissionTaskDao.Properties.Examine_status.eq(2),GreenMissionTaskDao.Properties.Examine_status.eq(1),GreenMissionTaskDao.Properties.Examine_status.eq(0),GreenMissionTaskDao.Properties.Status.eq("1"), GreenMissionTaskDao.Properties.Status.eq("2"), GreenMissionTaskDao.Properties.Status.eq("3"), GreenMissionTaskDao.Properties.Status.eq("4"), GreenMissionTaskDao.Properties.Status.eq("7"), GreenMissionTaskDao.Properties.Status.eq("100"))
                     .count();
             if (mMessageCoutTextView != null && count > 0) {
                 mMessageCoutTextView.setVisibility(View.VISIBLE);
