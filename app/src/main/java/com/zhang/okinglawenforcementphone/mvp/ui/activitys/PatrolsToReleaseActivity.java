@@ -1,5 +1,6 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,17 +30,23 @@ import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.TextUtil;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
+import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
 import com.zhang.okinglawenforcementphone.beans.ApproverBean;
+import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.InspectTaskBean;
+import com.zhang.okinglawenforcementphone.beans.JPushMessageBean;
 import com.zhang.okinglawenforcementphone.beans.LatLngListOV;
+import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.RecipientBean;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
 import com.zhang.okinglawenforcementphone.http.Api;
 import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.mvp.contract.JPushMessageContract;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.ApproverPinyinComparator;
 import com.zhang.okinglawenforcementphone.utils.CBRPinyinComparator;
@@ -63,6 +70,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.data.JPushLocalNotification;
 import io.reactivex.functions.Consumer;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -133,6 +142,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     private List<SourceArrayOV> mRecipientsOVS;
     private Handler mainHandler;
     private int mPosition;
+   private Gson gson = new Gson();
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private long mId;
 
@@ -321,7 +331,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                     public void accept(ResponseBody responseBody) throws Exception {
                         mRxDialogLoading.cancel();
                         String result = responseBody.string();
-                        Gson gson = new Gson();
+
                         ApproverBean approverBean = gson.fromJson(result, ApproverBean.class);
                         mSzjc = approverBean.getSZJC();
                         Collections.sort(mSzjc, new ApproverPinyinComparator());
@@ -349,7 +359,6 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
                         String result = responseBody.string();
-                        Gson gson = new Gson();
                         ApproverBean approverBean = gson.fromJson(result, ApproverBean.class);
                         List<ApproverBean.SZJCBean> szjc = approverBean.getSZJC();
                         mCbr = approverBean.getCBR();
@@ -621,7 +630,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
             return;
         }
 
-        String taskName = mEt_taskname.getText().toString().trim();
+        final String taskName = mEt_taskname.getText().toString().trim();
         String missionDetail = mList_item_missionDetail.getText().toString().trim();
         String description = mEt_description.getText().toString().trim();
         String beginTime = mBt_select_begintime.getText().toString().trim();
@@ -677,13 +686,40 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                                     UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
                                     updateGreenMissionTaskOV.setType(100);
                                     updateGreenMissionTaskOV.setPosition(mPosition);
-
                                     EventBus.getDefault().post(updateGreenMissionTaskOV);
                                     GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().deleteByKey(mId);
                                     finish();
-                                    finish();
                                     RxToast.success(BaseApplication.getApplictaion(), "巡查任务发布成功", Toast.LENGTH_LONG).show();
+                                    //发送一个远程通知
+                                    JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                                    JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                                    ArrayList<String> alias = new ArrayList<>();
+                                    alias.add(mApproverId);
+                                    audienceBean.setAlias(alias);
+                                    jPushMessageBean.setAudience(audienceBean);
+                                    JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                                    notificationBean.setAlert("新消息："+taskName);
+                                    JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                                    JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                                    extrasBean.setTaskid(inspectTaskBean.getID());
+                                    extrasBean.setOpenType("0");
+                                    androidBean.setExtras(extrasBean);
+                                    notificationBean.setAndroid(androidBean);
+                                    ArrayList<String> platforms = new ArrayList<>();
+                                    platforms.add("android");
+                                    jPushMessageBean.setPlatform(platforms);
+                                    jPushMessageBean.setNotification(notificationBean);
+                                    OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                                        @Override
+                                        public void pushMessageSucc(String result) {
+                                            Log.i("Oking5",result);
+                                        }
 
+                                        @Override
+                                        public void pushMessageFail(Throwable ex) {
+                                            Log.i("Oking5",ex.toString());
+                                        }
+                                    });
                                 } else {
                                     Log.i("Oking", "服务器系统内部出错了1");
                                     RxToast.error(BaseApplication.getApplictaion(), "服务器系统内部出错了", Toast.LENGTH_LONG).show();
@@ -712,6 +748,8 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
     }
 
     private void submitDataToServer() {
+
+
         if (mSubRxDialogLoading == null) {
 
             mSubRxDialogLoading = new RxDialogLoading(this, false, new DialogInterface.OnCancelListener() {
@@ -805,41 +843,73 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
                                 int code = jsonObject.getInt("code");
                                 if (code == 400) {
                                     String taskid = jsonObject.getString("taskid");
-//                                    GreenMissionTask greenMissionTask = new GreenMissionTask();
-//                                    //返回个id
-//                                    greenMissionTask.setTaskid(taskid);
-//                                    greenMissionTask.setStatus("1");
-//                                    greenMissionTask.setTask_name(taskName);
-//                                    greenMissionTask.setJjcd(mEmergency);
-//                                    greenMissionTask.setTask_content(description);
-//                                    greenMissionTask.setRwqyms(missionDetail);
-//                                    greenMissionTask.setBegin_time(mBeginMillseconds);
-//                                    greenMissionTask.setEnd_time(mEndMillseconds);
-//                                    greenMissionTask.setUserid(OkingContract.CURRENTUSER.getUserid());
-//                                    greenMissionTask.setTypeoftask(mTasktype);
-//                                    greenMissionTask.setRwly(mSource);
-//                                    greenMissionTask.setBegin_time(mBeginMillseconds);
-//                                    greenMissionTask.setEnd_time(mEndMillseconds);
-//                                    greenMissionTask.setTask_type(mTasknature);
-//                                    greenMissionTask.setJsr(mSelecRecipient);
-//                                    greenMissionTask.setJsdw(mReBean.getDEPTNAME());
-//                                    greenMissionTask.setTypename(mSpTasknature);
-//                                    greenMissionTask.setApproved_person(mApproverId);
-//                                    greenMissionTask.setApproved_person_name(mApprover);
-//                                    greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
-//                                    greenMissionTask.setPublisher(OkingContract.CURRENTUSER.getUserid());
-//                                    greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
-//                                    greenMissionTask.setReceiver(mReBean.getUSERID());
-//                                    greenMissionTask.setTask_area(missionDetail);
-//                                    long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(greenMissionTask);
-//                                    Intent intent = new Intent(BaseApplication.getApplictaion(), AuditActivity.class);
-//                                    intent.putExtra("id", insert);
-//                                    PendingIntent pendingIntent = PendingIntent.getActivity(BaseApplication.getApplictaion(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                                    OkingNotificationManager.getInstence().showTaskNotification(greenMissionTask, pendingIntent);
-//                                    EmergencyTaskOV emergencyTaskOV = new EmergencyTaskOV();
-//                                    emergencyTaskOV.setType(0);
-//                                    emergencyTaskOV.setGreenMissionTask(greenMissionTask);
-//                                    EventBus.getDefault().post(emergencyTaskOV);
+                                    GreenMissionTask greenMissionTask = new GreenMissionTask();
+                                    greenMissionTask.setExamine_status(-1);
+                                    greenMissionTask.setTaskid(taskid);
+                                    greenMissionTask.setStatus("1");
+                                    greenMissionTask.setTask_name(taskName);
+                                    greenMissionTask.setJjcd(mEmergency);
+                                    greenMissionTask.setTask_content(description);
+                                    greenMissionTask.setRwqyms(missionDetail);
+                                    greenMissionTask.setBegin_time(mBeginMillseconds);
+                                    greenMissionTask.setEnd_time(mEndMillseconds);
+                                    greenMissionTask.setUserid(OkingContract.CURRENTUSER.getUserid());
+                                    greenMissionTask.setTypeoftask(mTasktype);
+                                    greenMissionTask.setRwly(mSource);
+                                    greenMissionTask.setTask_type(mTasknature);
+                                    greenMissionTask.setJsr(mSelecRecipient);
+                                    greenMissionTask.setJsdw(mReBean.getDEPTNAME());
+                                    greenMissionTask.setTypename(mSp_tasknature.getText().toString());
+                                    greenMissionTask.setApproved_person(mApproverId);
+                                    greenMissionTask.setApproved_person_name(mApprover);
+                                    greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
+                                    greenMissionTask.setPublisher(OkingContract.CURRENTUSER.getUserid());
+                                    greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
+                                    greenMissionTask.setReceiver(mReBean.getUSERID());
+                                    greenMissionTask.setTask_area(missionDetail);
+                                    if (mApproverId.equals(OkingContract.CURRENTUSER.getUserid())) {
+                                        //发送一个本地通知
+                                        long insert = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().insert(greenMissionTask);
+                                            Intent intent = new Intent(BaseApplication.getApplictaion(), AuditActivity.class);
+                                        intent.putExtra("id", insert);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(BaseApplication.getApplictaion(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                        OkingNotificationManager.getInstence().showTaskNotification(greenMissionTask, pendingIntent);
+                                        NewsTaskOV event = new NewsTaskOV(2,null,greenMissionTask);
+                                        EventBus.getDefault().post(event);
+
+                                    } else {
+                                        //发送一个远程通知
+                                        JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                                        JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                                        ArrayList<String> alias = new ArrayList<>();
+                                        alias.add(mApproverId);
+                                        audienceBean.setAlias(alias);
+                                        jPushMessageBean.setAudience(audienceBean);
+                                        JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                                        notificationBean.setAlert("新消息："+taskName);
+                                        JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                                        JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                                        extrasBean.setTaskid(taskid);
+                                        extrasBean.setOpenType("0");
+                                        androidBean.setExtras(extrasBean);
+                                        notificationBean.setAndroid(androidBean);
+                                        ArrayList<String> platforms = new ArrayList<>();
+                                        platforms.add("android");
+                                        jPushMessageBean.setPlatform(platforms);
+                                        jPushMessageBean.setNotification(notificationBean);
+                                        OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                                            @Override
+                                            public void pushMessageSucc(String result) {
+                                                Log.i("Oking5",result);
+                                            }
+
+                                            @Override
+                                            public void pushMessageFail(Throwable ex) {
+                                                Log.i("Oking5",ex.toString());
+                                            }
+                                        });
+                                    }
+
 
                                     if (mainHandler == null) {
 
@@ -887,7 +957,7 @@ public class PatrolsToReleaseActivity extends BaseActivity implements OnDateSetL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(LatLngListOV latLngListOV) {
-        Log.i("Oking", latLngListOV.getLatLngs().size() + ">>" + new Gson().toJson(latLngListOV.getLatLngs()));
+        Log.i("Oking", latLngListOV.getLatLngs().size() + ">>" + gson.toJson(latLngListOV.getLatLngs()));
     }
 
     @Override

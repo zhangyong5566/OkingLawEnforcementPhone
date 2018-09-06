@@ -10,11 +10,9 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,9 +51,7 @@ import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
-import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
-import com.zhang.baselib.BaseApplication;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 
@@ -208,12 +204,22 @@ public class ChatActivity extends BaseActivity implements EMMessageListener {
     }
 
     protected void sendImageMessage(String imagePath) {
-        if (mFile==null){
-            mFile = new File(cameraFile.getParentFile().getPath() + "/luban");
-            if (!mFile.exists()){
-                mFile.mkdirs();
+        if (cameraFile!=null) {
+            if (mFile == null) {
+                mFile = new File(cameraFile.getParentFile().getPath() + "/luban");
+                if (!mFile.exists()) {
+                    mFile.mkdirs();
+                }
+            }
+        }else {
+            if (mFile == null) {
+                mFile = new File("/storage/emulated/0/oking/mission_pic" + "/luban");
+                if (!mFile.exists()) {
+                    mFile.mkdirs();
+                }
             }
         }
+
 
         Luban.with(this)
                 .load(imagePath)                                   // 传人要压缩的图片列表

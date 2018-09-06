@@ -15,6 +15,7 @@ import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
+import com.zhang.okinglawenforcementphone.beans.GreenMissionLogDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadBasicLogContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.LoadBasicLogPresenter;
@@ -115,16 +116,14 @@ public class ApprovalTheLogFragment extends Fragment {
                     public void getBasicLogSucc(String result) {
                         mRxDialogLoading.cancel();
                         //{"msg":"查询成功!","datas":[{"OTHER_PART":"交通,城管","EQUIPMENT":"交通工具：001003,001001,001001  ","PLAN":"0","TYPE":"0"}],"status":"1"}
-
                         try {
                             JSONObject jsonObject = new JSONObject(result);
                             String status = jsonObject.getString("status");
                             if (status.equals("1")) {
                                 JSONArray datas = jsonObject.getJSONArray("datas");
                                 mGreenMissionLog = new GreenMissionLog();
-                                for (int i = 0; i < datas.length(); i++) {
-
-                                    JSONObject object = datas.getJSONObject(i);
+                                if (datas.length()>0){
+                                    JSONObject object = datas.getJSONObject(0);
                                     mGreenMissionLog.setEquipment(object.getString("EQUIPMENT"));
                                     mGreenMissionLog.setServer_id(object.getString("LOG_ID"));
                                     mGreenMissionLog.setTask_id(mGreenMissionTask.getTaskid());
@@ -132,11 +131,12 @@ public class ApprovalTheLogFragment extends Fragment {
                                     mGreenMissionLog.setPlan(Integer.parseInt(object.getString("PLAN")));
                                     mGreenMissionLog.setPatrol(object.getString("PATROL"));
                                     mGreenMissionLog.setDzyj(object.getString("DZYJ"));
-
+                                    Log.i("Oking5",">>>>>>>>>>>"+mGreenMissionLog.toString());
+                             GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
+                                    setTaskLogData();
                                 }
-                                GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao()
-                                        .insert(mGreenMissionLog);
-                                setTaskLogData();
+
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

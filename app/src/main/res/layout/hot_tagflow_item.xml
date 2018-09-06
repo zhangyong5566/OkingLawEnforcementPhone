@@ -26,17 +26,6 @@
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
-    <TextView
-        android:text="0"
-        android:layout_width="@dimen/x_px_24"
-        android:gravity="center"
-        android:visibility="gone"
-        android:id="@+id/tv_msgcout"
-        android:layout_height="@dimen/x_px_24"
-        android:layout_toRightOf="@id/iv_icon"
-        android:background="@drawable/btn_msg_bg"
-        android:textColor="@color/white"
-        android:textSize="8sp" />
 
 
 </RelativeLayout>

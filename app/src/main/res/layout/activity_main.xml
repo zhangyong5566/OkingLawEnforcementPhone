@@ -113,19 +113,4 @@
 
 
     </com.zhang.okinglawenforcementphone.views.bottonbar.AlphaTabsIndicator>
-
-
-    <TextView
-        android:id="@+id/tv_doing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="1dp"
-        android:background="@drawable/btn_waiting_selector"
-        android:padding="@dimen/x_px_5"
-        android:text="有任务正在执行"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="gone" />
 </RelativeLayout>

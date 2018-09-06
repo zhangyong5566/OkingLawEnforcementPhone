@@ -13,11 +13,11 @@
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
         android:id="@+id/rcy_all_menu_sub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_title"></android.support.v7.widget.RecyclerView>
+        android:layout_below="@id/tv_title">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

@@ -7,18 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
@@ -32,7 +27,6 @@ import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.exceptions.HyphenateException;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
-import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.ActivityUtil;
@@ -40,6 +34,7 @@ import com.zhang.baselib.utils.DeviceUtil;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.OkingEMManager;
 import com.zhang.okinglawenforcementphone.OkingFileManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
 import com.zhang.okinglawenforcementphone.OkingLocationManager;
 import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
@@ -48,12 +43,8 @@ import com.zhang.okinglawenforcementphone.adapter.StatisRcyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
-import com.zhang.okinglawenforcementphone.beans.RefreshTaskMissionEvent;
-import com.zhang.okinglawenforcementphone.beans.StopSwipeRefreshEvent;
 import com.zhang.okinglawenforcementphone.db.LawDao;
-import com.zhang.okinglawenforcementphone.mvp.contract.LoadHttpMissionContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadLocationToServerContract;
-import com.zhang.okinglawenforcementphone.mvp.presenter.LoadHttpMissionPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.IndexFragment;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.UserFragment;
@@ -90,8 +81,6 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @BindView(R.id.tv_doing)
-    TextView mTvDoing;
     private Unbinder unbinder;
     @BindView(R.id.alphaIndicator)
     AlphaTabsIndicator mAlphaTabsIndicator;
@@ -102,8 +91,7 @@ public class MainActivity extends BaseActivity {
 //    private AddressBookFragment mAddressBookFragment;
     private UserFragment mUserFragment;
     private Gson gson = new Gson();
-    private RxDialogLoading mRxDialogLoading;
-    private LoadHttpMissionPresenter mLoadHttpMissionPresenter;
+
     private EaseContactListFragment mEaseContactListFragment;
     private Map<String, EaseUser> mContacts;
     private int mUnreadMsgCount = 0;
@@ -112,10 +100,8 @@ public class MainActivity extends BaseActivity {
     private Intent mIntent;
     private boolean mIsLoginIMErro = false;
     private boolean isMessageFragmentShow = false;
-    private ArrayList<GreenMissionTask> mNewsGreenMissionTasks = new ArrayList<>();
-    private RxDialogSureCancel mRxDialogSureCancel;
     private String mCrashDir;
-
+    private long mExitTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +113,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-        EventBus.getDefault().register(this);
 
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             mCrashDir = getExternalCacheDir().getPath() + File.separator + "crash" + File.separator;
@@ -169,6 +154,7 @@ public class MainActivity extends BaseActivity {
         //初始化环信
         OkingEMManager.getInstence().initEM();
 
+        OkingJPushManager.getInstence().init();
 
         login();
 
@@ -187,8 +173,7 @@ public class MainActivity extends BaseActivity {
             }
         }, imei, gson);
 
-        //获取任务
-        getHttpMissionList();
+
     }
 
 
@@ -287,43 +272,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleEvent1(RefreshTaskMissionEvent event) {
-        int type = event.getType();
-        if (type == 0) {
-            getHttpMissionList();
-        }
-    }
-
-    //新任务
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleEvent2(NewsTaskOV event) {
-//        mNewsGreenMissionTasks.clear();
-//        List<GreenMissionTask> greenMissionTasks = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
-//                .queryBuilder()
-//                .where(GreenMissionTaskDao.Properties.Userid.eq(OkingContract.CURRENTUSER.getUserid()), GreenMissionTaskDao.Properties.Status.eq("4"))
-//                .list();
-//
-//        for (GreenMissionTask greenMissionTask : greenMissionTasks) {
-//            if (greenMissionTask.getStatus().equals("4")) {
-//                mNewsGreenMissionTasks.add(greenMissionTask);
-//
-//            }
-//        }
-
-        if (event.mType == 0) {
-            mTvDoing.setVisibility(View.VISIBLE);
-            mNewsGreenMissionTasks.add(event.mGreenMissionTask);
-        } else {
-            GreenMissionTask greenMissionTask = event.mGreenMissionTask;
-            for (GreenMissionTask newsGreenMissionTask : mNewsGreenMissionTasks) {
-                if (newsGreenMissionTask.getTaskid().equals(greenMissionTask.getTaskid())) {
-                    mNewsGreenMissionTasks.remove(newsGreenMissionTask);
-                }
-            }
-        }
-
-    }
 
 
     private void setListener() {
@@ -360,10 +308,13 @@ public class MainActivity extends BaseActivity {
                             mIndexFragment = IndexFragment.newInstance(null, null);
                             fragmentTransaction.add(R.id.bottom_nav_content, mIndexFragment, "IndexFragment");
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
                         break;
                     case 1:                 //消息
                         isMessageFragmentShow = true;
+                        if (mIsLoginIMErro) {
+                            login();
+                        }
                         if (mIndexFragment != null) {
 
                             fragmentTransaction.hide(mIndexFragment);
@@ -393,10 +344,13 @@ public class MainActivity extends BaseActivity {
                         }
                         mUnreadMsgCount = 0;
                         mAlphaTabsIndicator.removeAllBadge();
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
                         break;
                     case 2:                     //通讯录
                         isMessageFragmentShow = false;
+                        if (mIsLoginIMErro) {
+                            login();
+                        }
                         if (mIndexFragment != null) {
 
                             fragmentTransaction.hide(mIndexFragment);
@@ -409,9 +363,7 @@ public class MainActivity extends BaseActivity {
 
                             fragmentTransaction.hide(mUserFragment);
                         }
-                        if (mIsLoginIMErro) {
-                            login();
-                        }
+
                         if (mEaseContactListFragment != null) {
 
                             fragmentTransaction.show(mEaseContactListFragment);
@@ -428,10 +380,11 @@ public class MainActivity extends BaseActivity {
                                     startActivity(mIntent);
                                 }
                             });
+                            mEaseContactListFragment.setContactsMap(mContacts);
                             fragmentTransaction.add(R.id.bottom_nav_content, mEaseContactListFragment, "EaseContactListFragment");
 
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
                         break;
                     case 3:
                         isMessageFragmentShow = false;
@@ -454,7 +407,7 @@ public class MainActivity extends BaseActivity {
                             fragmentTransaction.add(R.id.bottom_nav_content, mUserFragment, "UserFragment");
 
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
                         break;
                     default:
                         break;
@@ -479,219 +432,13 @@ public class MainActivity extends BaseActivity {
 
 
 
-    private void getHttpMissionList() {
-        if (mRxDialogLoading == null) {
-            mRxDialogLoading = new RxDialogLoading(this, false, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    dialogInterface.cancel();
-                }
-            });
-
-            mRxDialogLoading.show();
-        }
-        mRxDialogLoading.setLoadingText("正在加载数据...");
-
-        if (mLoadHttpMissionPresenter == null) {
-            mLoadHttpMissionPresenter = new LoadHttpMissionPresenter(new LoadHttpMissionContract.View() {
-                @Override
-                public void loadHttpMissionSucc(List<GreenMissionTask> greenMissionTasks) {
-                    mNewsGreenMissionTasks.clear();
-                    for (GreenMissionTask greenMissionTask : greenMissionTasks) {
-                        if (greenMissionTask.getStatus().equals("4")) {
-                            mNewsGreenMissionTasks.add(greenMissionTask);
-
-                        }
-                    }
-                    AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRxDialogLoading.cancel();
-                            StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
-                            stopSwipeRefreshEvent.setType(0);
-                            EventBus.getDefault().post(stopSwipeRefreshEvent);
-                            if (mNewsGreenMissionTasks.size() > 0) {
-                                showBottomDialog();
-                            }
-                        }
-
-
-                    });
-                }
-
-                @Override
-                public void loadHttpMissionProgress(final int total, final int count) {
-                    if (mRxDialogLoading.isShowing()) {
-
-                        AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                            @Override
-                            public void run() {
-                                mRxDialogLoading.setLoadingText(count + "/" + total);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void loadHttpMissionFail(Throwable ex) {
-                    AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRxDialogLoading.cancel();
-                            StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
-                            stopSwipeRefreshEvent.setType(0);
-                            EventBus.getDefault().post(stopSwipeRefreshEvent);
-                        }
-                    });
-                }
-
-                @Override
-                public void loadMissionFromLocal(List<GreenMissionTask> greenMissionTasks) {
-                    mNewsGreenMissionTasks.clear();
-                    for (GreenMissionTask greenMissionTask : greenMissionTasks) {
-                        if (greenMissionTask.getStatus().equals("4")) {
-                            mNewsGreenMissionTasks.add(greenMissionTask);
-
-                        }
-                    }
-                    AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRxDialogLoading.cancel();
-                            StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
-                            stopSwipeRefreshEvent.setType(0);
-                            EventBus.getDefault().post(stopSwipeRefreshEvent);
-
-                            if (mNewsGreenMissionTasks.size() > 0) {
-                                showBottomDialog();
-
-                            }
-                        }
-                    });
-                }
-
-            });
-        }
-
-        mLoadHttpMissionPresenter.loadHttpMission(2, OkingContract.CURRENTUSER.getUserid());
-    }
-
-    private DialogUtil mDialogUtil;
-
-    private void showBottomDialog() {
-        if (mRxDialogSureCancel == null) {
-            mRxDialogSureCancel = new RxDialogSureCancel(MainActivity.this, false, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    dialogInterface.cancel();
-                }
-            });
-            mRxDialogSureCancel.setContent("有任务正在执行，需要直接打开任务吗？");
-
-            mRxDialogSureCancel.getTvCancel().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mTvDoing.setVisibility(View.VISIBLE);
-                    mRxDialogSureCancel.cancel();
-
-                }
-            });
-            mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
-
-                private View mDoingTaskView;
-                private StatisRcyAdapter mStatisRcyAdapter;
-
-
-                @Override
-                public void onClick(View view) {
-                    mRxDialogSureCancel.cancel();
-                    mTvDoing.setVisibility(View.VISIBLE);
-                    if (mDialogUtil == null) {
-
-                        mDialogUtil = new DialogUtil();
-                        mDoingTaskView = View.inflate(BaseApplication.getApplictaion(), R.layout.statistical_dialog, null);
-                        RecyclerView doingTaskRecyt = mDoingTaskView.findViewById(R.id.rcy_statis);
-                        doingTaskRecyt.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
-                        doingTaskRecyt.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
-                        mStatisRcyAdapter = new StatisRcyAdapter(R.layout.statistical_dialog_item, mNewsGreenMissionTasks);
-                        mStatisRcyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
-                        doingTaskRecyt.setAdapter(mStatisRcyAdapter);
-                        setItemListener(mStatisRcyAdapter);
-                    } else {
-                        mStatisRcyAdapter.setNewData(mNewsGreenMissionTasks);
-                    }
-                    mDialogUtil.showBottomDialog(MainActivity.this, mDoingTaskView, 350);
-                }
-            });
-        }
-
-
-        mRxDialogSureCancel.show();
-    }
-
-    private void setItemListener(StatisRcyAdapter statisRcyAdapter) {
-        statisRcyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-
-            private Intent mIntent;
-
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List<GreenMissionTask> data = adapter.getData();
-                GreenMissionTask greenMissionTask = data.get(position);
-                switch (greenMissionTask.getStatus()) {
-                    case "0":
-
-                    case "1":
-                        mIntent = new Intent(MainActivity.this, AuditActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
-                        break;
-                    case "2":
-                        mIntent = new Intent(MainActivity.this, ArrangeTeamMembersActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
-                        break;
-                    case "3":
-
-                    case "4":
-                    case "100":
-                        mIntent = new Intent(MainActivity.this, MissionActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
-                        break;
-                    case "5":
-                        mIntent = new Intent(MainActivity.this, MissionRecorActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("taskId", greenMissionTask.getTaskid());
-                        startActivity(mIntent);
-                        break;
-                    case "9":
-                        mIntent = new Intent(MainActivity.this, MissionActivity.class);
-                        mIntent.putExtra("id", greenMissionTask.getId());
-                        mIntent.putExtra("position", position);
-                        startActivity(mIntent);
-                        break;
-                    default:
-                        break;
-                }
-
-                mDialogUtil.cancelDialog();
-            }
-        });
-
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
         OkingLocationManager.getInstence().cancelLocation();
-        EventBus.getDefault().unregister(this);
         OkingEMManager.getInstence().unRegist();
-        Log.i("Oking", "销毁");
+
         Process.killProcess(Process.myPid());
     }
 
@@ -721,18 +468,6 @@ public class MainActivity extends BaseActivity {
         }
 
 
-    }
-
-    @OnClick(R.id.tv_doing)
-    public void onViewClicked() {
-
-        if (mNewsGreenMissionTasks.size() < 1) {
-            mTvDoing.setVisibility(View.GONE);
-            RxToast.success("当前任务已经执行完毕了~~~~");
-        } else {
-
-            showBottomDialog();
-        }
     }
 
     class MsgListener implements EMMessageListener {
@@ -785,21 +520,26 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (EMClient.getInstance().isLoggedInBefore()) {
 
-                EMClient.getInstance().logout(true);
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {//System.currentTimeMillis()无论何时调用，肯定大于2000
+                RxToast.warning("再按一次退出程序");
+                mExitTime = System.currentTimeMillis();
+            } else {
+                if (EMClient.getInstance().isLoggedInBefore()) {
+
+                    EMClient.getInstance().logout(true);
+                }
+                ActivityUtil.AppExit(BaseApplication.getApplictaion());
             }
-            ActivityUtil.AppExit(BaseApplication.getApplictaion());
-            return true;//return true;拦截事件传递,从而屏蔽back键。
-        }
-        if (KeyEvent.KEYCODE_HOME == keyCode) {
-            return true;//同理
+
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
 }

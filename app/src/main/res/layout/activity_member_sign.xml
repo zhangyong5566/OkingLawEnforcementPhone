@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appbar"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/x_px_5"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -48,28 +48,27 @@
             android:id="@+id/ll_02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="@dimen/y_px_5"
+            android:layout_marginLeft="@dimen/x_px_5"
+            android:layout_marginTop="@dimen/y_px_5"
             android:background="@drawable/editor_enabel_bg"
             android:orientation="horizontal">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/member_listView"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="@dimen/y_px_35"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-
                 android:divider="@color/bottom_nav_normal" />
 
 
             <Button
                 android:id="@+id/btn_add"
-                android:layout_width="45dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/x_px_65"
+                android:layout_height="@dimen/y_px_30"
                 android:layout_gravity="center"
-                android:layout_margin="4dp"
+                android:layout_margin="@dimen/x_px_4"
                 android:background="@drawable/btn_waiting_selector"
                 android:text="添加队员"
                 android:textColor="@color/colorMain6"
@@ -77,11 +76,10 @@
 
             <Button
                 android:id="@+id/complete_button"
-                android:layout_width="45dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/x_px_65"
+                android:layout_height="@dimen/y_px_30"
                 android:layout_gravity="center"
-                android:layout_margin="4dp"
-
+                android:layout_margin="@dimen/y_px_4"
                 android:background="@drawable/btn_waiting_selector"
                 android:text="完成签名"
                 android:textColor="@color/colorMain6"
@@ -91,8 +89,8 @@
         <TextView
             android:id="@+id/name_tv"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="5dp"
+            android:layout_height="@dimen/y_px_35"
+            android:layout_marginLeft="@dimen/x_px_5"
             android:gravity="left|center_vertical"
             android:text="巡查人员"
             android:textColor="@color/colorMain8"
@@ -107,9 +105,9 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="@dimen/y_px_5"
+            android:layout_marginLeft="@dimen/x_px_5"
+            android:layout_marginTop="@dimen/y_px_5"
             android:layout_weight="1">
 
             <com.zhang.okinglawenforcementphone.views.SignatureView
@@ -140,8 +138,8 @@
 
             <Button
                 android:id="@+id/clear_btn"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/x_px_60"
+                android:layout_height="@dimen/y_px_30"
                 android:background="@drawable/btn_msg_selector"
                 android:text="清空"
                 android:textColor="@color/colorMain6"
@@ -150,9 +148,9 @@
 
             <Button
                 android:id="@+id/save_btn"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="20dp"
+                android:layout_width="@dimen/x_px_60"
+                android:layout_height="@dimen/y_px_30"
+                android:layout_marginLeft="@dimen/x_px_20"
                 android:background="@drawable/btn_waiting_selector"
                 android:text="保存"
                 android:textColor="@color/colorMain6"

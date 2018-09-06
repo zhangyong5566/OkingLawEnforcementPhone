@@ -17,7 +17,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.okinglawenforcementphone.R;
-import com.zhang.okinglawenforcementphone.adapter.AskAdapter;
 import com.zhang.okinglawenforcementphone.adapter.ExpandableWrittenRecordAdapter;
 import com.zhang.okinglawenforcementphone.adapter.ProblemAdapter;
 import com.zhang.okinglawenforcementphone.beans.ProblemBean;

@@ -1,6 +1,5 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

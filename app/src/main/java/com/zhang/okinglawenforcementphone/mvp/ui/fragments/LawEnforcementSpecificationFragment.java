@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zhang.baselib.BaseApplication;
@@ -18,7 +17,6 @@ import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.UserRecyAdaper;
 import com.zhang.okinglawenforcementphone.beans.UserItemOV;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.FromAllLawEnforcementSpecificationActivity;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.LawEnforcementManagerActivity;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import java.util.ArrayList;

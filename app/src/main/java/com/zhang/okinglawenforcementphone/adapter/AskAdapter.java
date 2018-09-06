@@ -1,27 +1,12 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.app.Activity;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.hyphenate.easeui.model.EaseVoiceRecorder;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.zhang.baselib.BaseApplication;
-import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.ProblemBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

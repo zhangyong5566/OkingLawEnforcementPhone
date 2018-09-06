@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,25 +24,34 @@ import com.zhang.baselib.http.BaseHttpFactory;
 import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
+import com.zhang.okinglawenforcementphone.GreenDAOManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
+import com.zhang.okinglawenforcementphone.beans.JPushMessageBean;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.SmameLeveOV;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
 import com.zhang.okinglawenforcementphone.beans.TaskCauseActionOV;
 import com.zhang.okinglawenforcementphone.beans.UnitOV;
+import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
 import com.zhang.okinglawenforcementphone.http.Api;
 import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
+import com.zhang.okinglawenforcementphone.mvp.contract.JPushMessageContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadAcceptNumberContract;
+import com.zhang.okinglawenforcementphone.mvp.contract.LoadBasicLogContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.LoadUsersByDeptIdContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.LoadAcceptNumberPresenter;
+import com.zhang.okinglawenforcementphone.mvp.presenter.LoadBasicLogPresenter;
 import com.zhang.okinglawenforcementphone.mvp.presenter.LoadUsersByDeptIdPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ApprovalActivity;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -112,7 +120,7 @@ public class ApprovalInstructionsFragment extends Fragment {
     private boolean mIsUnitSucc = false;
     private List<SmameLeveOV.DataBean.RecordsBean> mSmameLeveRecords;
     private String mDepatUserId;
-
+    private LoadBasicLogPresenter mLoadBasicLogPresenter;
     public ApprovalInstructionsFragment() {
         // Required empty public constructor
     }
@@ -410,68 +418,59 @@ public class ApprovalInstructionsFragment extends Fragment {
                             mRxDialogLoading.setLoadingText("正在提交数据中请稍候...");
                             mRxDialogLoading.show();
 
-                            //Rx链式调用，解决回调嵌套
-                            BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
-                                    .getTaskAyByParameterForAndroid(mGreenMissionLog.getServer_id())
-                                    .compose(RxSchedulersHelper.<ResponseBody>io_main())
-                                    .observeOn(Schedulers.io())
-                                    .concatMap(new Function<ResponseBody, Observable<ResponseBody>>() {
-                                        @Override
-                                        public Observable<ResponseBody> apply(ResponseBody responseBody) throws Exception {
-                                            String result = responseBody.string();
-                                            TaskCauseActionOV taskCauseActionOV = mGson.fromJson(result, TaskCauseActionOV.class);
-                                            TaskCauseActionOV.DataBean data = taskCauseActionOV.getData();
-                                            TaskCauseActionOV.DataBean.RecordsBean recordsBean = data.getRecords().get(0);
-                                            Map<String, Object> putRecordParams = new HashMap<>();
-                                            putRecordParams.put("option", "add");
-                                            putRecordParams.put("slbh", mSlbh);
-                                            putRecordParams.put("slsj", OkingContract.SDF.format(System.currentTimeMillis()));
-                                            putRecordParams.put("afsj", OkingContract.SDF.format(mGreenMissionTask.getBegin_time()));
-                                            putRecordParams.put("afdd", recordsBean.getAfdd());
-                                            putRecordParams.put("aqjy", recordsBean.getSlsjstr() + recordsBean.getAfdd() + recordsBean.getAqjy());
-                                            putRecordParams.put("wfsx", recordsBean.getAqjy());
-                                            putRecordParams.put("ajly", "执法检查");
-                                            List<TaskCauseActionOV.DataBean.RecordsBean> jsonBen = new ArrayList<>();
-                                            jsonBen.add(recordsBean);
-                                            putRecordParams.put("ajlylist", mGson.toJson(jsonBen));
-                                            putRecordParams.put("EXAMINE_STATUS", "4");
-                                            putRecordParams.put("LDQM", OkingContract.CURRENTUSER.getUserName());
-                                            putRecordParams.put("ID", mGreenMissionLog.getServer_id());
-                                            putRecordParams.put("LEADIDEA", input);
-                                            putRecordParams.put("taskid", mGreenMissionTask.getTaskid());
-                                            putRecordParams.put("username", OkingContract.CURRENTUSER.getUserName());
-                                            putRecordParams.put("xcqk", mGreenMissionLog.getPatrol());
-                                            putRecordParams.put("dzyj", mGreenMissionLog.getDzyj());
-                                            putRecordParams.put("ajdjzt", "4");
-                                            return BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
-                                                    .examineLogForAndroid(putRecordParams);
-                                        }
-                                    })
-                                    .concatMap(new Function<ResponseBody, ObservableSource<ResponseBody>>() {
-                                        @Override
-                                        public ObservableSource<ResponseBody> apply(ResponseBody responseBody) throws Exception {
-                                            return BaseHttpFactory.getInstence()
-                                                    .createService(GDWaterService.class, Api.BASE_URL).rwdba("update", mGreenMissionTask.getTaskid(), "rwfbldps", mGreenMissionTask.getApproved_person());
+                            if (mGreenMissionLog!=null){
+                                //Rx链式调用，解决回调嵌套
 
-                                        }
-                                    })
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Consumer<ResponseBody>() {
-                                        @Override
-                                        public void accept(ResponseBody responseBody) throws Exception {
-                                            mRxDialogLoading.cancel();
-                                            RxToast.success("领导批示成功");
-                                            ApprovalActivity activity = (ApprovalActivity) getActivity();
-                                            activity.designatorSuccess();
+                                submitDataRecord(input);
 
-                                        }
-                                    }, new Consumer<Throwable>() {
+                            }else {
+                                //
+                                if (mLoadBasicLogPresenter == null) {
+                                    mLoadBasicLogPresenter = new LoadBasicLogPresenter(new LoadBasicLogContract.View() {
                                         @Override
-                                        public void accept(Throwable throwable) throws Exception {
+                                        public void getBasicLogSucc(String result) {
                                             mRxDialogLoading.cancel();
-                                            RxToast.error("领导批示失败" + throwable.toString());
+                                            //{"msg":"查询成功!","datas":[{"OTHER_PART":"交通,城管","EQUIPMENT":"交通工具：001003,001001,001001  ","PLAN":"0","TYPE":"0"}],"status":"1"}
+
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(result);
+                                                String status = jsonObject.getString("status");
+                                                if (status.equals("1")) {
+                                                    JSONArray datas = jsonObject.getJSONArray("datas");
+                                                    mGreenMissionLog = new GreenMissionLog();
+                                                    if (datas.length()>0){
+                                                        JSONObject object = datas.getJSONObject(0);
+                                                        mGreenMissionLog.setEquipment(object.getString("EQUIPMENT"));
+                                                        mGreenMissionLog.setServer_id(object.getString("LOG_ID"));
+                                                        mGreenMissionLog.setTask_id(mGreenMissionTask.getTaskid());
+                                                        mGreenMissionLog.setOther_part(object.getString("OTHER_PART"));
+                                                        mGreenMissionLog.setPlan(Integer.parseInt(object.getString("PLAN")));
+                                                        mGreenMissionLog.setPatrol(object.getString("PATROL"));
+                                                        mGreenMissionLog.setDzyj(object.getString("DZYJ"));
+                                                    }
+
+                                                    submitDataRecord(input);
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+//
+                                        }
+
+                                        @Override
+                                        public void getBasicLogFail(Throwable ex) {
+                                            mRxDialogLoading.cancel();
+                                            Log.i("Oking5","获取日志失败"+ex.toString());
+                                            RxToast.error("获取日志失败");
+
                                         }
                                     });
+
+                                }
+                                mLoadBasicLogPresenter.getBasicLog(mGreenMissionTask.getTaskid());
+
+
+                            }
 
 
                         } else {
@@ -587,7 +586,154 @@ public class ApprovalInstructionsFragment extends Fragment {
 
     }
 
-    private void examineOthersLogForAndroid(String input, String ajdjzt, String bzjrId) {
+    private void submitDataRecord(final String input) {
+        BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
+                .getTaskAyByParameterForAndroid(mGreenMissionLog.getServer_id())
+                .compose(RxSchedulersHelper.<ResponseBody>io_main())
+                .observeOn(Schedulers.io())
+                .concatMap(new Function<ResponseBody, Observable<ResponseBody>>() {
+                    @Override
+                    public Observable<ResponseBody> apply(ResponseBody responseBody) throws Exception {
+                        String result = responseBody.string();
+                        TaskCauseActionOV taskCauseActionOV = mGson.fromJson(result, TaskCauseActionOV.class);
+                        TaskCauseActionOV.DataBean data = taskCauseActionOV.getData();
+                        TaskCauseActionOV.DataBean.RecordsBean recordsBean = data.getRecords().get(0);
+                        Map<String, Object> putRecordParams = new HashMap<>();
+                        putRecordParams.put("option", "add");
+                        putRecordParams.put("slbh", mSlbh);
+                        putRecordParams.put("slsj", OkingContract.SDF.format(System.currentTimeMillis()));
+                        putRecordParams.put("afsj", OkingContract.SDF.format(mGreenMissionTask.getBegin_time()));
+                        putRecordParams.put("afdd", recordsBean.getAfdd());
+                        putRecordParams.put("aqjy", recordsBean.getSlsjstr() + recordsBean.getAfdd() + recordsBean.getAqjy());
+                        putRecordParams.put("wfsx", recordsBean.getAqjy());
+                        putRecordParams.put("ajly", "执法检查");
+                        List<TaskCauseActionOV.DataBean.RecordsBean> jsonBen = new ArrayList<>();
+                        jsonBen.add(recordsBean);
+                        putRecordParams.put("ajlylist", mGson.toJson(jsonBen));
+                        putRecordParams.put("EXAMINE_STATUS", "4");
+                        putRecordParams.put("LDQM", OkingContract.CURRENTUSER.getUserName());
+                        putRecordParams.put("ID", mGreenMissionLog.getServer_id());
+                        putRecordParams.put("LEADIDEA", input);
+                        putRecordParams.put("taskid", mGreenMissionTask.getTaskid());
+                        putRecordParams.put("username", OkingContract.CURRENTUSER.getUserName());
+                        putRecordParams.put("xcqk", mGreenMissionLog.getPatrol());
+                        putRecordParams.put("dzyj", mGreenMissionLog.getDzyj());
+                        putRecordParams.put("ajdjzt", "4");
+                        return BaseHttpFactory.getInstence().createService(GDWaterService.class, Api.BASE_URL)
+                                .examineLogForAndroid(putRecordParams);
+                    }
+                })
+                .concatMap(new Function<ResponseBody, ObservableSource<ResponseBody>>() {
+                    @Override
+                    public ObservableSource<ResponseBody> apply(ResponseBody responseBody) throws Exception {
+                        return BaseHttpFactory.getInstence()
+                                .createService(GDWaterService.class, Api.BASE_URL).rwdba("update", mGreenMissionTask.getTaskid(), "rwfbldps", mGreenMissionTask.getApproved_person());
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+
+                        //发送一个远程通知
+                        JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                        JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                        ArrayList<String> alias = new ArrayList<>();
+                        alias.add(mGreenMissionTask.getReceiver());
+                        audienceBean.setAlias(alias);
+                        jPushMessageBean.setAudience(audienceBean);
+                        JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                        notificationBean.setAlert("新消息(已批示)：" + mGreenMissionTask.getTask_name());
+                        JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                        JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                        extrasBean.setTaskid(mGreenMissionTask.getTaskid());
+                        extrasBean.setOpenType("3");
+                        androidBean.setExtras(extrasBean);
+                        notificationBean.setAndroid(androidBean);
+                        ArrayList<String> platforms = new ArrayList<>();
+                        platforms.add("android");
+                        jPushMessageBean.setPlatform(platforms);
+                        jPushMessageBean.setNotification(notificationBean);
+                        OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                            @Override
+                            public void pushMessageSucc(String result) {
+                                Log.i("Oking5", result);
+                            }
+
+                            @Override
+                            public void pushMessageFail(Throwable ex) {
+                                Log.i("Oking5", ex.toString());
+                            }
+                        });
+                        mRxDialogLoading.cancel();
+                        RxToast.success("领导批示成功");
+                        ApprovalActivity activity = (ApprovalActivity) getActivity();
+                        activity.designatorSuccess();
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mRxDialogLoading.cancel();
+                        RxToast.error("领导批示失败" + throwable.toString());
+                    }
+                });
+    }
+
+    private void examineOthersLogForAndroid(final String input, final String ajdjzt, final String bzjrId) {
+        if (mGreenMissionLog!=null){
+            submitData(input, ajdjzt, bzjrId);
+    }else {
+//
+            if (mLoadBasicLogPresenter == null) {
+                mLoadBasicLogPresenter = new LoadBasicLogPresenter(new LoadBasicLogContract.View() {
+                    @Override
+                    public void getBasicLogSucc(String result) {
+                        mRxDialogLoading.cancel();
+                        //{"msg":"查询成功!","datas":[{"OTHER_PART":"交通,城管","EQUIPMENT":"交通工具：001003,001001,001001  ","PLAN":"0","TYPE":"0"}],"status":"1"}
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String status = jsonObject.getString("status");
+                            if (status.equals("1")) {
+                                JSONArray datas = jsonObject.getJSONArray("datas");
+                                mGreenMissionLog = new GreenMissionLog();
+                                if (datas.length()>0){
+                                    JSONObject object = datas.getJSONObject(0);
+                                    mGreenMissionLog.setEquipment(object.getString("EQUIPMENT"));
+                                    mGreenMissionLog.setServer_id(object.getString("LOG_ID"));
+                                    mGreenMissionLog.setTask_id(mGreenMissionTask.getTaskid());
+                                    mGreenMissionLog.setOther_part(object.getString("OTHER_PART"));
+                                    mGreenMissionLog.setPlan(Integer.parseInt(object.getString("PLAN")));
+                                    mGreenMissionLog.setPatrol(object.getString("PATROL"));
+                                    mGreenMissionLog.setDzyj(object.getString("DZYJ"));
+                                }
+
+                                submitData(input, ajdjzt, bzjrId);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+//
+                    }
+
+                    @Override
+                    public void getBasicLogFail(Throwable ex) {
+                        mRxDialogLoading.cancel();
+                        Log.i("Oking5","获取日志失败"+ex.toString());
+                        RxToast.error("获取日志失败");
+
+                    }
+                });
+
+            }
+            mLoadBasicLogPresenter.getBasicLog(mGreenMissionTask.getTaskid());
+
+        }
+    }
+
+    private void submitData(String input, String ajdjzt, String bzjrId) {
         Map<String, Object> params = new HashMap<>();
         params.put("EXAMINE_STATUS", "1");
         params.put("LDQM", OkingContract.CURRENTUSER.getUserName());
@@ -617,6 +763,41 @@ public class ApprovalInstructionsFragment extends Fragment {
                 .subscribe(new Consumer<ResponseBody>() {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
+                        //发送一个远程通知
+                        JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                        JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                        ArrayList<String> alias = new ArrayList<>();
+                        alias.add(mGreenMissionTask.getReceiver());
+                        audienceBean.setAlias(alias);
+                        jPushMessageBean.setAudience(audienceBean);
+                        JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                        notificationBean.setAlert("新消息(已批示)：" + mGreenMissionTask.getTask_name());
+                        JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                        JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                        extrasBean.setTaskid(mGreenMissionTask.getTaskid());
+                        extrasBean.setOpenType("3");
+                        androidBean.setExtras(extrasBean);
+                        notificationBean.setAndroid(androidBean);
+                        ArrayList<String> platforms = new ArrayList<>();
+                        platforms.add("android");
+                        jPushMessageBean.setPlatform(platforms);
+                        jPushMessageBean.setNotification(notificationBean);
+                        OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                            @Override
+                            public void pushMessageSucc(String result) {
+                                Log.i("Oking5", result);
+                            }
+
+                            @Override
+                            public void pushMessageFail(Throwable ex) {
+                                Log.i("Oking5", ex.toString());
+                            }
+                        });
+//                        UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
+//                        updateGreenMissionTaskOV.setType(100);
+//                        updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
+//                        EventBus.getDefault().post(updateGreenMissionTaskOV);
+//                        GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().delete(mGreenMissionTask);
                         mRxDialogLoading.cancel();
                         RxToast.success("领导批示成功");
                         ApprovalActivity activity = (ApprovalActivity) getActivity();

@@ -176,7 +176,6 @@ public class PhoneBookFragment extends Fragment {
                         String result = responseBody.string();
 
 
-
                         Dept dept = gson.fromJson(result, Dept.class);
 
                         List<Dept.RowsBean> rows = dept.getRows();
@@ -230,17 +229,23 @@ public class PhoneBookFragment extends Fragment {
                             RxToast.success("数据获取成功");
                         } else {
 
-                            Log.i("Oking","服务器无数据");
+                            Log.i("Oking", "服务器无数据");
                             loadMoreEnd = true;
                         }
-                        mLayoutSwipeRefresh.setEnabled(true);
-                        mLayoutSwipeRefresh.setRefreshing(false);
+                        if (mLayoutSwipeRefresh != null) {
+
+                            mLayoutSwipeRefresh.setEnabled(true);
+                            mLayoutSwipeRefresh.setRefreshing(false);
+                        }
 
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mLayoutSwipeRefresh.setRefreshing(false);
+                        if (mLayoutSwipeRefresh != null) {
+
+                            mLayoutSwipeRefresh.setRefreshing(false);
+                        }
 
                         List<GreenDept> list = GreenDAOManager.getInstence().getDaoSession().getGreenDeptDao()
                                 .queryBuilder()
@@ -260,8 +265,10 @@ public class PhoneBookFragment extends Fragment {
                             loadMoreEnd = true;
                         }
 
+                        if (mLayoutSwipeRefresh != null) {
 
-                        mLayoutSwipeRefresh.setEnabled(true);
+                            mLayoutSwipeRefresh.setEnabled(true);
+                        }
                     }
 
                 });

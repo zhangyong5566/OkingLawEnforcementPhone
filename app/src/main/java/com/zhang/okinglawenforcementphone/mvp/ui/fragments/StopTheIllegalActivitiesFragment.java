@@ -28,7 +28,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.baselib.utils.AppUtil;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.ExpandableStopIllegalAdapter;

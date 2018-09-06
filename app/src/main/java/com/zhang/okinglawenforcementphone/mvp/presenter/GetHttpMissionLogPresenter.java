@@ -31,8 +31,9 @@ public class GetHttpMissionLogPresenter implements GetHttpMissionLogContract.Pre
 
     }
 
+
     @Override
-    public void loadHttpMissionLogFail(Throwable ex) {
-        mView.loadHttpMissionLogFail(ex);
+    public void loadEmpty(GreenMissionLog greenMissionLog) {
+        mView.loadEmpty(greenMissionLog);
     }
 }

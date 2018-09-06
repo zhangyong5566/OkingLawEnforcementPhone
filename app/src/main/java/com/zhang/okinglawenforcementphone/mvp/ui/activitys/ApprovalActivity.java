@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,14 +16,17 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.NavViewRecyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLogDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
+import com.zhang.okinglawenforcementphone.beans.JPushMessageBean;
 import com.zhang.okinglawenforcementphone.beans.NavBean;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
+import com.zhang.okinglawenforcementphone.mvp.contract.JPushMessageContract;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.ApprovalInstructionsFragment;
 import com.zhang.okinglawenforcementphone.mvp.ui.fragments.ApprovalPicVideoFragment;
@@ -33,6 +37,7 @@ import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,14 +99,14 @@ public class ApprovalActivity extends BaseActivity {
         mNavView.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
         mNavView.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 1, Color.DKGRAY));
         mNavView.setAdapter(mNavViewRecyAdapter);
-
+        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
     private void initFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mApprovalTaskInfoFragment = ApprovalTaskInfoFragment.newInstance(null, null);
         mApprovalTaskInfoFragment.setMissionTask(mGreenMissionTask);
-        fragmentTransaction.replace(R.id.rl_mision, mApprovalTaskInfoFragment, "ApprovalTaskInfoFragment").commit();
+        fragmentTransaction.replace(R.id.rl_mision, mApprovalTaskInfoFragment, "ApprovalTaskInfoFragment").commitAllowingStateLoss();
     }
 
     private void setListener() {
@@ -136,7 +141,7 @@ public class ApprovalActivity extends BaseActivity {
                             mApprovalTaskInfoFragment = ApprovalTaskInfoFragment.newInstance(null, null);
                             fragmentTransaction.add(R.id.rl_mision, mApprovalTaskInfoFragment, "ApprovalTaskInfoFragment");
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
 
                         break;
                     case 1:                     //巡查情况
@@ -162,7 +167,7 @@ public class ApprovalActivity extends BaseActivity {
                             fragmentTransaction.add(R.id.rl_mision, mApprovalTheLogFragment, "ApprovalTheLogFragment");
 
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
 
                         break;
                     case 2:                     //处理结果
@@ -188,7 +193,7 @@ public class ApprovalActivity extends BaseActivity {
                             fragmentTransaction.add(R.id.rl_mision, mApprovalPicVideoFragment, "ApprovalPicVideoFragment");
 
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
 
 
                         break;
@@ -215,7 +220,7 @@ public class ApprovalActivity extends BaseActivity {
                             fragmentTransaction.add(R.id.rl_mision, mApprovalInstructionsFragment, "ApprovalInstructionsFragment");
 
                         }
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commitAllowingStateLoss();
                         break;
                     default:
                         break;
@@ -229,7 +234,6 @@ public class ApprovalActivity extends BaseActivity {
 
     private void initData() {
         long id = getIntent().getLongExtra("id", -1L);
-        String taskId = getIntent().getStringExtra("taskId");
         mPosition = getIntent().getIntExtra("position", -1);
 
 
@@ -237,16 +241,14 @@ public class ApprovalActivity extends BaseActivity {
             mGreenMissionTask = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao()
                     .queryBuilder()
                     .where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
-
-        }
-
-        if (taskId != null) {
-            mGreenMissionLog = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao()
+            mGreenMissionLog =  GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao()
                     .queryBuilder()
-                    .where(GreenMissionLogDao.Properties.Task_id.eq(taskId))
+                    .where(GreenMissionLogDao.Properties.Task_id.eq(mGreenMissionTask.getTaskid()))
                     .unique();
+
         }
 
+//        GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert()
         initFragment();
     }
 
@@ -271,8 +273,10 @@ public class ApprovalActivity extends BaseActivity {
         mBind.unbind();
     }
 
-
+    //批示成功回调
     public void designatorSuccess() {
+
+
         UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
         updateGreenMissionTaskOV.setType(100);
         updateGreenMissionTaskOV.setPosition(mPosition);

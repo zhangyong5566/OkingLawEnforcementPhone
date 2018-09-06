@@ -282,7 +282,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
             mTv_title = mButtonDailog.findViewById(R.id.tv_title);
             RecyclerView recyList = mButtonDailog.findViewById(R.id.recy_task);
             recyList.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
-            recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 3, Color.TRANSPARENT));
+            recyList.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 1, Color.argb(255,223,223,223)));
             mSourceArrayRecyAdapter = new SourceArrayRecyAdapter(R.layout.source_item, null);
             mSourceArrayRecyAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
             recyList.setAdapter(mSourceArrayRecyAdapter);
@@ -679,7 +679,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                             greenMissionTask.setExamine_status(-1);
                                             greenMissionTask.setTypename(mSpTasknature.getText().toString());
                                             greenMissionTask.setApproved_person_name(mApprover);
-                                            greenMissionTask.setApproved_person(OkingContract.CURRENTUSER.getUserid());
+                                            greenMissionTask.setApproved_person(mApproverId);
                                             greenMissionTask.setPublisher_name(OkingContract.CURRENTUSER.getUserName());
                                             greenMissionTask.setFbdw(OkingContract.CURRENTUSER.getDeptname());
                                             greenMissionTask.setTask_area(missionDetail);
@@ -701,7 +701,7 @@ public class TemporaryEmergencyTaskActivity extends BaseActivity implements OnDa
                                             for (GreenMember checkName : mCheckName) {
                                                 checkName.setPost("组员");
                                                 checkName.setGreenMemberId(insert);
-                                                long insert1 = GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(checkName);
+                                            GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().insert(checkName);
                                             }
                                             Intent intent = new Intent(BaseApplication.getApplictaion(), MissionActivity.class);
                                             intent.putExtra("id", insert);

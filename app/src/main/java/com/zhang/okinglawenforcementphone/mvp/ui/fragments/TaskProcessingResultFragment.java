@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,6 +130,7 @@ public class TaskProcessingResultFragment extends Fragment {
         if (mGreenMissionTask.getMembers() != null) {
             for (int i = 0; i < mGreenMissionTask.getMembers().size(); i++) {
                 GreenMember member = mGreenMissionTask.getMembers().get(i);
+                Log.i("Oking5","队员："+member.toString());
                 if (member.getUsername().equals(mGreenMissionTask.getReceiver_name())) {
                     memberStr += "<font color=\"#88000000\">任务负责人：</font>";
                     if (member.getSignPic() == null || !new File(member.getSignPic()).exists()) {

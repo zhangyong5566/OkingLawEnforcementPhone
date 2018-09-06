@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
-    android:paddingBottom="110dp"
     android:orientation="vertical">
     <include
         layout="@layout/ease_search_bar_with_padding" />

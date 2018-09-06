@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,38 +38,42 @@ public class CaseManagerActivity extends BaseActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                Fragment caseRegistrationFragment = getSupportFragmentManager().findFragmentByTag("CaseRegistrationFragment");
-                Fragment openCasesFragment = getSupportFragmentManager().findFragmentByTag("OpenCasesFragment");
-                Fragment caseProcessingListFragment = getSupportFragmentManager().findFragmentByTag("CaseProcessingListFragment");
-                Fragment caseComplaintFragment = getSupportFragmentManager().findFragmentByTag("CaseComplaintFragment");
-                Fragment caseInAdvanceFragment = getSupportFragmentManager().findFragmentByTag("CaseInAdvanceFragment");
-
-                if (caseRegistrationFragment != null && !caseRegistrationFragment.isHidden()) {
-                    mTvTitle.setText("办案");
-                    fragmentTransaction.hide(caseRegistrationFragment);
-                    fragmentTransaction.show(mHandlingMenuFragment).commit();
-                }else if (openCasesFragment != null && !openCasesFragment.isHidden()) {
-                    mTvTitle.setText("办案");
-                    fragmentTransaction.hide(openCasesFragment);
-                    fragmentTransaction.show(mHandlingMenuFragment).commit();
-                }else if (caseProcessingListFragment != null && !caseProcessingListFragment.isHidden()) {
-                    mTvTitle.setText("办案");
-                    fragmentTransaction.hide(caseProcessingListFragment);
-                    fragmentTransaction.show(mHandlingMenuFragment).commit();
-                }else if (caseComplaintFragment != null && !caseComplaintFragment.isHidden()) {
-                    mTvTitle.setText("办案");
-                    fragmentTransaction.hide(caseComplaintFragment);
-                    fragmentTransaction.show(mHandlingMenuFragment).commit();
-                }else if (caseInAdvanceFragment != null && !caseInAdvanceFragment.isHidden()) {
-                    mTvTitle.setText("办案");
-                    fragmentTransaction.hide(caseInAdvanceFragment);
-                    fragmentTransaction.show(mHandlingMenuFragment).commit();
-                }else {
-                    finish();
-                }
+                back();
             }
         });
+    }
+
+    private void back() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment caseRegistrationFragment = getSupportFragmentManager().findFragmentByTag("CaseRegistrationFragment");
+        Fragment openCasesFragment = getSupportFragmentManager().findFragmentByTag("OpenCasesFragment");
+        Fragment caseProcessingListFragment = getSupportFragmentManager().findFragmentByTag("CaseProcessingListFragment");
+        Fragment caseComplaintFragment = getSupportFragmentManager().findFragmentByTag("CaseComplaintFragment");
+        Fragment caseInAdvanceFragment = getSupportFragmentManager().findFragmentByTag("CaseInAdvanceFragment");
+
+        if (caseRegistrationFragment != null && !caseRegistrationFragment.isHidden()) {
+            mTvTitle.setText("办案");
+            fragmentTransaction.hide(caseRegistrationFragment);
+            fragmentTransaction.show(mHandlingMenuFragment).commit();
+        }else if (openCasesFragment != null && !openCasesFragment.isHidden()) {
+            mTvTitle.setText("办案");
+            fragmentTransaction.hide(openCasesFragment);
+            fragmentTransaction.show(mHandlingMenuFragment).commit();
+        }else if (caseProcessingListFragment != null && !caseProcessingListFragment.isHidden()) {
+            mTvTitle.setText("办案");
+            fragmentTransaction.hide(caseProcessingListFragment);
+            fragmentTransaction.show(mHandlingMenuFragment).commit();
+        }else if (caseComplaintFragment != null && !caseComplaintFragment.isHidden()) {
+            mTvTitle.setText("办案");
+            fragmentTransaction.hide(caseComplaintFragment);
+            fragmentTransaction.show(mHandlingMenuFragment).commit();
+        }else if (caseInAdvanceFragment != null && !caseInAdvanceFragment.isHidden()) {
+            mTvTitle.setText("办案");
+            fragmentTransaction.hide(caseInAdvanceFragment);
+            fragmentTransaction.show(mHandlingMenuFragment).commit();
+        }else {
+            finish();
+        }
     }
 
     private void initData() {
@@ -121,6 +126,16 @@ public class CaseManagerActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mBind.unbind();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;//return true;拦截事件传递,从而屏蔽back键。
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     public void setTitleText(String title) {

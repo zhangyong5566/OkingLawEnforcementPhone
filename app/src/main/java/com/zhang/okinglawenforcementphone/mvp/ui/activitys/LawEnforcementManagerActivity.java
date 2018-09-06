@@ -5,6 +5,8 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,39 +46,43 @@ public class LawEnforcementManagerActivity extends BaseActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                Fragment lawEnforcementMenuFragment = getSupportFragmentManager().findFragmentByTag("StopTheIllegalActivitiesFragment");
-                Fragment penaltyTheSpotFragment = getSupportFragmentManager().findFragmentByTag("PenaltyTheSpotFragment");
-                Fragment enforcementInspectionNormsFragment = getSupportFragmentManager().findFragmentByTag("EnforcementInspectionNormsFragment");
-                Fragment enforcementLanguageSpecificationFragment = getSupportFragmentManager().findFragmentByTag("EnforcementLanguageSpecificationFragment");
-                Fragment administrativeEnforcementFragment = getSupportFragmentManager().findFragmentByTag("AdministrativeEnforcementFragment");
-
-                if (lawEnforcementMenuFragment != null && !lawEnforcementMenuFragment.isHidden()) {
-                    mTvTitle.setText("辅助执法");
-                    fragmentTransaction.hide(lawEnforcementMenuFragment);
-                    fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
-                } else if (penaltyTheSpotFragment != null && !penaltyTheSpotFragment.isHidden()) {
-                    mTvTitle.setText("辅助执法");
-                    fragmentTransaction.hide(penaltyTheSpotFragment);
-                    fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
-                } else if (enforcementInspectionNormsFragment != null && !enforcementInspectionNormsFragment.isHidden()) {
-                    mTvTitle.setText("辅助执法");
-                    fragmentTransaction.hide(enforcementInspectionNormsFragment);
-                    fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
-                } else if (enforcementLanguageSpecificationFragment != null && !enforcementLanguageSpecificationFragment.isHidden()) {
-                    mTvTitle.setText("辅助执法");
-                    fragmentTransaction.hide(enforcementLanguageSpecificationFragment);
-                    fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
-                } else if (administrativeEnforcementFragment != null && !administrativeEnforcementFragment.isHidden()) {
-                    mTvTitle.setText("辅助执法");
-                    fragmentTransaction.hide(administrativeEnforcementFragment);
-                    fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
-                } else {
-                    finish();
-                }
+                back();
 
             }
         });
+    }
+
+    private void back() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment lawEnforcementMenuFragment = getSupportFragmentManager().findFragmentByTag("StopTheIllegalActivitiesFragment");
+        Fragment penaltyTheSpotFragment = getSupportFragmentManager().findFragmentByTag("PenaltyTheSpotFragment");
+        Fragment enforcementInspectionNormsFragment = getSupportFragmentManager().findFragmentByTag("EnforcementInspectionNormsFragment");
+        Fragment enforcementLanguageSpecificationFragment = getSupportFragmentManager().findFragmentByTag("EnforcementLanguageSpecificationFragment");
+        Fragment administrativeEnforcementFragment = getSupportFragmentManager().findFragmentByTag("AdministrativeEnforcementFragment");
+
+        if (lawEnforcementMenuFragment != null && !lawEnforcementMenuFragment.isHidden()) {
+            mTvTitle.setText("辅助执法");
+            fragmentTransaction.hide(lawEnforcementMenuFragment);
+            fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
+        } else if (penaltyTheSpotFragment != null && !penaltyTheSpotFragment.isHidden()) {
+            mTvTitle.setText("辅助执法");
+            fragmentTransaction.hide(penaltyTheSpotFragment);
+            fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
+        } else if (enforcementInspectionNormsFragment != null && !enforcementInspectionNormsFragment.isHidden()) {
+            mTvTitle.setText("辅助执法");
+            fragmentTransaction.hide(enforcementInspectionNormsFragment);
+            fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
+        } else if (enforcementLanguageSpecificationFragment != null && !enforcementLanguageSpecificationFragment.isHidden()) {
+            mTvTitle.setText("辅助执法");
+            fragmentTransaction.hide(enforcementLanguageSpecificationFragment);
+            fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
+        } else if (administrativeEnforcementFragment != null && !administrativeEnforcementFragment.isHidden()) {
+            mTvTitle.setText("辅助执法");
+            fragmentTransaction.hide(administrativeEnforcementFragment);
+            fragmentTransaction.show(mLawEnforcementMenuFragment).commit();
+        } else {
+            finish();
+        }
     }
 
     private void initData() {
@@ -85,6 +91,16 @@ public class LawEnforcementManagerActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;//return true;拦截事件传递,从而屏蔽back键。
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onDestroy() {

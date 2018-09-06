@@ -330,6 +330,7 @@ public abstract class EaseChatRow extends LinearLayout {
 
     protected void updateView() {
         activity.runOnUiThread(new Runnable() {
+            @Override
             public void run() {
                 if (message.status() == EMMessage.Status.FAIL) {
                     Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();

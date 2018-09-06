@@ -1,27 +1,15 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.GlideApp;
 import com.zhang.okinglawenforcementphone.R;
-import com.zhang.okinglawenforcementphone.beans.GreenLocation;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ImageViewActivity;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 

@@ -1,9 +1,7 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -12,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.AllMenuItemBean;
+import com.zhang.okinglawenforcementphone.views.GridDivider;
 
 import java.util.List;
 
@@ -32,7 +31,8 @@ public class AllMenuRecyAdapter extends BaseQuickAdapter<AllMenuItemBean, BaseVi
 
         helper.setText(R.id.tv_title, item.getTitle());
         RecyclerView rcyAllMenuSub = helper.getView(R.id.rcy_all_menu_sub);
-        rcyAllMenuSub.setLayoutManager(new GridLayoutManager(BaseApplication.getApplictaion(), 4));
+        rcyAllMenuSub.setLayoutManager(new GridLayoutManager(BaseApplication.getApplictaion(), 3));
+        rcyAllMenuSub.addItemDecoration(new GridDivider(BaseApplication.getApplictaion(),  5, BaseApplication.getApplictaion().getResources().getColor(R.color.line)));
         AllMenuSubRecyAdapter allMenuSubRecyAdapter = new AllMenuSubRecyAdapter(R.layout.all_menu_sub, item.getSubList());
         rcyAllMenuSub.setAdapter(allMenuSubRecyAdapter);
         allMenuSubRecyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

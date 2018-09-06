@@ -5,5 +5,5 @@ package com.zhang.okinglawenforcementphone.http;
  */
 
 public class Api {
-    public static final String BASE_URL = "http://183.237.175.100:8087";
+    public static final String BASE_URL = "http://10.44.21.26:8087";
 }

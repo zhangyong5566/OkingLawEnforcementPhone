@@ -214,6 +214,7 @@ public class TaskInfoFragment extends Fragment {
             String[] split = flowTagPos.split(",");
             Set<Integer> integers = new HashSet<>();
             for (String s : split) {
+                parts += partList.get(Integer.parseInt(s)) + ",";
                 integers.add(Integer.parseInt(s));
             }
             partTagAdapter.setSelectedList(integers);
@@ -240,11 +241,9 @@ public class TaskInfoFragment extends Fragment {
 
             }
         });
-        Log.i("Oking5",mGreenMissionTask.getStatus());
         if (mGreenMissionTask.getStatus().equals("100")) {
             mPartFlowLayout.setEnabled(false);
         } else if (mGreenMissionTask.getStatus().equals("5")) {
-            Log.i("Oking5",mGreenMissionTask.getStatus());
             mPartFlowLayout.setEnabled(false);
             mEditEquipmentBtn.setVisibility(View.GONE);
             mPlanSpinner.setClickable(false);

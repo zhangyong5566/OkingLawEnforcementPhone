@@ -32,7 +32,6 @@ import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ImageViewActivity;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.MissionRecorActivity;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.ShootActivity;
 
 import java.io.File;
@@ -195,6 +194,7 @@ public class TaskPicFragment extends Fragment {
         //清除缓存
         mGreenMissionLog.resetGreenMedia();
         List<GreenMedia> greenMedias = mGreenMissionLog.getGreenMedia();
+        Log.i("Oking5",greenMedias.size()+">>>图片");
         for (GreenMedia media : greenMedias) {
             if (media.getType() == 1) {            //1表示日志图片
                 mPhotoMedias.add(media);

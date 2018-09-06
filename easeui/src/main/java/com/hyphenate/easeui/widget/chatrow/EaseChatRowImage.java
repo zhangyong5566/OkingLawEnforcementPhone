@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -19,6 +20,9 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.model.EaseImageCache;
 import com.hyphenate.easeui.ui.EaseShowBigImageActivity;
 import com.hyphenate.easeui.utils.EaseImageUtils;
+import com.zhang.baselib.BaseApplication;
+import com.zhang.baselib.GlideApp;
+
 import java.io.File;
 
 public class EaseChatRowImage extends EaseChatRowFile{
@@ -56,19 +60,22 @@ public class EaseChatRowImage extends EaseChatRowFile{
                 progressBar.setVisibility(View.GONE);
                 percentageView.setVisibility(View.GONE);
                 imageView.setImageResource(R.drawable.ease_default_image);
-                String thumbPath = imgBody.thumbnailLocalPath();
-                if (!new File(thumbPath).exists()) {
-                	// to make it compatible with thumbnail received in previous version
-                    thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
-                }
-                showImageView(thumbPath, imgBody.getLocalUrl(), message);
+                GlideApp.with(BaseApplication.getApplictaion())
+                        .load(imgBody.getLocalUrl())
+                        .override(180, 180)
+                        .into(imageView);
             }
             return;
         }
-        
+
+
         String filePath = imgBody.getLocalUrl();
-        String thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
-        showImageView(thumbPath, filePath, message);
+        GlideApp.with(BaseApplication.getApplictaion())
+                .load(filePath)
+                .override(180, 180)
+                .into(imageView);
+//        String thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+//        showImageView(thumbPath, filePath, message);
         handleSendMessage();
     }
     
@@ -119,46 +126,46 @@ public class EaseChatRowImage extends EaseChatRowFile{
      * load image into image view
      * 
      */
-    @SuppressLint("StaticFieldLeak")
-    private void showImageView(final String thumbernailPath, final String localFullSizePath, final EMMessage message) {
-        // first check if the thumbnail image already loaded into cache
-        Bitmap bitmap = EaseImageCache.getInstance().get(thumbernailPath);
-        if (bitmap != null) {
-            // thumbnail image is already loaded, reuse the drawable
-            imageView.setImageBitmap(bitmap);
-        } else {
-            new AsyncTask<Object, Void, Bitmap>() {
-
-                @Override
-                protected Bitmap doInBackground(Object... args) {
-                    File file = new File(thumbernailPath);
-                    if (file.exists()) {
-                        return EaseImageUtils.decodeScaleImage(thumbernailPath, 160, 160);
-                    } else if (new File(imgBody.thumbnailLocalPath()).exists()) {
-                        return EaseImageUtils.decodeScaleImage(imgBody.thumbnailLocalPath(), 160, 160);
-                    }
-                    else {
-                        if (message.direct() == EMMessage.Direct.SEND) {
-                            if (localFullSizePath != null && new File(localFullSizePath).exists()) {
-                                return EaseImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
-                            } else {
-                                return null;
-                            }
-                        } else {
-                            return null;
-                        }
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(Bitmap image) {
-                    if (image != null) {
-                        imageView.setImageBitmap(image);
-                        EaseImageCache.getInstance().put(thumbernailPath, image);
-                    }
-                }
-            };
-        }
-    }
+//    @SuppressLint("StaticFieldLeak")
+//    private void showImageView(final String thumbernailPath, final String localFullSizePath, final EMMessage message) {
+//        // first check if the thumbnail image already loaded into cache
+//        Bitmap bitmap = EaseImageCache.getInstance().get(thumbernailPath);
+//        if (bitmap != null) {
+//            // thumbnail image is already loaded, reuse the drawable
+//            imageView.setImageBitmap(bitmap);
+//        } else {
+//            new AsyncTask<Object, Void, Bitmap>() {
+//
+//                @Override
+//                protected Bitmap doInBackground(Object... args) {
+//                    File file = new File(thumbernailPath);
+//                    if (file.exists()) {
+//                        return EaseImageUtils.decodeScaleImage(thumbernailPath, 160, 160);
+//                    } else if (new File(imgBody.thumbnailLocalPath()).exists()) {
+//                        return EaseImageUtils.decodeScaleImage(imgBody.thumbnailLocalPath(), 160, 160);
+//                    }
+//                    else {
+//                        if (message.direct() == EMMessage.Direct.SEND) {
+//                            if (localFullSizePath != null && new File(localFullSizePath).exists()) {
+//                                return EaseImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
+//                            } else {
+//                                return null;
+//                            }
+//                        } else {
+//                            return null;
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Bitmap image) {
+//                    if (image != null) {
+//                        imageView.setImageBitmap(image);
+//                        EaseImageCache.getInstance().put(thumbernailPath, image);
+//                    }
+//                }
+//            };
+//        }
+//    }
 
 }

@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -104,7 +105,7 @@ public class LoginActivity extends BaseActivity {
         if (!LocationUtil.isGpsEnabled(BaseApplication.getApplictaion())) {
 
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            this.startActivityForResult(intent, 0); //此为设置完成后返回到获取界面Intent GPSIntent = new Intent();
+            startActivityForResult(intent, 0); //此为设置完成后返回到获取界面Intent GPSIntent = new Intent();
         }
 
     }
@@ -207,7 +208,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void run() {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("menuGroup", menuGroup);
+
                         startActivity(intent);
                         finish();
                     }
@@ -326,6 +327,7 @@ public class LoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mBind.unbind();
+
     }
 
     private ProgressInfo mLastDownloadingInfo;

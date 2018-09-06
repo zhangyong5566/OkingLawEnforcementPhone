@@ -20,12 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hyphenate.chat.EMMessage;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxDialogSure;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
@@ -34,15 +32,12 @@ import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.EvidencePicRecyAdapter;
-import com.zhang.okinglawenforcementphone.adapter.PicSimpleAdapter;
 import com.zhang.okinglawenforcementphone.adapter.SourceArrayRecyAdapter;
-import com.zhang.okinglawenforcementphone.adapter.SpinnerArrayAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenCase;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidence;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceDao;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceMedia;
 import com.zhang.okinglawenforcementphone.beans.GreenEvidenceSZOV;
-import com.zhang.okinglawenforcementphone.beans.GreenMedia;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.SaveOrRemoveDataEvent;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;

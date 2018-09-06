@@ -6,10 +6,12 @@ package com.zhang.okinglawenforcementphone.beans;
 
 public class NewsTaskOV {
     public int mType;
+    public String taskid;
     public GreenMissionTask mGreenMissionTask;
 
-    public NewsTaskOV(int type, GreenMissionTask greenMissionTask) {
+    public NewsTaskOV(int type, String taskid, GreenMissionTask greenMissionTask) {
         mType = type;
+        this.taskid = taskid;
         mGreenMissionTask = greenMissionTask;
     }
 }

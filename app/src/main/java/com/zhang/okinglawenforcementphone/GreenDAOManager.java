@@ -10,6 +10,7 @@ import com.zhang.okinglawenforcementphone.db.MyGreenDaoDbHelper;
 
 import org.greenrobot.greendao.database.Database;
 
+
 /**
  * Created by Administrator on 2018/4/18.
  */

@@ -30,7 +30,6 @@ import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.ExpandablePenaltyTheSpotAdapter;
-import com.zhang.okinglawenforcementphone.adapter.ExpandableStopIllegalAdapter;
 import com.zhang.okinglawenforcementphone.beans.WrittenItemBean;
 import com.zhang.okinglawenforcementphone.beans.WrittenRecordLevel0;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;

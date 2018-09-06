@@ -1,7 +1,5 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,14 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,16 +30,12 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.zhang.baselib.BaseApplication;
-import com.zhang.baselib.DefaultContants;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.baselib.utils.AppUtil;
 import com.zhang.baselib.utils.FileUtil;
-import com.zhang.baselib.utils.PermissionUtil;
-import com.zhang.baselib.utils.Util;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.AnswBean;
-import com.zhang.okinglawenforcementphone.beans.Level0Item;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.ProblemBean;
 import com.zhang.okinglawenforcementphone.beans.SourceArrayOV;
@@ -57,7 +47,6 @@ import com.zhang.okinglawenforcementphone.mvp.presenter.UploadRecordPresenter;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
 import com.zhang.okinglawenforcementphone.utils.DialogUtil;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
-import com.zhang.okinglawenforcementphone.views.MyRecycelerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;

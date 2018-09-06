@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Stack;
@@ -46,6 +45,9 @@ public class ActivityUtil {
      */
     public static void finishActivity() {
         Activity activity = activityStack.lastElement();
+        activityStack.remove(activity);
+        activity.finish();
+        activity = null;
 
     }
 

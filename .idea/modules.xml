@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CircularProgressButtonLibrary/CircularProgressButtonLibrary.iml" filepath="$PROJECT_DIR$/CircularProgressButtonLibrary/CircularProgressButtonLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JPushExample(1043273)/JPushExample(1043273).iml" filepath="$PROJECT_DIR$/JPushExample(1043273)/JPushExample(1043273).iml" />
       <module fileurl="file://$PROJECT_DIR$/OkingLawEnforcementPhone.iml" filepath="$PROJECT_DIR$/OkingLawEnforcementPhone.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-pdf-viewer/android-pdf-viewer.iml" filepath="$PROJECT_DIR$/android-pdf-viewer/android-pdf-viewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

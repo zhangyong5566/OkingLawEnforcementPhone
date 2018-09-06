@@ -17,7 +17,8 @@ public interface GetHttpMissionLogContract {
     interface View {
         void loadHttpMissionLogSucc(GreenMissionLog greenMissionLog);
 
-        void loadHttpMissionLogFail(Throwable ex);
+
+        void loadEmpty(GreenMissionLog greenMissionLog);
     }
 
     interface Presenter {
@@ -25,7 +26,7 @@ public interface GetHttpMissionLogContract {
 
         void loadHttpMissionLogSucc(GreenMissionLog greenMissionLog);
 
-        void loadHttpMissionLogFail(Throwable ex);
 
+        void loadEmpty(GreenMissionLog greenMissionLog);
     }
 }

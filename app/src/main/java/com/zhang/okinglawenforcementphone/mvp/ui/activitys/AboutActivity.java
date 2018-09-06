@@ -12,7 +12,6 @@ import com.zhang.baselib.GlideApp;
 import com.zhang.baselib.utils.DeviceUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.mvp.ui.base.BaseActivity;
-import com.zhang.okinglawenforcementphone.mvp.ui.fragments.UserFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

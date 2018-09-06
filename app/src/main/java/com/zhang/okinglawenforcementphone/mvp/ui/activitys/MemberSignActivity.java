@@ -155,9 +155,8 @@ public class MemberSignActivity extends BaseActivity {
                         mRxDialogSureCancel.getTvSure().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                memberList.remove(position);
                                 GreenDAOManager.getInstence().getDaoSession().getGreenMemberDao().delete(member);
-                                memberAdapter.notifyDataSetChanged();
+                                memberAdapter.remove(position);
                                 mRxDialogSureCancel.cancel();
                             }
                         });
@@ -272,7 +271,8 @@ public class MemberSignActivity extends BaseActivity {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-                                        GreenMember greenMember = memberList.get(selection);
+                                       final GreenMember greenMember = memberAdapter.getData().get(selection);
+
                                         if (greenMember != null) {
                                             if (greenMember.getSignPic() != null && new File(FileUtil.praseUritoPath(MemberSignActivity.this, Uri.parse(greenMember.getSignPic()))).exists()) {
 
@@ -289,19 +289,12 @@ public class MemberSignActivity extends BaseActivity {
                                                 greenMember.setSignPic(signatureFile.getPath());
                                             }
 
-                                            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                                            intent.setData(Uri.fromFile(signatureFile));
-                                            sendBroadcast(intent);
-
-                                            Intent resultIntent = new Intent();
-                                            resultIntent.setData(Uri.fromFile(signatureFile));
-                                            setResult(RESULT_OK, intent);
 
 
                                             AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    memberAdapter.notifyDataSetChanged();
+                                                    memberAdapter.setData(selection,greenMember);
                                                     mClearBtn.setVisibility(View.INVISIBLE);
                                                     mSaveBtn.setVisibility(View.INVISIBLE);
                                                 }

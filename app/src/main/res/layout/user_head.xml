@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/main_sdv"
         android:layout_width="@dimen/x_px_100"
-        android:layout_height="@dimen/y_px_100"
+        android:layout_height="@dimen/x_px_100"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y_px_20"
         android:scaleType="centerCrop"

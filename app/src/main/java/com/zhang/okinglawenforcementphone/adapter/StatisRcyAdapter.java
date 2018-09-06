@@ -1,14 +1,11 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.zhang.baselib.BaseApplication;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
-import com.zhang.okinglawenforcementphone.beans.UserItemOV;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,10 +35,12 @@ import com.zhang.baselib.http.schedulers.RxSchedulersHelper;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxDialogSureCancel;
 import com.zhang.baselib.ui.views.RxToast;
+import com.zhang.baselib.utils.ActivityUtil;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.baselib.utils.NetUtil;
 import com.zhang.baselib.utils.Util;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.adapter.NavViewRecyAdapter;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
@@ -46,16 +49,16 @@ import com.zhang.okinglawenforcementphone.beans.GreenMissionLog;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionLogDao;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
+import com.zhang.okinglawenforcementphone.beans.JPushMessageBean;
 import com.zhang.okinglawenforcementphone.beans.NavBean;
-import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.Point;
 import com.zhang.okinglawenforcementphone.beans.RecordLogOV;
-import com.zhang.okinglawenforcementphone.beans.StopSwipeRefreshEvent;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
 import com.zhang.okinglawenforcementphone.http.Api;
 import com.zhang.okinglawenforcementphone.http.service.GDWaterService;
 import com.zhang.okinglawenforcementphone.mvp.contract.GetHttpMissionLogContract;
+import com.zhang.okinglawenforcementphone.mvp.contract.JPushMessageContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UpdateMissionStateContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadJobLogContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.UploadJobLogForPicContract;
@@ -76,7 +79,6 @@ import com.zhang.okinglawenforcementphone.mvp.ui.fragments.TaskVideoFragment;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.greendao.query.QueryBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.reactivestreams.Subscriber;
@@ -89,6 +91,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -124,7 +127,7 @@ public class MissionRecorActivity extends BaseActivity {
     Button mReportMissionButton;
     @BindView(R.id.complete_mission_button)
     Button mCompleteMissionButton;
-    private int atPosition = -1;
+    private int atPosition = 0;
     private GreenMissionTask mission;
     private GreenMissionLog mGreenMissionLog;
     private RxDialogLoading mRxDialogLoading;
@@ -178,6 +181,8 @@ public class MissionRecorActivity extends BaseActivity {
     private boolean mCanSaveComplete = false;
     private boolean mSummarySwisopen;
     private boolean mLeaderSummarySwisopen;
+    private Handler mainHandler;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +253,7 @@ public class MissionRecorActivity extends BaseActivity {
                                     mTaskInfoFragment.setGreenMissionLog(mGreenMissionLog);
                                     fragmentTransaction.add(R.id.rl_mision, mTaskInfoFragment, "TaskInfoFragment");
                                 }
-                                fragmentTransaction.commit();
+                                fragmentTransaction.commitAllowingStateLoss();
 
                                 break;
                             case 1:                     //巡查情况
@@ -278,7 +283,7 @@ public class MissionRecorActivity extends BaseActivity {
                                     fragmentTransaction.add(R.id.rl_mision, mTaskPatrolFragment, "TaskPatrolFragment");
 
                                 }
-                                fragmentTransaction.commit();
+                                fragmentTransaction.commitAllowingStateLoss();
 
                                 break;
                             case 2:                     //处理结果
@@ -312,7 +317,7 @@ public class MissionRecorActivity extends BaseActivity {
                                     fragmentTransaction.add(R.id.rl_mision, mTaskPicFragment, "TaskPicFragment");
 
                                 }
-                                fragmentTransaction.commit();
+                                fragmentTransaction.commitAllowingStateLoss();
                                 break;
                             case 4:                     //录视频
                                 mTvTitle.setText("录视频");
@@ -341,7 +346,7 @@ public class MissionRecorActivity extends BaseActivity {
                                     fragmentTransaction.add(R.id.rl_mision, mTaskVideoFragment, "TaskVideoFragment");
 
                                 }
-                                fragmentTransaction.commit();
+                                fragmentTransaction.commitAllowingStateLoss();
                                 break;
                             default:
                                 break;
@@ -383,72 +388,74 @@ public class MissionRecorActivity extends BaseActivity {
             fragmentTransaction.add(R.id.rl_mision, mTaskProcessingResultFragment, "TaskProcessingResultFragment");
 
         }
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
 
     private void initData() {
         BaseApplication.getApplictaion().registerReceiver(mNetWokReceiver, new IntentFilter("oking.network"));
         //定时保存
-        Flowable.interval(5, 10, TimeUnit.SECONDS)
-                .onBackpressureDrop()
-                .subscribe(new Subscriber<Long>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        mSubscription = s;
-                        s.request(Long.MAX_VALUE);
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-                        //判断当前显示的是哪个页面
-                        if (mission.getStatus().equals(5)){
-
-                        }else {
-                            switch (atPosition) {
-                                case 0:
-                                    Log.i("Oking5", "保存基本信息");
-                                    saveTaskInfo();
-                                    break;
-                                case 1:
-                                    Log.i("Oking5", "保存巡查情况");
-                                    savePatrol();
-                                    break;
-                                case 2:
-                                    Log.i("Oking5", "保存处理结果");
-                                    saveResults();
-                                    break;
-                                case 3:
-                                    Log.i("Oking5", "保存拍照");     //不用再去调用保存操作，每次拍照都保存了
-                                    break;
-                                case 4:
-                                    Log.i("Oking5", "保存视频");
-                                    break;
-                                default:
-                                    break;
-                            }
-                            AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mTvSavetag.setText("上次保存时间：" + mSimpleDateFormat.format(System.currentTimeMillis()));
-                                }
-                            });
+        if (mission != null) {
+            Flowable.interval(5, 10, TimeUnit.SECONDS)
+                    .onBackpressureDrop()
+                    .subscribe(new Subscriber<Long>() {
+                        @Override
+                        public void onSubscribe(Subscription s) {
+                            mSubscription = s;
+                            s.request(Long.MAX_VALUE);
                         }
 
+                        @Override
+                        public void onNext(Long aLong) {
+                            //判断当前显示的是哪个页面
+                            if (mission.getStatus().equals("5") || mission.getStatus().equals("100")) {
+
+                            } else {
+                                switch (atPosition) {
+                                    case 0:
+                                        Log.i("Oking5", "保存基本信息");
+                                        saveTaskInfo();
+                                        break;
+                                    case 1:
+                                        Log.i("Oking5", "保存巡查情况");
+                                        savePatrol();
+                                        break;
+                                    case 2:
+                                        Log.i("Oking5", "保存处理结果");
+                                        saveResults();
+                                        break;
+                                    case 3:
+                                        Log.i("Oking5", "保存拍照");     //不用再去调用保存操作，每次拍照都保存了
+                                        break;
+                                    case 4:
+                                        Log.i("Oking5", "保存视频");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                AndroidSchedulers.mainThread().createWorker().schedule(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mTvSavetag.setText("上次保存时间：" + mSimpleDateFormat.format(System.currentTimeMillis()));
+                                    }
+                                });
+                            }
 
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable t) {
+                        @Override
+                        public void onError(Throwable t) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-                    }
-                });
+                        }
+                    });
+        }
+
     }
 
     private void saveResults() {
@@ -500,122 +507,89 @@ public class MissionRecorActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mTaskId = intent.getStringExtra("taskId");
-        long id = intent.getLongExtra("id", -1L);
+        mPosition = intent.getIntExtra("position", -1);
+
+
         if (mTaskId != null) {
-
-            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
-
-            if (unique == null) {
-                //网络获取Log(尝试用http获取服务器的Log，获取不了再单机生成新Log)
-                getHttpMissionLog(id);
-
-            } else {
-                mGreenMissionLog = unique;
-                if (mission == null) {
-
-                    mission = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(mTaskId)).unique();
-                }
-                initFragment();
-            }
+            //网络获取Log(尝试用http获取服务器的Log，获取不了再单机生成新Log)
+            getNetData(mTaskId);
         }
 
 
+        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
-    private void initFragment() {
-        if (mission.getStatus().equals("100")) {//任务已完成，不能再完成
-
-            mCompleteMissionButton.setVisibility(View.GONE);
-
-        } else if (mission.getStatus().equals("5")) {
-            //任务已上报，不能再上报
-            mReportMissionButton.setVisibility(View.GONE);
-            mCompleteMissionButton.setVisibility(View.GONE);
-
-
-        } else if (mission.getStatus().equals("9")) {//任务被退回修改
-
-
-            mReportMissionButton.setVisibility(View.GONE);
-            mCompleteMissionButton.setVisibility(View.GONE);
-
-        }
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mTaskInfoFragment = TaskInfoFragment.newInstance(null, null);
-        mTaskInfoFragment.setMission(mission);
-        mTaskInfoFragment.setGreenMissionLog(mGreenMissionLog);
-        fragmentTransaction.replace(R.id.rl_mision, mTaskInfoFragment, "TaskInfoFragment").commit();
-    }
-
-
-    private void getHttpMissionLog(final Long id) {
-
-        mission = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Id.eq(id)).unique();
-
-        if (mission != null) {
+    private void getNetData(String taskId) {
+        if (mRxDialogLoading == null) {
             mRxDialogLoading = new RxDialogLoading(this, true, new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
                     dialogInterface.cancel();
                 }
             });
-            mRxDialogLoading.setLoadingText("初始化数据中，请稍等...");
-            mRxDialogLoading.show();
-            if (mGetHttpMissionLogPresenter == null) {
-                mGetHttpMissionLogPresenter = new GetHttpMissionLogPresenter(new GetHttpMissionLogContract.View() {
-                    @Override
-                    public void loadHttpMissionLogSucc(GreenMissionLog greenMissionLog) {
-                        mRxDialogLoading.cancel();
-                        if (greenMissionLog != null) {
-                            mGreenMissionLog = greenMissionLog;
-                            initFragment();
-                        } else {
+        }
+        mRxDialogLoading.setLoadingText("初始化数据中，请稍等...");
+        mRxDialogLoading.show();
 
-                        }
+        mission = GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().queryBuilder().where(GreenMissionTaskDao.Properties.Taskid.eq(taskId)).unique();
+        if (mGetHttpMissionLogPresenter == null) {
+            mGetHttpMissionLogPresenter = new GetHttpMissionLogPresenter(new GetHttpMissionLogContract.View() {
+                @Override
+                public void loadHttpMissionLogSucc(GreenMissionLog greenMissionLog) {
+                    mRxDialogLoading.cancel();
+                    mGreenMissionLog = greenMissionLog;
+                    initFragment();
 
-                    }
+                }
 
-                    @Override
-                    public void loadHttpMissionLogFail(Throwable ex) {
-                        mRxDialogLoading.cancel();
-                        Log.i("Oking", "没有获取到任务日志" + ex.toString());
+                @Override
+                public void loadEmpty(GreenMissionLog greenMissionLog) {
+                    mRxDialogLoading.cancel();
+                    mGreenMissionLog = greenMissionLog;
+                    initFragment();
 
-                        if (ex.toString().contains("SocketTimeoutException")) {
-                            RxToast.error("网络超时");
-                            mReportMissionButton.setEnabled(false);
-                            mCompleteMissionButton.setEnabled(false);
-                        } else {
-                            mGreenMissionLog = new GreenMissionLog();
-                            mGreenMissionLog.setTask_id(mission.getTaskid());
-                            mGreenMissionLog.setName(OkingContract.CURRENTUSER.getUserid());
-                            mGreenMissionLog.setStatus(0);
+                }
+            });
+        }
+        if (mission != null) {
 
-                            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
-                            if (unique == null) {
-                                GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
-                            }
-                            initFragment();
-                        }
-                    }
-                });
-            }
             mGetHttpMissionLogPresenter.getHttpMissionLog(mission);
-
-
         } else {
-            mGreenMissionLog = new GreenMissionLog();
-            mGreenMissionLog.setTask_id(mTaskId);
-            mGreenMissionLog.setName(OkingContract.CURRENTUSER.getUserid());
-            mGreenMissionLog.setStatus(0);
-
-            GreenMissionLog unique = GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().queryBuilder().where(GreenMissionLogDao.Properties.Task_id.eq(mTaskId)).unique();
-            if (unique == null) {
-                GreenDAOManager.getInstence().getDaoSession().getGreenMissionLogDao().insert(mGreenMissionLog);
-            }
+            mRxDialogLoading.cancel();
+            finish();
         }
 
 
     }
+
+    private void initFragment() {
+        if (mCompleteMissionButton != null && mReportMissionButton != null) {
+            if (mission.getStatus().equals("100")) {//任务已完成，不能再完成
+
+                mCompleteMissionButton.setVisibility(View.GONE);
+
+            } else if (mission.getStatus().equals("5")) {
+                //任务已上报，不能再上报
+                mReportMissionButton.setVisibility(View.GONE);
+                mCompleteMissionButton.setVisibility(View.GONE);
+
+
+            } else if (mission.getStatus().equals("9")) {//任务被退回修改
+
+
+                mReportMissionButton.setVisibility(View.GONE);
+                mCompleteMissionButton.setVisibility(View.GONE);
+
+            }
+        }
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        mTaskInfoFragment = TaskInfoFragment.newInstance(null, null);
+        mTaskInfoFragment.setMission(mission);
+        mTaskInfoFragment.setGreenMissionLog(mGreenMissionLog);
+        fragmentTransaction.replace(R.id.rl_mision, mTaskInfoFragment, "TaskInfoFragment").commitAllowingStateLoss();
+    }
+
 
     @Override
     public void onPause() {
@@ -861,11 +835,16 @@ public class MissionRecorActivity extends BaseActivity {
                             File file = new File(signPic);
                             if (signPic != null && file.exists()) {
                                 mCanSaveComplete = true;
+
                             } else {
                                 mCanSaveComplete = false;
+                                RxToast.warning(BaseApplication.getApplictaion(), "存在成员未签名，不能上报任务！", Toast.LENGTH_SHORT, true).show();
+                                return;
                             }
                         } else {
                             mCanSaveComplete = false;
+                            RxToast.warning(BaseApplication.getApplictaion(), "存在成员未签名，不能上报任务！", Toast.LENGTH_SHORT, true).show();
+                            return;
                         }
 
 
@@ -901,7 +880,6 @@ public class MissionRecorActivity extends BaseActivity {
                     unique.resetGreenMedia();
                     List<GreenMedia> greenMedias = unique.getGreenMedia();
                     for (GreenMedia media : greenMedias) {
-                        Log.i("Oking5",media.toString());
                         if (media.getType() == 1) {            //1表示日志图片
                             mPhotoMedias.add(media);
                         } else if (media.getType() == 2) {      //2表示视频
@@ -991,7 +969,6 @@ public class MissionRecorActivity extends BaseActivity {
                     //上传签名图片
                     uploadSignedPic();
 
-                    Log.i("Oking", mVideoMedias.size() + ">>>>>>>>>>33>>>>");
                     //上传巡查视频
                     if (mVideoMedias.size() > 0) {
                         uploadVideo();
@@ -1254,18 +1231,68 @@ public class MissionRecorActivity extends BaseActivity {
                         if (mRxDialogLoading != null) {
                             mRxDialogLoading.cancel();
                         }
+
                         String string = responseBody.string();
-                        StopSwipeRefreshEvent stopSwipeRefreshEvent = new StopSwipeRefreshEvent();
-                        stopSwipeRefreshEvent.setType(0);
-                        EventBus.getDefault().post(stopSwipeRefreshEvent);
-                        Log.i("Oking", "》》》》》》》更新任务状态成功：" + string);
-                        EventBus.getDefault().post(new NewsTaskOV(1, mission));
                         mission.setStatus("5");
+                        mission.setExamine_status(0);
                         GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().update(mission);
                         UpdateGreenMissionTaskOV greenMissionOV = new UpdateGreenMissionTaskOV();
                         greenMissionOV.setMissionTask(mission);
+                        greenMissionOV.setPosition(mPosition);
                         EventBus.getDefault().post(greenMissionOV);
-                        finish();
+
+
+                        //发送一个远程通知
+                        JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                        JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                        ArrayList<String> alias = new ArrayList<>();
+                        alias.add(mission.getApproved_person());
+                        audienceBean.setAlias(alias);
+                        jPushMessageBean.setAudience(audienceBean);
+                        JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                        notificationBean.setAlert("新消息：" + mission.getTask_name());
+                        JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                        JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                        extrasBean.setOpenType("2");
+                        extrasBean.setTaskid(mission.getTaskid());
+                        androidBean.setExtras(extrasBean);
+                        notificationBean.setAndroid(androidBean);
+                        ArrayList<String> platforms = new ArrayList<>();
+                        platforms.add("android");
+                        jPushMessageBean.setPlatform(platforms);
+                        jPushMessageBean.setNotification(notificationBean);
+                        OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                            @Override
+                            public void pushMessageSucc(String result) {
+
+
+                            }
+
+                            @Override
+                            public void pushMessageFail(Throwable ex) {
+                                RxToast.error(ex.getMessage());
+                            }
+                        });
+
+                        if (mainHandler == null) {
+
+                            mainHandler = new Handler();
+                        }
+                        mainHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Stack<Activity> activityStack = ActivityUtil.getActivityStack();
+                                for (Activity activity : activityStack) {
+                                    if (activity.getClass().getSimpleName().equals("MissionActivity")) {
+                                        activity.finish();
+                                    }
+
+                                }
+                                finish();
+
+                            }
+                        }, 100);
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override

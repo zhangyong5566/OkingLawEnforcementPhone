@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.zhang.okinglawenforcementphone.adapter.UserRecyAdaper;
 import com.zhang.okinglawenforcementphone.beans.UserItemOV;
 import com.zhang.okinglawenforcementphone.mvp.ui.activitys.CaseManagerActivity;
 import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
+import com.zhang.okinglawenforcementphone.views.GridDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -242,8 +244,8 @@ public class HandlingMenuFragment extends Fragment {
 
     private void initData() {
         mHandlingMenuFragment = getFragmentManager().findFragmentByTag("HandlingMenuFragment");
-        mRecyLawMenu.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
-        mRecyLawMenu.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 20, getResources().getColor(R.color.activity_bg)));
+        mRecyLawMenu.setLayoutManager(new GridLayoutManager(BaseApplication.getApplictaion(),3));
+        mRecyLawMenu.addItemDecoration(new GridDivider(BaseApplication.getApplictaion(),  10, getResources().getColor(R.color.line)));
 
         List<UserItemOV> userItemOVS = new ArrayList<>();
         mUserItemOV = new UserItemOV();
@@ -267,7 +269,7 @@ public class HandlingMenuFragment extends Fragment {
         mUserItemOV.setIcon(R.mipmap.yla);
         userItemOVS.add(mUserItemOV);
 
-        mHandingMenuRecyAdaper = new UserRecyAdaper(R.layout.user_item, userItemOVS);
+        mHandingMenuRecyAdaper = new UserRecyAdaper(R.layout.handling_menu_item, userItemOVS);
         mHandingMenuRecyAdaper.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
         mRecyLawMenu.setAdapter(mHandingMenuRecyAdaper);
     }

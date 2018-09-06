@@ -2,23 +2,17 @@ package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxToast;
-import com.zhang.baselib.utils.AppUtil;
 import com.zhang.baselib.utils.DeviceUtil;
 import com.zhang.baselib.utils.NetUtil;
 import com.zhang.baselib.utils.RegUtil;
-import com.zhang.baselib.utils.TextUtil;
-import com.zhang.baselib.utils.Util;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.SendEmailManager;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;

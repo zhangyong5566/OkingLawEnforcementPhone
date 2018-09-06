@@ -73,6 +73,8 @@ dependencies {
     implementation files('libs/additionnal.jar')
     implementation 'cn.ittiger:TigerVideoPlayer:1.7'
     implementation files('libs/AMap3DMap_5.2.0_AMapNavi_5.1.0_AMapSearch_5.1.0_AMapLocation_3.4.0_20170602.jar')
+    implementation files('libs/jcore-android-1.2.3.jar')
+    implementation files('libs/jpush-android-3.1.5.jar')
 }
 
 configurations.all {

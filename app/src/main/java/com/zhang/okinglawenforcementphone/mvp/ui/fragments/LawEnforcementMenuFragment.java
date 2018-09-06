@@ -244,7 +244,7 @@ public class LawEnforcementMenuFragment extends Fragment {
 
     private void initData() {
         mRecyLawMenu.setLayoutManager(new LinearLayoutManager(BaseApplication.getApplictaion(), LinearLayoutManager.VERTICAL, false));
-        mRecyLawMenu.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 20, getResources().getColor(R.color.activity_bg)));
+        mRecyLawMenu.addItemDecoration(new DividerItemDecoration(BaseApplication.getApplictaion(), 0, 15, getResources().getColor(R.color.activity_bg)));
 
         List<UserItemOV> userItemOVS = new ArrayList<>();
         mUserItemOV = new UserItemOV();

@@ -73,9 +73,7 @@ public class EaseContactListFragment extends EaseBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i("Oking","EaseContactListFragment>>>>onCreateView");
         if (mInflate==null){
-            Log.i("Oking","EaseContactListFragment>>>>mInflate==null");
             mInflate = inflater.inflate(R.layout.ease_fragment_contact_list, container, false);
         }
         return mInflate;

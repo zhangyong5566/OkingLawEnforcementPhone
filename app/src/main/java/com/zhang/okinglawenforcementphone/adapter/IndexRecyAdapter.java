@@ -1,12 +1,6 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +11,6 @@ import com.zhang.baselib.BaseApplication;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.MenuItemOV;
 import com.zhang.okinglawenforcementphone.beans.MenuOV;
-import com.zhang.okinglawenforcementphone.views.DividerItemDecoration;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -47,11 +40,6 @@ public class IndexRecyAdapter extends BaseQuickAdapter<MenuOV, BaseViewHolder> {
             public View getView(FlowLayout parent, int position, MenuItemOV dataBean) {
                 View inflate = View.inflate(BaseApplication.getApplictaion(), R.layout.hot_tagflow_item, null);
                 TextView tv_tag = inflate.findViewById(R.id.tv_tag);
-                if (dataBean.getTitle().equals("待办")) {
-                    TextView tv_msgcout = inflate.findViewById(R.id.tv_msgcout);
-                    mOnTagClickListener.setMessageCount(tv_msgcout);
-                }
-
                 ImageView icon = inflate.findViewById(R.id.iv_icon);
                 tv_tag.setText(dataBean.getTitle());
                 icon.setImageResource(dataBean.getIcon());
@@ -72,6 +60,5 @@ public class IndexRecyAdapter extends BaseQuickAdapter<MenuOV, BaseViewHolder> {
     public interface OnTagClickListener {
         void onTagClickListener(MenuItemOV bean);
 
-        void setMessageCount(TextView textView);
     }
 }

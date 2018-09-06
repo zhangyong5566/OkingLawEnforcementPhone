@@ -1,28 +1,36 @@
 package com.zhang.okinglawenforcementphone.mvp.ui.activitys;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcel;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zhang.baselib.BaseApplication;
 import com.zhang.baselib.ui.views.RxDialogLoading;
 import com.zhang.baselib.ui.views.RxToast;
 import com.zhang.okinglawenforcementphone.GreenDAOManager;
+import com.zhang.okinglawenforcementphone.OkingJPushManager;
+import com.zhang.okinglawenforcementphone.OkingNotificationManager;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTask;
 import com.zhang.okinglawenforcementphone.beans.GreenMissionTaskDao;
 import com.zhang.okinglawenforcementphone.beans.InspectTaskBean;
+import com.zhang.okinglawenforcementphone.beans.JPushMessageBean;
+import com.zhang.okinglawenforcementphone.beans.NewsTaskOV;
 import com.zhang.okinglawenforcementphone.beans.OkingContract;
 import com.zhang.okinglawenforcementphone.beans.UpdateGreenMissionTaskOV;
+import com.zhang.okinglawenforcementphone.mvp.contract.JPushMessageContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.TaskBackContract;
 import com.zhang.okinglawenforcementphone.mvp.contract.TaskReviewContract;
 import com.zhang.okinglawenforcementphone.mvp.presenter.TaskBackPresenter;
@@ -35,6 +43,7 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +87,7 @@ public class AuditActivity extends BaseActivity {
     private RxDialogLoading mRxDialogLoading;
     private int mPosition;
     private TaskBackPresenter mTaskBackPresenter;
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,7 +292,7 @@ public class AuditActivity extends BaseActivity {
                         if (mTaskReviewPresenter == null) {
                             mTaskReviewPresenter = new TaskReviewPresenter(new TaskReviewContract.View() {
                                 @Override
-                                public void taskReviewSucc(String result) {
+                                public void taskReviewSucc(final String result) {
                                     Log.i("Oking", "成功:" + result);
                                     mRxDialogLoading.cancel();
                                     try {
@@ -291,15 +301,60 @@ public class AuditActivity extends BaseActivity {
                                         String msg = jsonObject.getString("msg");
 
                                         if (status.equals("1")) {
-                                            RxToast.success(msg);
+
+                                            //发送一个远程通知
+                                            JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                                            JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                                            ArrayList<String> alias = new ArrayList<>();
+                                            alias.add(mUnique.getReceiver());
+                                            mUnique.setStatus("2");
+                                            audienceBean.setAlias(alias);
+                                            jPushMessageBean.setAudience(audienceBean);
+                                            JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                                            notificationBean.setAlert("新消息："+mUnique.getTask_name());
+                                            JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                                            JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                                            extrasBean.setOpenType("1");
+                                            extrasBean.setTaskid(mUnique.getTaskid());
+                                            androidBean.setExtras(extrasBean);
+                                            notificationBean.setAndroid(androidBean);
+                                            ArrayList<String> platforms = new ArrayList<>();
+                                            platforms.add("android");
+                                            jPushMessageBean.setPlatform(platforms);
+                                            jPushMessageBean.setNotification(notificationBean);
+                                            OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                                                @Override
+                                                public void pushMessageSucc(String result) {
+
+
+                                                }
+
+                                                @Override
+                                                public void pushMessageFail(Throwable ex) {
+                                                    RxToast.error(ex.getMessage());
+                                                }
+                                            });
+
+
+
                                             UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
                                             updateGreenMissionTaskOV.setType(100);
+                                            updateGreenMissionTaskOV.setMissionTask(mUnique);
                                             updateGreenMissionTaskOV.setPosition(mPosition);
-
                                             EventBus.getDefault().post(updateGreenMissionTaskOV);
                                             GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().delete(mUnique);
-                                            finish();
+                                            if (mainHandler == null) {
 
+                                                mainHandler = new Handler();
+                                            }
+                                            mainHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    finish();
+
+                                                }
+                                            }, 100);
+                                            RxToast.success(msg);
                                         } else {
                                             RxToast.error(msg);
                                         }
@@ -374,8 +429,52 @@ public class AuditActivity extends BaseActivity {
                                     String msg = jsonObject.getString("msg");
 
                                     if (status.equals("1")) {
-                                        RxToast.success("退回成功");
+
                                         GreenDAOManager.getInstence().getDaoSession().getGreenMissionTaskDao().delete(mUnique);
+
+                                        //发送一个远程通知
+                                        JPushMessageBean jPushMessageBean = new JPushMessageBean();
+                                        JPushMessageBean.AudienceBean audienceBean = new JPushMessageBean.AudienceBean();
+                                        ArrayList<String> alias = new ArrayList<>();
+                                        alias.add(mUnique.getPublisher());
+                                        mUnique.setStatus("7");
+                                        audienceBean.setAlias(alias);
+                                        jPushMessageBean.setAudience(audienceBean);
+                                        JPushMessageBean.NotificationBean notificationBean = new JPushMessageBean.NotificationBean();
+                                        notificationBean.setAlert(mUnique.getTask_name());
+                                        JPushMessageBean.NotificationBean.AndroidBean androidBean = new JPushMessageBean.NotificationBean.AndroidBean();
+                                        JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean extrasBean = new JPushMessageBean.NotificationBean.AndroidBean.ExtrasBean();
+                                        extrasBean.setData(new Gson().toJson(mUnique));
+                                        androidBean.setExtras(extrasBean);
+                                        notificationBean.setAndroid(androidBean);
+                                        ArrayList<String> platforms = new ArrayList<>();
+                                        platforms.add("android");
+                                        jPushMessageBean.setPlatform(platforms);
+                                        jPushMessageBean.setNotification(notificationBean);
+                                        OkingJPushManager.getInstence().pushMessage(jPushMessageBean, new JPushMessageContract.View() {
+                                            @Override
+                                            public void pushMessageSucc(String result) {
+
+
+                                            }
+
+                                            @Override
+                                            public void pushMessageFail(Throwable ex) {
+                                                RxToast.error(ex.getMessage());
+                                            }
+                                        });
+                                        if (mainHandler == null) {
+
+                                            mainHandler = new Handler();
+                                        }
+                                        mainHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                finish();
+
+                                            }
+                                        }, 100);
+                                        RxToast.success("退回成功");
                                         if (mPosition != -1) {
                                             UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
                                             updateGreenMissionTaskOV.setType(100);

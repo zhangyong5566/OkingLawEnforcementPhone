@@ -32,7 +32,7 @@
         android:layout_below="@id/tv_depat"
         android:layout_marginLeft="5dp"
         android:paddingBottom="5dp"
-        android:textColor="@color/flow_item_color"
+        android:textColor="@color/waiting_btn_press"
         android:text="13570191401"
         android:textSize="12sp" />
 

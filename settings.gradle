@@ -1,1 +1,1 @@
-include ':app', ':CircularProgressButtonLibrary', ':baselib', ':easeui', ':whiteboardlib', ':ocr_ui', ':android-pdf-viewer'
+include ':app', ':CircularProgressButtonLibrary', ':baselib', ':easeui', ':whiteboardlib', ':ocr_ui', ':android-pdf-viewer', ':JPushExample(1043273)'

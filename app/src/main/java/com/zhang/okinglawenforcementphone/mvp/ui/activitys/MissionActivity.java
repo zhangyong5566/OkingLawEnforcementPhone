@@ -285,6 +285,7 @@ public class MissionActivity extends BaseActivity {
                                     tv_state.setTextColor(BaseApplication.getApplictaion().getResources().getColor(R.color.colorMain5));
                                     if (mPosition != -1) {
                                         UpdateGreenMissionTaskOV updateGreenMissionTaskOV = new UpdateGreenMissionTaskOV();
+                                        updateGreenMissionTaskOV.setType(200);
                                         updateGreenMissionTaskOV.setPosition(mPosition);
                                         updateGreenMissionTaskOV.setMissionTask(mGreenMissionTask);
                                         EventBus.getDefault().post(updateGreenMissionTaskOV);
@@ -315,7 +316,7 @@ public class MissionActivity extends BaseActivity {
                 mUpdateMissionStatePresenter.updateMissionState(mGreenMissionTask.getTaskid(), OkingContract.SDF.format(System.currentTimeMillis())
                         , "", 4);
 
-                EventBus.getDefault().post(new NewsTaskOV(0,mGreenMissionTask));
+                EventBus.getDefault().post(new NewsTaskOV(0,null,mGreenMissionTask));
             } else {
 
                 mGreenMissionTask.setExecute_start_time(System.currentTimeMillis());
@@ -326,7 +327,7 @@ public class MissionActivity extends BaseActivity {
 
         } else if ("任务日志".equals(list_item_missionRecord.getText().toString())) {
             Intent intent = new Intent(MissionActivity.this, MissionRecorActivity.class);
-            intent.putExtra("id", mGreenMissionTask.getId());
+            intent.putExtra("position", mPosition);
             intent.putExtra("taskId", mGreenMissionTask.getTaskid());
             startActivity(intent);
 

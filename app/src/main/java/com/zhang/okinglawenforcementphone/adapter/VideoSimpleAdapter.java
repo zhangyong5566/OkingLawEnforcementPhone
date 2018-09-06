@@ -1,7 +1,6 @@
 package com.zhang.okinglawenforcementphone.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -18,12 +17,9 @@ import com.zhang.baselib.GlideApp;
 import com.zhang.baselib.utils.FileUtil;
 import com.zhang.okinglawenforcementphone.R;
 import com.zhang.okinglawenforcementphone.beans.GreenMedia;
-import com.zhang.okinglawenforcementphone.mvp.ui.activitys.PlayVideoOnlineActivity;
 
 import java.util.HashMap;
 import java.util.List;
-
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/4/25/025.
